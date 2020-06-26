@@ -19,4 +19,3 @@
 
 ### other (requires purchase; $10; Josh will do)
 - LIWC: https://liwc.wpengine.com/
-- any others?

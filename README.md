@@ -24,9 +24,9 @@
 
 ### ORIGINAL 
 
-Research Question 1: How did the public sentiment toward the NGSS vary, if any, across all states on Twitter?
-Research Question 2: What was the topical structure in the NGSS discourse on Twitter?
-Research Question 3: Who were the opinion leaders in the NGSS communication network on Twitter?
+Research Question 1: How did the public sentiment toward the NGSS vary, if any, across all states on Twitter?  
+Research Question 2: What was the topical structure in the NGSS discourse on Twitter?  
+Research Question 3: Who were the opinion leaders in the NGSS communication network on Twitter?  
 
 ### ADDITIONAL/MODIFIED
 

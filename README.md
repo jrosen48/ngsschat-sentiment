@@ -14,7 +14,7 @@
 #### R
 
 - the three options available through tidytext: https://www.tidytextmining.com/sentiment.html
-- sentimentR (all options)L https://github.com/trinker/sentimentr
+- sentimentR (all options): https://github.com/trinker/sentimentr
 - VADER:  https://pypi.org/project/vaderSentiment/
 
 ### other (requires purchase; $10; Josh will do)
@@ -34,8 +34,31 @@ Research Question 4: How does sentiment differ between chat and non-chat time?
 ## pre-requisites for analysis
 
 - identifying chats
+    - can be messy
+    - always a moderator - "welcome to #NGSSchat, please introduce yourself"
+    - options:
+        - hard cut-off: official end is 1 hour (usually/almost always)
+        - gap - 5 minutes with no tweets, etc.
 - determining sentiment
 - identifying professional roles
+
+## notes from 2020-06-29
+
+- LIWC can also provide other information (different from sentiment)
+- what is the unit of analysis? do we look within users? do we aggregate?
+- first step: 
+    - get familiar with the different sentiment analysis options
+    - start with a smaller dataset - maybe just one year (2014? 2015?)
+        - get a sense for how scalable/reliable things are 
+    - for LIWC, CF can also purchase (https://liwcsoftware.onfastspring.com/)
+- links to resources:
+    - quanteda: https://quanteda.io/
+    - quanteda classifiers: https://github.com/quanteda/quanteda.classifiers
+    - purchasing LIWC: https://liwcsoftware.onfastspring.com/
+    - pros and cons and ins-and-outs of sentiment analysis - Ben can share in OSF: https://osf.io/vk67n/
+- tasks:
+    - begin to explore some of the different packages
+    - longer-term, split up sentiment and/or pre-requisites
 
 ## venue?
 

@@ -26,13 +26,10 @@
 
 Research Question 1: How did the public sentiment toward the NGSS vary, if any, across all states on Twitter?  
 Research Question 2: What was the topical structure in the NGSS discourse on Twitter?  
+    - How do we look at topical structure? We could do a dictionary-based approach. or we could do topic models
 Research Question 3: Who were the opinion leaders in the NGSS communication network on Twitter?  
-
-### ADDITIONAL/MODIFIED
-
-How does sentiment differ between chat and non-chat time?
-Do we look at professional role? I think so
-How do we look at topical structure? We could do a dictionary-based approach. or we could do topic models
+    - Do we look at professional role? I think so
+Research Question 4: How does sentiment differ between chat and non-chat time?
 
 ## pre-requisites for analysis
 

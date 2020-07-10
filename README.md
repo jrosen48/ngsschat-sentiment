@@ -67,3 +67,24 @@ AERA Open?
 Educational Researcher?
 AERJ?
 Some cross-disciplinary journal (PlosOne?)
+
+## accessing additional data beyond #NGSSChat
+
+### timeline
+
+- 2014-08-01 - 2015-07-31 (one whole academic year) 
+
+### terms
+
+- "next generation science standards" OR "next generation science standard" OR "ngss" OR "next gen science standards" OR "next gen science standard"
+
+### next steps
+
+- if we still have requests left, then let's expand the timeline:
+    - 2015-08-01 - 2016-07-31
+    - 2013-08-01 - 2014-07-31
+    - 2016-08-01 - 2017-07-31
+    
+- if we *still* have requests left:
+    - "designing solutions enginee
+    

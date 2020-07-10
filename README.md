@@ -84,7 +84,3 @@ Some cross-disciplinary journal (PlosOne?)
     - 2015-08-01 - 2016-07-31
     - 2013-08-01 - 2014-07-31
     - 2016-08-01 - 2017-07-31
-    
-- if we *still* have requests left:
-    - "designing solutions enginee
-    

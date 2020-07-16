@@ -12,7 +12,7 @@ library(gganimate)
 
 # f <- osf_retrieve_file("https://osf.io/684cx/")
 # osf_download(f)
-
+git 
 d <- read_csv("NGSSchat_sentiment_states.csv")
 state_counts <- read_csv("state_counts.csv")
 

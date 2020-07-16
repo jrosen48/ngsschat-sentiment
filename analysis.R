@@ -110,7 +110,7 @@ users <- users %>%
 users <- users %>% 
   filter(val == TRUE)
 
-write_csv(state_counts, "state-counts.csv")
+
 
 library(albersusa)
 library(gganimate)
@@ -123,6 +123,8 @@ state_counts <- users %>%
   mutate(name = tools::toTitleCase(name)) %>% 
   spread(key, n, fill = 0) %>% 
   gather(year, n, -name)
+
+write_csv(state_counts, "state-counts.csv")
 
 s <- left_join(US, state_counts)
 s$`No. of Participants` <- s$n

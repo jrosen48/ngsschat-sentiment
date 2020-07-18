@@ -21,6 +21,8 @@ d <- d %>%
          month = month(created_at),
          day = round_date(created_at, "day"))
 
+US <- usa_sf()
+
 ##### SENTIMENT MEANS #####
 sentiment_states <- d %>% 
   select(year, state, Positive, Negative, senti_class)
@@ -88,7 +90,9 @@ p <- ggplot(s, aes(fill = `Mean Sentiment Score`)) +
 
 animate(p)
 
-ggsave("sentiment-means.png", width = 8, height = 6)
+anim_save("ngsschat-sentiment-means.gif")
+
+# ggsave("sentiment-means.gif", width = 8, height = 6)
 
 ##### #####
 
@@ -136,5 +140,7 @@ p <- ggplot(s, aes(fill = `No. of Participants`)) +
   ease_aes('linear')
 
 animate(p)
+
+
 
 ggsave("ngsschat-location.png", width = 8, height = 6)

@@ -10,8 +10,8 @@ library(gganimate)
 library(transformr)
 
 # uncomment the following two lines of code to download the data
-f <- osf_retrieve_file("https://osf.io/7sgw6/")
-osf_download(f)
+# f <- osf_retrieve_file("https://osf.io/7sgw6/")
+# osf_download(f)
 d <- read_csv("NGSSchat_sentiment_states.csv")
 state_counts <- read_csv("state-counts.csv")
 

@@ -80,7 +80,7 @@ sentiment_means %>%
   group_by(year) %>% 
   summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE))
 
-# mean by state
+0# mean by state
 sentiment_means %>% 
   group_by(name) %>% 
   summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE)) %>% 

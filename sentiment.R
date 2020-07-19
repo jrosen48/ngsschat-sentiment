@@ -9,6 +9,13 @@ library(albersusa)
 library(gganimate)
 library(transformr)
 
+state_data <- read_csv("ngsschat-state-data.csv")
+
+state_data <- state_data %>% 
+  select(State, Early:Not) %>% 
+  gather(key, val, -State) %>% 
+  filter(!is.na(val))
+
 # uncomment the following two lines of code to download the data
 f <- osf_retrieve_file("https://osf.io/7sgw6/")
 osf_download(f, conflicts = "overwrite")
@@ -64,17 +71,40 @@ senticount$avg[senticount$avg == Inf] <- 0
 sentiment_means <- left_join(sentiment_means, senticount, by = c("name", "year"))
 sentiment_means <- sentiment_means %>% subset(select = -c(n))
 
+# overall mean
 sentiment_means %>% 
-  summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE)) 
+  summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE))
 
-state_means <- sentiment_means %>% 
-  filter(!is.na(name)) %>% 
+# mean by year
+sentiment_means %>% 
+  group_by(year) %>% 
+  summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE))
+
+# mean by state
+sentiment_means %>% 
   group_by(name) %>% 
-  summarize(mean_avg = mean(avg, na.rm = TRUE))
+  summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE)) %>% 
+  arrange(desc(sentiment_ratio))
+
+# by status
+sentiment_means %>%
+  rename(State = name) %>% 
+  left_join(state_data) %>%
+  group_by(key) %>% 
+  summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE)) %>% 
+  arrange(desc(sentiment_ratio)) %>% 
+  filter(!is.na(key)) %>% 
+  clipr::write_clip()
+
+# for plot
+state_means <- sentiment_means %>% 
+  group_by(name) %>% 
+  summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE)) %>% 
+  arrange(desc(sentiment_ratio))
 
 s <- left_join(US, state_means)
 
-p1 <- ggplot(s, aes(fill = mean_avg)) +
+p1 <- ggplot(s, aes(fill = sentiment_ratio)) +
   geom_sf() + 
   coord_sf(crs = "+proj=aea +lat_1=25 +lat_2=50 +lon_0=-100") +
   theme_void() +
@@ -88,11 +118,16 @@ p1 <- ggplot(s, aes(fill = mean_avg)) +
         axis.ticks.y=element_blank()) +
   theme(text = element_text(family = "Times"))
 
+p1
+
+ggsave("states-sentiment.png", width = 10, height = 6)
+
+
 p2 <- sentiment_means %>% 
   filter(!is.na(name)) %>% 
   group_by(year) %>% 
-  summarize(mean_avg = mean(avg, na.rm = TRUE)) %>% 
-  ggplot(aes(x = year, y = mean_avg)) +
+  summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE)) %>% 
+  ggplot(aes(x = year, y = sentiment_ratio)) +
   geom_smooth(color = "#39568CFF") +
   geom_point() +
   theme_minimal() +
@@ -100,10 +135,6 @@ p2 <- sentiment_means %>%
   ylab("Sentiment Ratio (- / + Tweets)") +
   xlab(NULL) +
   theme(text = element_text(family = "Times", size = 16)) 
-
-p1
-
-ggsave("states-sentiment.png", width = 10, height = 6)
 
 p2
 

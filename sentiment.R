@@ -17,6 +17,7 @@ state_data <- state_data %>%
   filter(!is.na(val))
 
 # uncomment the following two lines of code to download the data
+# osf_auth("") # uncomment and insert OSF PAT
 f <- osf_retrieve_file("https://osf.io/7sgw6/")
 osf_download(f, conflicts = "overwrite")
 
@@ -41,7 +42,9 @@ sentiment_states$state <- sentiment_states$state %>%
   str_remove(":south") %>%
   str_remove(":north") %>%
   str_remove(":long island") %>%
-  str_remove(":manhattan")
+  str_remove(":manhattan") %>%
+  str_remove(":whidbey island") %>%
+  str_remove(":martha's vineyard")
 sentiment_states <- mutate(sentiment_states, state = tools::toTitleCase(state))
 unique(sentiment_states$state)
 
@@ -70,23 +73,38 @@ senticount$avg[senticount$avg == Inf] <- 0
 
 sentiment_means <- left_join(sentiment_means, senticount, by = c("name", "year"))
 sentiment_means <- sentiment_means %>% subset(select = -c(n))
+sentiment_means$total <- sentiment_means$nPos + sentiment_means$nNeg
+sentiment_means$posRatio <- sentiment_means$nPos / sentiment_means$total
 
-# overall mean
+
+# overall mean (basic ratio = neg / pos)
 sentiment_means %>% 
   summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE))
+# overall mean (standardized ratio = pos / total)
+sentiment_means %>%
+  summarise(sentiment_ratio = sum(nPos, na.rm = TRUE)/sum(total, na.rm = TRUE))
 
-# mean by year
+# mean by year (basic ratio)
 sentiment_means %>% 
   group_by(year) %>% 
   summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE))
+# mean by year (standardized ratio)
+sentiment_means %>%
+  group_by(year) %>%
+  summarise(sentiment_ratio = sum(nPos, na.rm = TRUE)/sum(total, na.rm = TRUE))
 
-0# mean by state
+# mean by state (basic ratio)
 sentiment_means %>% 
   group_by(name) %>% 
   summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE)) %>% 
   arrange(desc(sentiment_ratio))
+# mean by state (standardized ratio)
+sentiment_means %>%
+  group_by(name) %>%
+  summarise(sentiment_ratio = sum(nPos, na.rm = TRUE)/sum(total, na.rm = TRUE)) %>%
+  arrange(desc(sentiment_ratio))
 
-# by status
+# by status (basic ratio)
 sentiment_means %>%
   rename(State = name) %>% 
   left_join(state_data) %>%
@@ -95,11 +113,26 @@ sentiment_means %>%
   arrange(desc(sentiment_ratio)) %>% 
   filter(!is.na(key)) %>% 
   clipr::write_clip()
+# by status (standardized ratio)
+sentiment_means %>%
+  rename(State = name) %>% 
+  left_join(state_data) %>%
+  group_by(key) %>% 
+  summarise(sentiment_ratio = sum(nPos, na.rm = TRUE)/sum(total, na.rm = TRUE)) %>% 
+  arrange(desc(sentiment_ratio)) %>% 
+  filter(!is.na(key)) %>% 
+  clipr::write_clip()
 
-# for plot
+
+# for plot (basic ratio)
 state_means <- sentiment_means %>% 
   group_by(name) %>% 
   summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE)) %>% 
+  arrange(desc(sentiment_ratio))
+# for plot (standardized ratio)
+state_means <- sentiment_means %>%
+  group_by(name) %>%
+  summarise(sentiment_ratio = sum(nPos, na.rm = TRUE)/sum(total, na.rm = TRUE)) %>% 
   arrange(desc(sentiment_ratio))
 
 s <- left_join(US, state_means)
@@ -123,10 +156,24 @@ p1
 ggsave("states-sentiment.png", width = 10, height = 6)
 
 
+# basic ratio
 p2 <- sentiment_means %>% 
   filter(!is.na(name)) %>% 
   group_by(year) %>% 
   summarise(sentiment_ratio = sum(nNeg, na.rm = TRUE)/sum(nPos, na.rm = TRUE)) %>% 
+  ggplot(aes(x = year, y = sentiment_ratio)) +
+  geom_smooth(color = "#39568CFF") +
+  geom_point() +
+  theme_minimal() +
+  theme(text = element_text(family = "Times")) +
+  ylab("Sentiment Ratio (- / + Tweets)") +
+  xlab(NULL) +
+  theme(text = element_text(family = "Times", size = 16)) 
+# standardized ratio
+p2 <- sentiment_means %>% 
+  filter(!is.na(name)) %>% 
+  group_by(year) %>% 
+  summarise(sentiment_ratio = sum(nPos, na.rm = TRUE)/sum(total, na.rm = TRUE)) %>% 
   ggplot(aes(x = year, y = sentiment_ratio)) +
   geom_smooth(color = "#39568CFF") +
   geom_point() +
@@ -143,7 +190,11 @@ ggsave("year-sentiment.png", width = 10, height = 6)
 
 ##### MAPPING SENTIMENT MEANS #####
 s <- left_join(US, sentiment_means)
-s$`Mean Sentiment Score` <- s$avg
+
+    ## choose one of the following two lines: ##
+#s$`Mean Sentiment Score` <- s$avg # basic ratio
+#s$`Mean Sentiment Score` <- s$posRatio # standardized ratio
+
 s$year <- as.integer(s$year)
 s <- s %>% 
   filter(!is.na(year))

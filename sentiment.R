@@ -76,6 +76,7 @@ sentiment_means <- sentiment_means %>% subset(select = -c(n))
 sentiment_means$total <- sentiment_means$nPos + sentiment_means$nNeg
 sentiment_means$posRatio <- sentiment_means$nPos / sentiment_means$total
 
+#write_csv(sentiment_means, "sentiment_means.csv")
 
 # overall mean (basic ratio = neg / pos)
 sentiment_means %>% 

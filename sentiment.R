@@ -21,7 +21,8 @@ state_data <- state_data %>%
 f <- osf_retrieve_file("https://osf.io/7sgw6/")
 osf_download(f, conflicts = "overwrite")
 
-d <- read_csv("NGSSchat_sentiment_states_revised.csv")
+#d <- read_csv("NGSSchat_sentiment_states_revised.csv")
+d <- read.csv("NGSSchat_sentiment_states_newly_revised.csv")
 state_counts <- read_csv("state-counts.csv")
 
 d <- d %>%
@@ -76,6 +77,8 @@ sentiment_means <- sentiment_means %>% subset(select = -c(n))
 sentiment_means$total <- sentiment_means$nPos + sentiment_means$nNeg
 sentiment_means$posRatio <- sentiment_means$nPos / sentiment_means$total
 
+#write_csv(sentiment_means, "sentiment_means.csv")
+#sentiment_means <- read.csv("sentiment_means.csv")
 
 # overall mean (basic ratio = neg / pos)
 sentiment_means %>% 

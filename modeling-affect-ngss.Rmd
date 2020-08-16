@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```{r, load-packages}
 library(tidyverse)
 library(lme4)
-library(brms)
+library(sjPlot)
 ```
 
 ```{r, read-and-prep-data}
@@ -42,7 +42,9 @@ state_data <- state_data %>%
   gather(key, val, -State) %>% 
   rename(state = State,
          adoption_status = key) %>% 
-  mutate(state = tolower(state)) %>% 
+  mutate(state = tolower(state),
+         adoption_status = if_else(adoption_status == "Near", "Mid", adoption_status),
+         adoption_status = factor(adoption_status, levels = c("Not", "Early", "Mid", "Late"))) %>% 
   filter(!is.na(val)) %>% 
   select(-val)
 ```
@@ -50,6 +52,10 @@ state_data <- state_data %>%
 ```{r, joining-state-data}
 d <- d %>% 
   left_join(state_data)
+```
+
+```{r, scaling-year}
+d$year <- as.numeric(scale(d$year))
 ```
 
 ## descriptive stats
@@ -65,11 +71,9 @@ d %>%
 ## Just modeling the effect of state
 
 ```{r, m0-state}
-Sys.time()
 m0_pos_state <- lmer(posRate ~ 1 + (1|state), data = d)
-Sys.time()
 m0_neg_state <- lmer(posRate ~ 1 + (1|state), data = d)
-Sys.time()
+
 
 sjPlot::tab_model(m0_pos_state)
 sjPlot::tab_model(m0_neg_state)
@@ -81,11 +85,9 @@ performance::icc(m0_neg_state, by_group = TRUE)
 ## Just modeling the effect of screen_name
 
 ```{r, m0-screen_name}
-Sys.time()
 m0_pos_screen_name <- lmer(posRate ~ 1 + (1|screen_name), data = d)
-Sys.time()
 m0_neg_screen_name <- lmer(posRate ~ 1 + (1|screen_name), data = d)
-Sys.time()
+
 
 sjPlot::tab_model(m0_pos_screen_name)
 sjPlot::tab_model(m0_neg_screen_name)
@@ -97,14 +99,12 @@ performance::icc(m0_neg_screen_name, by_group = TRUE)
 ## Both state and screen name 
 
 ```{r, m1}
-Sys.time()
 m1_pos <- lmer(posRate ~ 1 + (1|state) + (1|screen_name), data = d)
-Sys.time()
 m1_neg <- lmer(posRate ~ 1 + (1|state) + (1|screen_name), data = d)
-Sys.time()
+
 
 sjPlot::tab_model(m1_pos, show.icc = TRUE)
-sjPlot::tab_model(m1_pos, show.icc = TRUE)
+sjPlot::tab_model(m1_neg, show.icc = TRUE)
 
 performance::icc(m1_pos, by_group = TRUE)
 performance::icc(m1_neg, by_group = TRUE)
@@ -113,14 +113,11 @@ performance::icc(m1_neg, by_group = TRUE)
 ## Adding year
 
 ```{r, m2}
-Sys.time()
 m2_pos <- lmer(posRate ~ 1 + year + (1|state) + (1|screen_name), data = d)
-Sys.time()
 m2_neg <- lmer(posRate ~ 1 + year + (1|state) + (1|screen_name), data = d)
-Sys.time()
 
 sjPlot::tab_model(m2_pos, show.icc = TRUE)
-sjPlot::tab_model(m2_pos, show.icc = TRUE)
+sjPlot::tab_model(m2_neg, show.icc = TRUE)
 
 performance::icc(m2_pos, by_group = TRUE)
 performance::icc(m2_neg, by_group = TRUE)
@@ -129,35 +126,49 @@ performance::icc(m2_neg, by_group = TRUE)
 ## Adding adoption status
 
 ```{r, m3-lmer}
-Sys.time()
 m3_pos <- lmer(posRate ~ 1 + year + adoption_status + (1|state) + (1|screen_name), data = d)
-Sys.time()
-m3_neg <- lmer(posRate ~ 1 + year + adoption_status + (adoption_status |state) + (1|screen_name), data = d)
-Sys.time()
+m3_neg <- lmer(posRate ~ 1 + year + adoption_status + (1|state) + (1|screen_name), data = d)
 
 sjPlot::tab_model(m3_pos, show.icc = TRUE)
-sjPlot::tab_model(m3_pos, show.icc = TRUE)
+sjPlot::tab_model(m3_neg, show.icc = TRUE)
 
 performance::icc(m3_pos, by_group = TRUE)
 performance::icc(m3_neg, by_group = TRUE)
 ```
 
-```{r, m3-brms}
-Sys.time()
-m3_pos_b <- brm(posRate ~ 1 + year + (adoption_status|state) + (1|screen_name), data = d,
-                cores = 4, chains = 4, iter = 2000)
-Sys.time()
-m3_neg_b <- brm(posRate ~ 1 + year + adoption_status + (adoption_status |state) + (1|screen_name), data = d,
-                cores = 4, chains = 4, iter = 2000)
-Sys.time()
+## Random slope for year across state
 
-sjPlot::tab_model(m3_pos_b, show.icc = TRUE)
-sjPlot::tab_model(m3_pos_b, show.icc = TRUE)
+```{r, m4-lmer}
+m4_pos <- lmer(posRate ~ 1 + year + adoption_status + (year|state) + (1|screen_name), data = d)
+m4_neg <- lmer(posRate ~ 1 + year + adoption_status + (year|state) + (1|screen_name), data = d)
 
-performance::icc(m3_pos_b, by_group = TRUE)
-performance::icc(m3_neg_b, by_group = TRUE)
+sjPlot::tab_model(m4_pos, show.icc = TRUE)
+sjPlot::tab_model(m4_neg, show.icc = TRUE)
+
+performance::icc(m4_pos, by_group = TRUE)
+performance::icc(m4_neg, by_group = TRUE)
 ```
-## Next models:
+
+## Random slope for adoption_status across state
+
+```{r, m5-lmer}
+m5_pos <- lmer(posRate ~ 1 + year + adoption_status + (year + adoption_status|state) + (1|screen_name), data = d)
+m5_neg <- lmer(posRate ~ 1 + year + adoption_status + (year + adoption_status|state) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m5_pos, show.icc = TRUE)
+sjPlot::tab_model(m5_neg, show.icc = TRUE)
+
+performance::icc(m5_pos, by_group = TRUE)
+performance::icc(m5_neg, by_group = TRUE)
+```
+
+Inspecting random effects levels for states
+
+```{r}
+p <- sjPlot::plot_model(m3_pos, type = "re", sort.est = TRUE)
+p[[2]]
+```
+
+## Next models
 
 - adding chat versus non-chat
-- modeling additional random slopes

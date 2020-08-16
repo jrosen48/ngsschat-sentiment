@@ -18,7 +18,7 @@ state_data <- state_data %>%
 
 # uncomment the following two lines of code to download the data
 # osf_auth("") # uncomment and insert OSF PAT
-f <- osf_retrieve_file("https://osf.io/7sgw6/")
+f <- osf_retrieve_file("https://osf.io/5kmau/")
 osf_download(f, conflicts = "overwrite")
 
 #d <- read_csv("NGSSchat_sentiment_states_revised.csv")

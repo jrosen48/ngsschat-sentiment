@@ -1,0 +1,163 @@
+---
+title: "#NGSSchat sentiment modeling"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+```
+
+## loading, setting up
+
+```{r}
+library(tidyverse)
+library(lme4)
+library(brms)
+```
+
+```{r}
+d <- read_csv("NGSSchat_sentiment_states_newly_revised.csv")
+
+d$year <- lubridate::year(d$created_at)
+
+d$state <- d$state %>% 
+  str_remove(":main") %>%
+  str_remove(":south") %>%
+  str_remove(":north") %>%
+  str_remove(":long island") %>%
+  str_remove(":manhattan") %>%
+  str_remove(":whidbey island") %>%
+  str_remove(":martha's vineyard")
+```
+
+```{r}
+state_data <- read_csv("ngsschat-state-data.csv")
+
+state_data <- state_data %>% 
+  select(State, Early:Not) %>% 
+  gather(key, val, -State) %>% 
+  rename(state = State,
+         adoption_status = key) %>% 
+  mutate(state = tolower(state)) %>% 
+  select(-val)
+```
+
+```{r}
+d <- d %>% 
+  left_join(state_data)
+```
+
+## descriptive stats
+
+```{r}
+d %>% 
+  select(posRate, negRate, state, screen_name, year, adoption_status) %>% 
+  skimr::skim()
+```
+
+# Models
+
+## Just modeling the effect of state
+
+```{r}
+Sys.time()
+m0_pos_state <- lmer(posRate ~ 1 + (1|state), data = d)
+Sys.time()
+m0_neg_state <- lmer(posRate ~ 1 + (1|state), data = d)
+Sys.time()
+
+sjPlot::tab_model(m0_pos_state)
+sjPlot::tab_model(m0_neg_state)
+
+performance::icc(m0_pos_state, by_group = TRUE)
+performance::icc(m0_neg_state, by_group = TRUE)
+```
+
+## Just modeling the effect of screen_name
+
+```{r}
+Sys.time()
+m0_pos_screen_name <- lmer(posRate ~ 1 + (1|screen_name), data = d)
+Sys.time()
+m0_neg_screen_name <- lmer(posRate ~ 1 + (1|screen_name), data = d)
+Sys.time()
+
+sjPlot::tab_model(m0_pos_screen_name)
+sjPlot::tab_model(m0_neg_screen_name)
+
+performance::icc(m0_pos_screen_name, by_group = TRUE)
+performance::icc(m0_neg_screen_name, by_group = TRUE)
+```
+
+## Both state and screen name 
+
+```{r}
+Sys.time()
+m1_pos <- lmer(posRate ~ 1 + (1|state) + (1|screen_name), data = d)
+Sys.time()
+m1_neg <- lmer(posRate ~ 1 + (1|state) + (1|screen_name), data = d)
+Sys.time()
+
+sjPlot::tab_model(m1_pos, show.icc = TRUE)
+sjPlot::tab_model(m1_pos, show.icc = TRUE)
+
+performance::icc(m1_pos, by_group = TRUE)
+performance::icc(m1_neg, by_group = TRUE)
+```
+
+## Adding year
+
+```{r}
+Sys.time()
+m2_pos <- lmer(posRate ~ 1 + year + (1|state) + (1|screen_name), data = d)
+Sys.time()
+m2_neg <- lmer(posRate ~ 1 + year + (1|state) + (1|screen_name), data = d)
+Sys.time()
+
+sjPlot::tab_model(m2_pos, show.icc = TRUE)
+sjPlot::tab_model(m2_pos, show.icc = TRUE)
+
+performance::icc(m2_pos, by_group = TRUE)
+performance::icc(m2_neg, by_group = TRUE)
+```
+
+## Adding adoption status
+
+won't seem to fit - switching to brms
+
+```{r, eval = FALSE}
+Sys.time()
+m3_pos <- lmer(posRate ~ 1 + year + adoption_status + (adoption_status|state) + (1|screen_name), data = d)
+Sys.time()
+m3_neg <- lmer(posRate ~ 1 + year + adoption_status + (adoption_status |state) + (1|screen_name), data = d)
+Sys.time()
+
+sjPlot::tab_model(m3_pos, show.icc = TRUE)
+sjPlot::tab_model(m3_pos, show.icc = TRUE)
+
+performance::icc(m3_pos, by_group = TRUE)
+performance::icc(m3_neg, by_group = TRUE)
+```
+
+```{r}
+Sys.time()
+m3_pos_b <- brm(posRate ~ 1 + year + adoption_status + (adoption_status|state) + (1|screen_name), data = d,
+                cores = 4, chains = 4, iter = 1000)
+Sys.time()
+m3_neg_b <- brm(posRate ~ 1 + year + adoption_status + (adoption_status |state) + (1|screen_name), data = d)
+Sys.time()
+
+sjPlot::tab_model(m3_pos_b, show.icc = TRUE)
+sjPlot::tab_model(m3_pos_b, show.icc = TRUE)
+
+performance::icc(m3_pos_b, by_group = TRUE)
+performance::icc(m3_neg_b, by_group = TRUE)
+```
+## Next models:
+
+- adding chat versus non-chat
+- modeling additional random slopes

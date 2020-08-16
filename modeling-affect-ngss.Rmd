@@ -13,13 +13,13 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 
 ## loading, setting up
 
-```{r}
+```{r, load-packages}
 library(tidyverse)
 library(lme4)
 library(brms)
 ```
 
-```{r}
+```{r, read-and-prep-data}
 d <- read_csv("NGSSchat_sentiment_states_newly_revised.csv")
 
 d$year <- lubridate::year(d$created_at)
@@ -34,7 +34,7 @@ d$state <- d$state %>%
   str_remove(":martha's vineyard")
 ```
 
-```{r}
+```{r, proc-state-data}
 state_data <- read_csv("ngsschat-state-data.csv")
 
 state_data <- state_data %>% 
@@ -46,14 +46,14 @@ state_data <- state_data %>%
   select(-val)
 ```
 
-```{r}
+```{r, joining-state-data}
 d <- d %>% 
   left_join(state_data)
 ```
 
 ## descriptive stats
 
-```{r}
+```{r, desciptive-stats}
 d %>% 
   select(posRate, negRate, state, screen_name, year, adoption_status) %>% 
   skimr::skim()
@@ -63,7 +63,7 @@ d %>%
 
 ## Just modeling the effect of state
 
-```{r}
+```{r, m0-state}
 Sys.time()
 m0_pos_state <- lmer(posRate ~ 1 + (1|state), data = d)
 Sys.time()
@@ -79,7 +79,7 @@ performance::icc(m0_neg_state, by_group = TRUE)
 
 ## Just modeling the effect of screen_name
 
-```{r}
+```{r, m0-screen_name}
 Sys.time()
 m0_pos_screen_name <- lmer(posRate ~ 1 + (1|screen_name), data = d)
 Sys.time()
@@ -95,7 +95,7 @@ performance::icc(m0_neg_screen_name, by_group = TRUE)
 
 ## Both state and screen name 
 
-```{r}
+```{r, m1}
 Sys.time()
 m1_pos <- lmer(posRate ~ 1 + (1|state) + (1|screen_name), data = d)
 Sys.time()
@@ -111,7 +111,7 @@ performance::icc(m1_neg, by_group = TRUE)
 
 ## Adding year
 
-```{r}
+```{r, m2}
 Sys.time()
 m2_pos <- lmer(posRate ~ 1 + year + (1|state) + (1|screen_name), data = d)
 Sys.time()
@@ -129,7 +129,7 @@ performance::icc(m2_neg, by_group = TRUE)
 
 won't seem to fit - switching to brms
 
-```{r, eval = FALSE}
+```{r, m3-lmer, eval = FALSE}
 Sys.time()
 m3_pos <- lmer(posRate ~ 1 + year + adoption_status + (adoption_status|state) + (1|screen_name), data = d)
 Sys.time()
@@ -143,12 +143,13 @@ performance::icc(m3_pos, by_group = TRUE)
 performance::icc(m3_neg, by_group = TRUE)
 ```
 
-```{r}
+```{r, m3-brms}
 Sys.time()
 m3_pos_b <- brm(posRate ~ 1 + year + adoption_status + (adoption_status|state) + (1|screen_name), data = d,
-                cores = 4, chains = 4, iter = 1000)
+                cores = 4, chains = 4, iter = 2000)
 Sys.time()
-m3_neg_b <- brm(posRate ~ 1 + year + adoption_status + (adoption_status |state) + (1|screen_name), data = d)
+m3_neg_b <- brm(posRate ~ 1 + year + adoption_status + (adoption_status |state) + (1|screen_name), data = d,
+                cores = 4, chains = 4, iter = 2000)
 Sys.time()
 
 sjPlot::tab_model(m3_pos_b, show.icc = TRUE)

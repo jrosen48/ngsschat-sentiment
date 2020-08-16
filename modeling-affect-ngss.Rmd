@@ -42,6 +42,7 @@ state_data <- state_data %>%
   gather(key, val, -State) %>% 
   rename(state = State,
          adoption_status = key) %>% 
+  mutate(state = tolower(state)) %>% 
   filter(!is.na(val)) %>% 
   select(-val)
 ```
@@ -145,7 +146,7 @@ performance::icc(m3_neg, by_group = TRUE)
 
 ```{r, m3-brms}
 Sys.time()
-m3_pos_b <- (posRate ~ 1 + year + adoption_status + (adoption_status|state) + (1|screen_name), data = d,
+m3_pos_b <- brm(posRate ~ 1 + year + (adoption_status|state) + (1|screen_name), data = d,
                 cores = 4, chains = 4, iter = 2000)
 Sys.time()
 m3_neg_b <- brm(posRate ~ 1 + year + adoption_status + (adoption_status |state) + (1|screen_name), data = d,

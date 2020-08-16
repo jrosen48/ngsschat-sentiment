@@ -128,9 +128,7 @@ performance::icc(m2_neg, by_group = TRUE)
 
 ## Adding adoption status
 
-won't seem to fit - switching to brms
-
-```{r, m3-lmer, eval = FALSE}
+```{r, m3-lmer}
 Sys.time()
 m3_pos <- lmer(posRate ~ 1 + year + adoption_status + (1|state) + (1|screen_name), data = d)
 Sys.time()

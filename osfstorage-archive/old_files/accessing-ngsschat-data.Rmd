@@ -1,0 +1,69 @@
+---
+title: 'Accessing #NGSSchat Data'
+output: html_document
+---
+
+
+# Loading the data and setting up
+
+This section loads the data and packages and starts to process the data, but doesn't calculate any statistics or create any results.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+usethis::use_git_ignore(c("*.csv", "*.rds"))
+```
+
+## Loading packages
+
+```{r, include=FALSE}
+library(tidyverse)
+library(rtweet)
+library(usethis)
+```
+
+## Getting data from Open Science Framework
+
+For notes on this one-time setup, see this walkthrough: http://centerforopenscience.github.io/osfr/articles/auth.html)
+
+First, you must generate an API token from an OSF account that has been added to the data repository. Read how to do this here: https://developer.osf.io/#tag/General-Usage
+
+Then, you need to add the OSF API token to the `.renviron` file, which is created using the following command. Here, the file is created at the user level, although this could also be set to the project level. 
+
+```{r, eval = FALSE}
+usethis::edit_r_environ(scope='user')
+```
+
+Open the `.renviron` file and add a single line, using this exact text but replacing `<token>` with your OSF API token:  
+`OSF_PAT="<token>"`
+
+Save the file, quit R, and restart in a new session. Continue running the R script from here.
+
+Now, install the `osfr` package and load the library:
+
+```{r, eval = FALSE}
+devtools::install_github("centerforopenscience/osfr")   # only need to run once
+library(osfr)
+```
+
+Upon loading the `osfr` package, you should see this message:  
+`Automatically registered OSF personal access token.` 
+
+Now you are able to retrieve and download the relevant dataset with this code:
+
+```{r, eval = TRUE}
+# to upload the data
+project <- osfr::osf_retrieve_node("vk67n")
+osfr::osf_upload(project, path = "all-ngsschat-tweets-flattened.csv")
+osfr::osf_upload(project, path = "accessing-ngsschat-data.Rmd", overwrite = TRUE)
+
+osf_retrieve_file("https://osf.io/pxmfc/") %>% 
+    osf_download(path = "all-ngsschat-tweets-flattened.csv", overwrite = TRUE)
+```
+
+## Loading the data
+
+Note that we first processed data collected via TAGS (tags.hawksey.info) in order to obtain the tweet IDs, which we then passed to the `lookup_statuses()` rtweet function. We also processed that data to join it with LIWC data and to remove identifying information.
+
+```{r}
+d <- read_csv("all-ngsschat-tweets-flattened.csv")
+```

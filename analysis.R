@@ -46,6 +46,7 @@ users <- users %>%
 
 location_index <-
   which((users$location != "") & !(stringr::str_detect(users$location, "#")))
+
 locations_minus_blank <-
   users$location[location_index]
 
@@ -53,6 +54,8 @@ users <- users[location_index, ]
 
 #geocoded_locs <- tidytags::geocode_tags(users)
 #write_rds(geocoded_locs, "geocoded-locs.rds")
+
+library(sf)
 
 geocoded_locs <- read_rds("geocoded-locs.rds")
 
@@ -63,7 +66,9 @@ coords <- do.call(rbind, st_geometry(geocoded_locs)) %>%
   filter(!is.na(lon), !is.na(lat))
 
 missing_coord <- is.na(st_dimension(geocoded_locs))
+
 t <- tibble(locations = locations_minus_blank, geocoded_locs)
+
 t <- t[!missing_coord,]
 
 

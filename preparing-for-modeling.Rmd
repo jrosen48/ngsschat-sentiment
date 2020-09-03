@@ -17,37 +17,11 @@ library(tidyverse)
 load('data_final_2020_09_02.rda')
 ```
 
-```{r, joining-data}
+```{r, loading-data}
 tweets_dl <- tweets_dl %>% as_tibble()
 
 d <- tweets_dl
-d <- select(d, -state)
-
-locs <- read_csv("all-ngsschat-locations.csv")
-
-locs$state <- maps::map.where("state", x = locs$lon, y = locs$lat)
-
-locs$state <- ifelse(str_detect(locs$location, "alaska"), "alaska",
-                     ifelse(str_detect(locs$location, "hawaii"), "hawaii", locs$state))
-
-locs <- distinct(locs, location, .keep_all = TRUE)
-
-d <- d %>% 
-  mutate(location = tolower(location)) %>% 
-  left_join(locs)
-
-d$year <- lubridate::year(d$created_at)
-
-d$state <- d$state %>% 
-  str_remove(":main") %>%
-  str_remove(":south") %>%
-  str_remove(":north") %>%
-  str_remove(":long island") %>%
-  str_remove(":manhattan") %>%
-  str_remove(":whidbey island") %>%
-  str_remove(":martha's vineyard") %>% 
-  str_remove("virginia:chesapeake") %>% 
-  str_remove("washington:san juan island")
+rm(tweets_dl)
 ```
 
 ```{r, ts-plot}
@@ -62,13 +36,13 @@ d %>%
   ylab("Posts") +
   ggtitle("Posts to the #NGSSchat Hashtag on Twitter Per Day")
 
-ggsave("ngsschat-posts-per-day.png", width = 8, height = 6)
+ggsave("img/ngsschat-posts-per-day.png", width = 8, height = 6)
 ```
 
 ```{r, proc-state-data}
-state_data <- read_csv("ngsschat-state-data.csv")
+state_data <- read_csv("data-raw/ngsschat-state-data.csv")
 
-state_acronyms <- read_csv("state-acronyms.csv") %>% 
+state_acronyms <- read_csv("data-raw/state-acronyms.csv") %>% 
   select(state, acronym) %>% 
   mutate(state = tolower(state))
 
@@ -134,22 +108,19 @@ dstatus <- state_data_final %>%
   select(-val) %>% 
   rename(adoption_key = key)
 
-state_data_final$adoption_key <- factor(dstatus$adoption_key) %>% forcats::fct_relevel("no_adoption")
+state_data_final$adoption_key <- factor(dstatus$adoption_key) %>% 
+  forcats::fct_relevel("no_adoption")
+
+state_data_final <- rename(state_data_final, state_master = state)
 ```
 
 ```{r, joining-state-data}
 d <- d %>% 
   left_join(state_data_final)
-
-d$year_fct <- factor(d$year) %>% forcats::fct_relevel('2016')
 ```
 
-## descriptive stats
-
-```{r, desciptive-stats}
-d %>% 
-  select(scale_neg, scale_pos, senti_scale, senti_binary, state, screen_name, year, near_adoption, before_adoption, after_adoption, no_adoption) %>% 
-  skimr::skim()
+```{r, creating-year-factor}
+d$year_fct <- factor(d$year) %>% forcats::fct_relevel('2016')
 ```
 
 ```{r, add-tweet-type}
@@ -163,20 +134,32 @@ d <- d %>%
 ```
 
 including english only 
+
 ```{r, filtering-en}
 d <- d %>% filter(lang == "en")
 ```
+
 
 ```{r}
 d <- d %>% 
   mutate(year_centered = scale(year, scale = FALSE),
          time_on_twitter = (d$created_at - d$account_created_at) / (60 * 60 * 24) / 365,
          year_fct = factor(as.numeric(as.character(d$year_fct))))
-
-d <- d %>% 
-  mutate(state = ifelse(state == "", NA, state))
 ```
 
+## descriptive stats
+
+New vars include:
+
+favorite_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count
+
+```{r, desciptive-stats}
+d %>% 
+  select(type_of_tweet, year_centered, year_fct, scale_neg, scale_pos, senti_scale, senti_binary, state_master, screen_name, year, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count) %>% 
+  skimr::skim()
+```
+
+
 ```{r}
-write_rds(rtweet::flatten(d), 'ngsschat-data-for-modeling.rds')
+write_rds(rtweet::flatten(d), 'data/ngsschat-data-for-modeling.rds')
 ```

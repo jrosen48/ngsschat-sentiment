@@ -1,5 +1,6 @@
 # processing-all-locations
 library(tidyverse)
+library(sf)
 # locs <- read_csv("geolocated-locs.csv")
 # locs <- locs$value
 
@@ -64,3 +65,14 @@ write_rds(out12, "out12.rds")
 
 out13 <- mapsapi::mp_geocode(locations_minus_blank[23000:23874], key = "AIzaSyAn7acOv54hSusg4khN5X2sPtIg8LSVzBM")
 write_rds(out13, "out13.rds")
+
+files <- list.files(pattern = "*.rds")[-1]
+l <- map(files, read_rds)
+
+f <- function(geocoded_locs) {
+  coords <- do.call(rbind, st_geometry(geocoded_locs)) %>% 
+    as_data_frame() %>% setNames(c("lon","lat")) %>% 
+    filter(!is.na(lon), !is.na(lat))
+}
+
+f(l[[1]])

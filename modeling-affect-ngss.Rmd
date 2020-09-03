@@ -8,165 +8,99 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, cache = TRUE)
 ```
 
 ## loading, setting up
 
-```{r, load-packages}
+```{r}
 library(tidyverse)
 library(lme4)
-library(sjPlot)
+
+d <- read_rds('ngsschat-data-for-modeling.rds')
 ```
 
-```{r, read-and-prep-data}
-# d <- read_csv("osfstorage-archive/CB2020_08_16_NGSSChat_chats.csv")
-load('data_aggregated_2020_08_25.rda')
-d <- tweets_dl
+# Descriptive analysis
 
-#d_all <- read_csv("NGSSchat_sentiment_states_newly_revised.csv")
+## overall
 
-#d_all <- d_all %>% select(status_id, posRate, negRate)
-
-#d <- left_join(d, d_all)
-
-d$year <- lubridate::year(d$created_at)
-
-d$state <- d$state %>% 
-  str_remove(":main") %>%
-  str_remove(":south") %>%
-  str_remove(":north") %>%
-  str_remove(":long island") %>%
-  str_remove(":manhattan") %>%
-  str_remove(":whidbey island") %>%
-  str_remove(":martha's vineyard")
+```{r}
+d %>% count(senti_binary) %>% spread(senti_binary, n) %>% 
+  set_names(c("neg", "pos")) %>% mutate(senti_ratio = neg/pos)
 ```
+
+## by year 
+
+```{r}
+d %>% count(year, senti_binary) %>% spread(senti_binary, n) %>% set_names(c("year", "neg", "pos")) %>% mutate(senti_ratio = neg/pos) %>% 
+  ggplot(aes(x = year, y = senti_ratio)) +
+  geom_point() +
+  geom_line() +
+  geom_smooth()
+```
+
+## by tweet type
+
+```{r}
+
+d %>% count(type_of_tweet, senti_binary) %>% spread(senti_binary, n) %>% set_names(c("type_of_tweet", "neg", "pos")) %>% mutate(senti_ratio = neg/pos)
+
+```
+
+## by state
 
 ```{r}
 d %>% 
-  mutate(date_r = lubridate::round_date(created_at, "day")) %>% 
-  count(date_r) %>% 
-  ggplot(aes(y = n, x = date_r)) +
-  geom_line(color = 'lightgray') +
-  geom_point(color = 'black') +
-  hrbrthemes::theme_ipsum() +
-  xlab(NULL) +
-  ylab("Posts") +
-  ggtitle("Posts to the #NGSSchat Hashtag on Twitter Per Day")
-
-ggsave("ngsschat-posts-per-day.png", width = 8, height = 6)
+  count(state, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("state", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos) %>% 
+  arrange(desc(senti_ratio)) %>% 
+  ggplot(aes(x = reorder(state, senti_ratio), y = senti_ratio)) +
+  geom_col() +
+  coord_flip()
 ```
+## by state, by year
 
-```{r, proc-state-data}
-state_data <- read_csv("ngsschat-state-data.csv")
-
-state_acronyms <- read_csv("state-acronyms.csv") %>% 
-  select(state, acronym) %>% 
-  mutate(state = tolower(state))
-
-state_data$month <- state_data$date_month %>% 
-  str_split("\\-") %>% 
-  map(~.[[1]]) %>% as.integer()
-
-state_data$year_month <- as.numeric(str_c(state_data$date_year, ".", state_data$month))
-
-state_data_merge <- state_data %>% 
-  rename(state = State) %>% 
-  mutate(state = tolower(state)) %>% 
-  select(state, year_month, adopted = Not, year = date_year, modified, lead) %>% 
-  mutate(adopted = if_else(is.na(adopted), 1, 0)) %>% 
-  mutate(year_adopted = year) %>% 
-  mutate(modified = ifelse(is.na(modified), 0, modified)) %>% 
-  mutate(lead = ifelse(lead == "Yes", 1, lead),
-         lead = ifelse(is.na(lead), 0, lead))
-
-state_data_adopt <- state_data %>%
-  select(State, Early:Not) %>%
-  gather(key, val, -State) %>%
-  rename(state = State,
-         adoption_status = key) %>%
-  mutate(state = tolower(state),
-         adoption_status = if_else(adoption_status == "Near", "Mid", adoption_status),
-         adoption_status = factor(adoption_status, levels = c("Not", "Early", "Mid", "Late"))) %>%
-  filter(!is.na(val)) %>%
-  select(-val) %>% 
-  select(state, adoption_status)
-
-state_data_merged <- state_data_merge %>% 
-  left_join(state_data_adopt) %>% 
-  left_join(state_acronyms)
-
-state_data_final <- state_data_merged %>% 
-  complete(state, year = 2011:2020) %>% 
-  group_by(state) %>% 
-  fill(adopted, year_month, adoption_status, acronym) %>% 
-  fill(adopted, year_month, adoption_status, acronym, .direction = "up")
-
-state_data_final <- state_data_final %>% 
-  mutate(year_adopted_plus = year_adopted + 1) %>% 
-  mutate(year_adopted_minus = year_adopted - 1) %>% 
-  fill(year_adopted, year_adopted_minus, year_adopted_plus, .direction = "updown") %>% 
-  mutate(near_adoption = ifelse(year == year_adopted, 1, 0),
-         near_adoption = ifelse(year == year_adopted_minus, 1, near_adoption),
-         near_adoption = ifelse(year == year_adopted_plus, 1, near_adoption)) %>% 
-  mutate(before_adoption = ifelse(year < year_adopted_minus, 1, 0)) %>% 
-  mutate(after_adoption = ifelse(year > year_adopted_plus, 1, 0)) %>% 
-  fill(modified, lead, .direction = 'updown') %>% 
-  ungroup()
-
-state_data_final <- state_data_final %>% 
-  mutate(no_adoption = ifelse(adoption_status == "Not", 1, 0)) %>% 
-  select(state, year, contains("_adoption"), modified, lead)
-
-dstatus <- state_data_final %>% 
-  select(contains("_adoption")) %>% 
-  gather(key, val) %>% 
-  mutate(val = ifelse(is.na(val), 0, val)) %>% 
-  filter(val == 1) %>% 
-  select(-val) %>% 
-  rename(adoption_key = key)
-
-state_data_final$adoption_key <- factor(dstatus$adoption_key) %>% forcats::fct_relevel("no_adoption")
-```
-
-```{r, joining-state-data}
-d <- d %>% 
-  left_join(state_data_final)
-
-d$year_fct <- factor(d$year) %>% forcats::fct_relevel('2016')
-```
-
-## descriptive stats
-
-```{r, desciptive-stats}
+```{r}
 d %>% 
-  select(Positive, Negative, posRate, negRate, state, screen_name, year, near_adoption, before_adoption, after_adoption, no_adoption) %>% 
-  skimr::skim()
+  filter(year >= 2012) %>% 
+  count(state, year, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("state", "year", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos) %>% 
+  arrange(desc(senti_ratio)) %>% 
+  ggplot(aes(x = reorder(state, senti_ratio), y = senti_ratio)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~year)
 ```
 
-### Trying to get more state data by identifying states in the text of tweets
+## by adoption status
 
-This doesn't seem to be working very well - need to somehow only get introductory posts, hard
+```{r}
+d %>% 
+  count(adoption_key, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("adoption_status", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos) %>% 
+  arrange(desc(senti_ratio))
+```
 
-```{r, eval = FALSE}
-ds <- d %>% 
-  filter(is.na(state))
+## by adoption status by year
 
-ds <- ds %>% 
-  mutate(text = tolower(text))
-
-l <- map(state_acronyms$state, str_detect, string = ds$text)
-
-dd <- as.data.frame(l) %>% as_tibble() %>% set_names(state_acronyms$state)
-
-ll <- map(str_c(" ", tolower(state_acronyms$acronym), " "), str_detect, string = ds$text)
-
-ddd <- as.data.frame(ll) %>% as_tibble() %>% set_names(tolower(state_acronyms$acronym))
-
-dd %>% 
-  mutate(screen_name = ds$screen_name) %>% 
-  gather(key, val, -screen_name) %>% 
-  filter(val == TRUE)
+```{r}
+d %>% 
+  filter(year >= 2012) %>% 
+  count(adoption_key, year, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("state", "year", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos) %>% 
+  arrange(desc(senti_ratio)) %>% 
+  ggplot(aes(x = reorder(state, senti_ratio), y = senti_ratio)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~year)
 ```
 
 # Models
@@ -174,180 +108,109 @@ dd %>%
 ## Just modeling the effect of state
 
 ```{r, m0-state}
-m0_pos_state <- lmer(posRate ~ 1 + (1|state), data = d)
-m0_neg_state <- lmer(negRate ~ 1 + (1|state), data = d)
+m0 <- lmer(senti_scale ~ 1 + (1|state), data = d)
 
-sjPlot::tab_model(m0_pos_state)
-sjPlot::tab_model(m0_neg_state)
+sjPlot::tab_model(m0)
 
-performance::icc(m0_pos_state, by_group = TRUE)
-performance::icc(m0_neg_state, by_group = TRUE)
+performance::icc(m0, by_group = TRUE)
 ```
 
 ## Just modeling the effect of screen_name
 
 ```{r, m0-screen_name}
-m0_pos_screen_name <- lmer(posRate ~ 1 + (1|screen_name), data = d)
-m0_neg_screen_name <- lmer(negRate ~ 1 + (1|screen_name), data = d)
+m1 <- lmer(senti_scale ~ 1 + (1|screen_name), data = d)
 
+sjPlot::tab_model(m1)
 
-sjPlot::tab_model(m0_pos_screen_name)
-sjPlot::tab_model(m0_neg_screen_name)
-
-performance::icc(m0_pos_screen_name, by_group = TRUE)
-performance::icc(m0_neg_screen_name, by_group = TRUE)
+performance::icc(m1, by_group = TRUE)
 ```
 
 ## Both state and screen name 
 
 ```{r, m1}
-m1_pos <- lmer(posRate ~ 1 + (1|state) + (1|screen_name), data = d)
-m1_neg <- lmer(negRate ~ 1 + (1|state) + (1|screen_name), data = d)
+m2 <- lmer(senti_scale ~ 1 + (1|state) + (1|screen_name), data = d)
 
+sjPlot::tab_model(m2)
 
-sjPlot::tab_model(m1_pos, show.icc = TRUE)
-sjPlot::tab_model(m1_neg, show.icc = TRUE)
-
-performance::icc(m1_pos, by_group = TRUE)
-performance::icc(m1_neg, by_group = TRUE)
+performance::icc(m2, by_group = TRUE)
 ```
 
-## Adding whether the tweet was during a chat or not
+## Adding whether the tweets incuded ngsschat or not
 
-```{r, m1-chat}
-mchat_pos <- lmer(posRate ~ 1 + isChat + (1|state) + (1|screen_name), data = d)
-mchat_neg <- lmer(negRate ~ 1 + isChat + (1|state) + (1|screen_name), data = d)
+```{r, m1-chat-all-tweets}
+m4 <- lmer(senti_scale ~ 1 + type_of_tweet + (1|state) + (1|screen_name), data = d)
 
-sjPlot::tab_model(mchat_pos, show.icc = TRUE)
-sjPlot::tab_model(mchat_neg, show.icc = TRUE)
+sjPlot::tab_model(m4, show.icc = TRUE)
 
-performance::icc(mchat_pos, by_group = TRUE)
-performance::icc(mchat_neg, by_group = TRUE)
+performance::icc(m4, by_group = TRUE)
 ```
 
 ## Adding year as a factor
 
 ```{r, m2}
-m2_pos <- lmer(posRate ~ 1 + year_fct + isChat + (1|state) + (1|screen_name), data = d)
-m2_neg <- lmer(negRate ~ 1 + year_fct + isChat + (1|state) + (1|screen_name), data = d)
+m5 <- lmer(senti_scale ~ 1 + type_of_tweet + year_fct + (1|state) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m2_pos, show.icc = TRUE)
-sjPlot::tab_model(m2_neg, show.icc = TRUE)
+sjPlot::tab_model(m5, show.icc = TRUE)
 
-performance::icc(m2_pos, by_group = TRUE)
-performance::icc(m2_neg, by_group = TRUE)
+performance::icc(m5, by_group = TRUE)
 ```
 
 ## Adding year (scaled) as a slope
 
 ```{r, m2-slope}
-m2_pos_s <- lmer(posRate ~ 1 + scale(year) + isChat + (1|state) + (1|screen_name), data = d)
-m2_neg_s <- lmer(negRate ~ 1 + scale(year) + isChat + (1|state) + (1|screen_name), data = d)
+m6 <- lmer(senti_scale ~ 1 + type_of_tweet + scale(year, scale = FALSE) + (1|state) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m2_pos_s, show.icc = TRUE)
-sjPlot::tab_model(m2_neg_s, show.icc = TRUE)
+sjPlot::tab_model(m6, show.icc = TRUE)
 
-performance::icc(m2_pos_s, by_group = TRUE)
-performance::icc(m2_neg_s, by_group = TRUE)
+performance::icc(m6, by_group = TRUE)
 ```
 
 ## Adding year as a random effect
 
 ```{r, m2-re}
-m2_pos_re <- lmer(posRate ~ 1 + isChat + (1|year) + (1|state) + (1|screen_name), data = d)
-m2_neg_re <- lmer(negRate ~ 1 + isChat + (1|year) + (1|state) + (1|screen_name), data = d)
+m7 <- lmer(senti_scale~ 1 + type_of_tweet + (1|year) + (1|state) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m2_pos_re, show.icc = TRUE)
-sjPlot::tab_model(m2_neg_re, show.icc = TRUE)
+sjPlot::tab_model(m7, show.icc = TRUE)
 
-performance::icc(m2_pos_re, by_group = TRUE)
-performance::icc(m2_neg_re, by_group = TRUE)
+performance::icc(m7, by_group = TRUE)
 ```
 
 ## Adding adoption status
 
-```{r, m3-lmer}
-d$year_fct <- factor(as.numeric(as.character(d$year_fct)))
+```{r, m3-lmer-run}
+m8 <- lmer(senti_scale ~ -1 + type_of_tweet + year_centered + adoption_key + lead + modified + time_on_twitter + (1|state) + (1|screen_name), data = d)
 
-dd <- d %>% 
-  select(Positive = posRate,
-         Negative = negRate,
-         Year_cont = year,
-         Year = year_fct,
-         `NGSS Adoption` = adoption_key,
-         Chat = isChat,
-         state, screen_name, 
-         lead, modified) %>% 
-  mutate(Year_cont = Year_cont - 2016) %>% 
-  mutate(time_on_twitter = (d$created_at - d$account_created_at) / (60 * 60 * 24) / 365)
+sjPlot::plot_model(m8) + hrbrthemes::theme_ipsum()
 
-m3_pos <- lmer(Positive ~ -1 + Year_cont + `NGSS Adoption` + Chat + lead + modified + time_on_twitter + (1|state) + (1|screen_name), data = dd)
-m3_neg <- lmer(Negative * -1 ~ -1 + Year_cont + `NGSS Adoption` + Chat + lead + modified + time_on_twitter + (1|state) + (1|screen_name), data = dd)
-# write_csv(d, "data-for-hpc.csv")
-# m <- brms::brm(mvbind(posRate, negRate) ~ -1 + year_fct + adoption_key + isChat + (1|state) + (1|screen_name), data = d, chains = 4, cores = 4, iter = 1000)
+performance::icc(m8, by_group = TRUE)
 
-sjPlot::plot_model(m3_pos) + hrbrthemes::theme_ipsum()
-sjPlot::plot_model(m3_neg, ) + hrbrthemes::theme_ipsum()
-
-performance::icc(m3_pos, by_group = TRUE)
-performance::icc(m3_neg, by_group = TRUE)
-
-sjPlot::tab_model(m3_pos,m3_neg, show.icc = TRUE, show.se = TRUE, file = 'out1.doc')
-sjPlot::tab_model(m3_neg, show.icc = TRUE, show.se = TRUE, file = 'm3-neg.doc')
-```
-
-## Adding adoption status as a varying slope (by state)
-
-```{r, m3-lmer-adopt-slope}
-m3_pos_i <- lmer(posRate ~ 1 + year_fct + isChat + (adoption_key|state) + (1|screen_name), data = d)
-m3_neg_i <- lmer(negRate ~ 1 + year_fct + isChat + (adoption_key|state) + (1|screen_name), data = d)
-
-sjPlot::tab_model(m3_pos_i, show.icc = TRUE, file = 'm3pos.doc', )
-sjPlot::tab_model(m3_neg_i, show.icc = TRUE)
-
-performance::icc(m3_pos_i, by_group = TRUE)
-performance::icc(m3_neg_i, by_group = TRUE)
+sjPlot::tab_model(m8, show.icc = TRUE, show.se = TRUE, file = 'out1.doc')
 ```
 
 ## Adding others state-level vars
 
 ```{r, m3-lmer-add}
-m3_pos_add <- lmer(posRate ~ 1 + year_fct + lead + modified + isChat + (1|state) + (1|screen_name), data = d)
-m3_neg_add <- lmer(negRate ~ 1 + year_fct + lead + modified + isChat + (1|state) + (1|screen_name), data = d)
+m10 <- lmer(senti_scale ~ 1 + scale(year, scale = FALSE) + lead + modified + type_of_tweet + (1|state) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m3_pos_add, show.icc = TRUE)
-sjPlot::tab_model(m3_neg_add, show.icc = TRUE)
+sjPlot::tab_model(m10, show.icc = TRUE)
 
-performance::icc(m3_pos_add, by_group = TRUE)
-performance::icc(m3_neg_add, by_group = TRUE)
+performance::icc(m10, by_group = TRUE)
 ```
 
-## Adding others state-level vars as varying slopes (not fitting well)
+## ignoring state because of missing data
 
-I am not sure the syntax is right, but I tried seperately (only lead and modified) and that also didn't work
+```{r, m3-lmer-add-no-state}
+m11 <- lmer(senti_scale ~ 1 + scale(year, scale = FALSE) + type_of_tweet + (1|screen_name), data = d)
 
-```{r, m3-lmer-add-i, eval = FALSE}
-m3_pos_add_i <- lmer(posRate ~ 1 + year_fct + isChat + (lead + modified|state) + (1|screen_name), data = d)
-m3_neg_add_i <- lmer(negRate ~ 1 + year_fct + isChat + (lead + modified|state) + (1|screen_name), data = d)
+sjPlot::tab_model(m11, show.icc = TRUE)
 
-sjPlot::tab_model(m3_pos_add_i, show.icc = TRUE)
-sjPlot::tab_model(m3_neg_add_i, show.icc = TRUE)
-
-performance::icc(m3_pos_add_i, by_group = TRUE)
-performance::icc(m3_neg_add_i, by_group = TRUE)
+performance::icc(m11, by_group = TRUE)
 ```
 
+## ignoring screen name to understand potential bias from not doing so
 
-Inspecting random effects levels for states
+```{r, m3-lm}
+m12 <- lm(senti_scale ~ 1 + scale(year, scale = FALSE) + type_of_tweet, data = d)
 
-```{r}
-p <- sjPlot::plot_model(m3_pos, type = "re", sort.est = TRUE)
-p[[2]]
-
-p1 <- sjPlot::plot_model(m3_neg, type = "re", sort.est = TRUE)
-p1[[2]]
+sjPlot::tab_model(m12, show.icc = TRUE)
 ```
-
-## Next models
-
-- adding chat versus non-chat

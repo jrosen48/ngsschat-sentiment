@@ -10,6 +10,6 @@ navbar:
   - text: Models
     href: models.html
   - text: Drake
-    href: drake-graph.html
+    href: graph.html
 output:
   html_document:

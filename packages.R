@@ -1,4 +1,12 @@
-## library() calls go here
-library(conflicted)
-library(dotenv)
 library(drake)
+library(tidyverse)
+library(maps)
+library(renv)
+library(conflicted)
+library(lme4)
+library(skimr)
+library(lubridate)
+
+conflict_prefer("load", "base")
+conflict_prefer("filter", "dplyr")
+conflict_prefer("gather", "tidyr")

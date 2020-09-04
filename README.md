@@ -1,9 +1,11 @@
 # README
 
-## Preparation of data 
+This project uses {drake}. 
 
-`data-for-modeling-affect-ngss.rds` is created from `data_final_2020_09_02.rda` and a number of other (CSV) files using `preparing-data-for-modeling.Rmd`. **This step is not needed to analyze the data, as described next.**
+One file that is not in this repository is needed:
 
-## Analysis
+`data_final_2020_09_04.rda` (available in OneDrive and upon request; save this file in the `data-raw` directory)
 
-Use `modeling-affect-ngss.Rmd` with the file `data-for-modeling-affect-ngss.rds` (from OneDrive).
+To run the analysis, run:
+
+`drake::r_make()`

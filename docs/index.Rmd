@@ -1,0 +1,45 @@
+---
+title: "#NGSSchat Sentiment Analysis"
+date: "`r stringr::str_c('Updated ', format(Sys.time(), '%d %B, %Y'))`"
+output: html_document
+---
+
+## Background
+
+The repository for this analysis is here: https://github.com/jrosen48/ngsschat-sentiment
+
+The data is available via request here: https://osf.io/vk67n/
+
+This project is carried out by:
+
+Joshua Rosenberg
+University of Tennessee, Knoxville
+jrosenb8@utk.edu
+
+Conrad Borchers
+University of Tübingen, Germany
+conrad.borchers@student.uni-tuebingen.de
+
+Benjamin Gibbons
+Emory University
+ben.gibbons@emory.edu
+
+Elizabeth Dyer
+Middle Tennessee State University
+elizabeth.dyer@mtsu.edu
+
+Daniel Anderson
+University of Oregon
+daniela@uoregon.edu
+
+Christian Fischer
+University of Tübingen, Germany
+christian.fischer@uni-tuebingen.de
+
+## Products
+
+Rosenberg, J. M., Dyer, E. B., Anderson, D. J., & Fischer, C. (September, 2020). If you’re happy and you know it, post a tweet? A study of the sentiment of posts to the #NGSSchat hashtag on Twitter. Presentation at the AERA Satellite Conference on Educational Data Science, Stanford, CA.
+
+- Video: https://stanford.box.com/s/i5ixkj2b8dyy8q5j9o5ww4nafznb497x
+- Poster: https://docs.google.com/presentation/d/1OQLBoqdmyx7lW_DrV_H7XY3uJjlbgp2aLlAxSyZQLNM/edit?usp=sharing
+

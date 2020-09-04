@@ -1,5 +1,11 @@
 # README
 
+## Dependencies
+
+See `packages.R`
+
+## Workflow
+
 This project uses {drake}. 
 
 One file that is not in this repository is needed:
@@ -9,3 +15,4 @@ One file that is not in this repository is needed:
 To run the analysis, run:
 
 `drake::r_make()`
+

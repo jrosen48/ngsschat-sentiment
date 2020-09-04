@@ -153,7 +153,7 @@ favorite_count_user, followers_count, friends_count, time_on_twitter_period, rep
 
 ```{r, desciptive-stats}
 d %>% 
-  select(type_of_tweet, year_centered, year_fct, scale_neg, scale_pos, senti_scale, senti_binary, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher) %>% 
+  select(type_of_tweet, year_fct, scale_neg, scale_pos, senti_scale, senti_binary, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher) %>% 
   skimr::skim()
 ```
 

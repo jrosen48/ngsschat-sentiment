@@ -4,11 +4,13 @@ date: "`r stringr::str_c('Updated ', format(Sys.time(), '%d %B, %Y'))`"
 output: html_document
 ---
 
+## Background
+
 The repository for this analysis is here: https://github.com/jrosen48/ngsschat-sentiment
 
 The data is available via request here: https://osf.io/vk67n/
 
-This is by:
+This project is carried out by:
 
 Joshua Rosenberg
 University of Tennessee, Knoxville
@@ -33,3 +35,11 @@ daniela@uoregon.edu
 Christian Fischer
 University of Tübingen, Germany
 christian.fischer@uni-tuebingen.de
+
+## Products
+
+Rosenberg, J. M., Dyer, E. B., Anderson, D. J., & Fischer, C. (September, 2020). If you’re happy and you know it, post a tweet? A study of the sentiment of posts to the #NGSSchat hashtag on Twitter. Presentation at the AERA Satellite Conference on Educational Data Science, Stanford, CA.
+
+- Video: https://stanford.box.com/s/i5ixkj2b8dyy8q5j9o5ww4nafznb497x
+- Poster: https://docs.google.com/presentation/d/1OQLBoqdmyx7lW_DrV_H7XY3uJjlbgp2aLlAxSyZQLNM/edit?usp=sharing
+

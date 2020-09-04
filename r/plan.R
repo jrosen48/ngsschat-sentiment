@@ -29,8 +29,6 @@ the_plan <-
       knitr_in("drake-graph.Rmd"),
       output_file = file_out("docs/drake-graph.html")),
     
-    site_index = rmarkdown::render(
-      knitr_in("index.Rmd"),
-      output_file = file_out("docs/index.html"))
+    rendered_site = render_site()
     
 )

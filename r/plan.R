@@ -25,10 +25,6 @@ the_plan <-
     
     # for site
     
-    drake_meta = rmarkdown::render(
-      knitr_in("drake-graph.Rmd"),
-      output_file = file_out("docs/drake-graph.html")),
-    
     rendered_site = render_site()
     
 )

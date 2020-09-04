@@ -1,0 +1,296 @@
+---
+title: "#NGSSchat sentiment modeling"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+params:
+  d: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, cache = FALSE)
+```
+
+```{r, renaming-params}
+d <- params$d
+```
+
+# Descriptive analysis
+
+## overall
+
+```{r}
+d %>% count(senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos)
+```
+
+## by year 
+
+```{r}
+d %>% count(year_of_post, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("year_of_post", "neg", "pos")) %>%
+  mutate(senti_ratio = neg/pos) %>% 
+  ggplot(aes(x = year_of_post, y = senti_ratio)) +
+  geom_point() +
+  geom_line() +
+  geom_smooth()
+```
+
+## by tweet type
+
+```{r}
+d %>% 
+  count(type_of_tweet, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("type_of_tweet", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos)
+```
+
+## by state
+
+```{r}
+d %>% 
+  count(state_master, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("state_master", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos) %>% 
+  arrange(desc(senti_ratio)) %>% 
+  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
+  geom_col() +
+  coord_flip()
+```
+
+## by state, by year
+
+```{r}
+d %>% 
+  filter(year_of_post >= 2012) %>% 
+  count(state_master, year_of_post, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("state_master", "year_of_post", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos) %>% 
+  arrange(desc(senti_ratio)) %>% 
+  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~year_of_post)
+```
+
+## by adoption status
+
+```{r}
+d %>% 
+  count(adoption_key, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("adoption_status", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos) %>% 
+  arrange(desc(senti_ratio))
+```
+
+## by adoption status by year
+
+```{r}
+d %>% 
+  filter(year_of_post >= 2012) %>% 
+  count(adoption_key, year_of_post, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("state_master", "year_of_post", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos) %>% 
+  arrange(desc(senti_ratio)) %>% 
+  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~year_of_post)
+```
+
+# Models
+
+## Just modeling the effect of state
+
+```{r, m0}
+m0 <- lmer(senti_scale ~ 1 + (1|state_master), data = d)
+
+sjPlot::tab_model(m0)
+
+performance::icc(m0, by_group = TRUE)
+```
+
+## Just modeling the effect of screen_name
+
+```{r, m1}
+m1 <- lmer(senti_scale ~ 1 + 
+             (1|screen_name), data = d)
+
+sjPlot::tab_model(m1)
+
+performance::icc(m1, by_group = TRUE)
+```
+
+```{r, m1-eq, results = "asis"}
+equatiomatic::extract_eq(m1)
+```
+
+## Modeling the effects of both state and screen name 
+
+```{r, m2}
+m2 <- lmer(senti_scale ~ 1 + 
+             (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m2)
+
+performance::icc(m2, by_group = TRUE)
+```
+
+```{r, m2-eq, results = "asis"}
+equatiomatic::extract_eq(m2)
+```
+
+## Adding whether the tweets incuded ngsschat or not
+
+```{r, m3}
+m3 <- lmer(senti_scale ~ 1 + type_of_tweet + 
+             (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m3, show.icc = TRUE)
+
+performance::icc(m3, by_group = TRUE)
+```
+
+```{r, m3-eq, results = "asis"}
+equatiomatic::extract_eq(m3)
+```
+
+## Adding year as a factor
+
+```{r, m4}
+m4 <- lmer(senti_scale ~ 1 + type_of_tweet + year_fct + 
+             (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m4, show.icc = TRUE)
+
+performance::icc(m4, by_group = TRUE)
+```
+
+```{r, m4-eq, results = "asis"}
+equatiomatic::extract_eq(m4)
+```
+
+## Adding year (centered) as a slope
+
+```{r, m2-slope}
+m5 <- lmer(senti_scale ~ 1 + type_of_tweet + scale(year_of_post, scale = FALSE) + 
+             (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m5, show.icc = TRUE)
+
+performance::icc(m5, by_group = TRUE)
+```
+
+```{r, m5-eq, results = "asis"}
+equatiomatic::extract_eq(m5)
+```
+
+## Adding adoption status
+
+```{r, m6}
+m6 <- lmer(senti_scale ~ -1 + type_of_tweet + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + time_on_twitter +
+             (1|state_master) + (1|screen_name), data = d)
+
+performance::icc(m6, by_group = TRUE)
+
+sjPlot::tab_model(m6, show.icc = TRUE, show.se = TRUE)
+```
+
+```{r, m6-eq, results = "asis"}
+equatiomatic::extract_eq(m6)
+```
+
+## Adding others state-level vars
+
+```{r, m7}
+m7 <- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + 
+             (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m7, show.icc = TRUE)
+
+performance::icc(m7, by_group = TRUE)
+```
+
+```{r, m7-eq, results = "asis"}
+equatiomatic::extract_eq(m7)
+```
+
+## Adding teacher
+
+```{r, m8}
+m8 <- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + isTeacher + 
+             (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m8, show.icc = TRUE)
+
+performance::icc(m8, by_group = TRUE)
+```
+
+```{r, m8-eq, results = "asis"}
+equatiomatic::extract_eq(m8)
+```
+
+## Adding some tweet-level vars
+
+```{r, m9, eval = FALSE}
+m9 <- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key +  lead + modified + type_of_tweet + isTeacher + 
+             favorite_count + retweet_count + reply_count +
+             (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m9, show.icc = TRUE)
+
+performance::icc(m9, by_group = TRUE)
+```
+
+```{r, m9-eq, results = "asis", eval = FALSE}
+equatiomatic::extract_eq(m9)
+```
+
+## Adding some user-level vars
+
+```{r, m10, eval = FALSE}
+m10 <- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + isTeacher + 
+              favorite_count + retweet_count + reply_count +
+              favorite_count_user +
+              retweet_count_user +
+              (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m10, show.icc = TRUE)
+
+performance::icc(m10, by_group = TRUE)
+```
+
+```{r, m10-eq, results = "asis", eval = FALSE}
+equatiomatic::extract_eq(m10)
+```
+
+## Adding additional user-level vars
+
+```{r, m11, eval = FALSE}
+m11 <- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + isTeacher + 
+              favorite_count + retweet_count + reply_count +
+              favorite_count_user +
+              retweet_count_user +
+              statuses_count +
+              follower_count +
+              friends_count +
+              (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m11, show.icc = TRUE)
+
+performance::icc(m11, by_group = TRUE)
+```
+
+```{r, m11-eq, results = "asis", eval = FALSE}
+equatiomatic::extract_eq(m11)
+```

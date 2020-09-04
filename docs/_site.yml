@@ -1,0 +1,15 @@
+name: NGSSchat Sentiment Analysis
+output_dir: '.'
+navbar:
+  title: #NGSSchat Sentiment Analysis
+  left:
+  - text: Home
+    href: index.html
+  - text: Preparing for Modeling
+    href: prepare-for-modeling.html
+  - text: Models
+    href: models.html
+  - text: Drake
+    href: drake-graph.html
+output:
+  html_document:

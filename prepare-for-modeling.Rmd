@@ -11,10 +11,10 @@ params:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
-```{r, load-packages}
-library(maps)
-library(tidyverse)
+```{r, renaming-params}
+tweets_dl <- params$tweets_dl
+state_data <- params$state_data
+state_acronyms <- params$state_acronyms
 ```
 
 ```{r, loading-data}

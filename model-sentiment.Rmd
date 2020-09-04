@@ -17,97 +17,6 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, cache = FALSE)
 d <- params$d
 ```
 
-# Descriptive analysis
-
-## overall
-
-```{r}
-d %>% count(senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos)
-```
-
-## by year 
-
-```{r}
-d %>% count(year_of_post, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("year_of_post", "neg", "pos")) %>%
-  mutate(senti_ratio = neg/pos) %>% 
-  ggplot(aes(x = year_of_post, y = senti_ratio)) +
-  geom_point() +
-  geom_line() +
-  geom_smooth()
-```
-
-## by tweet type
-
-```{r}
-d %>% 
-  count(type_of_tweet, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("type_of_tweet", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos)
-```
-
-## by state
-
-```{r}
-d %>% 
-  count(state_master, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip()
-```
-
-## by state, by year
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(state_master, year_of_post, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "year_of_post", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip() +
-  facet_wrap(~year_of_post)
-```
-
-## by adoption status
-
-```{r}
-d %>% 
-  count(adoption_key, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("adoption_status", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio))
-```
-
-## by adoption status by year
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(adoption_key, year_of_post, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "year_of_post", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip() +
-  facet_wrap(~year_of_post)
-```
-
 # Models
 
 ## Just modeling the effect of state
@@ -242,7 +151,7 @@ equatiomatic::extract_eq(m8)
 
 ## Adding some tweet-level vars
 
-```{r, m9, eval = FALSE}
+```{r, m9, eval = TRUE}
 m9 <- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key +  lead + modified + type_of_tweet + isTeacher + 
              favorite_count + retweet_count + reply_count +
              (1|state_master) + (1|screen_name), data = d)
@@ -252,13 +161,13 @@ sjPlot::tab_model(m9, show.icc = TRUE)
 performance::icc(m9, by_group = TRUE)
 ```
 
-```{r, m9-eq, results = "asis", eval = FALSE}
+```{r, m9-eq, results = "asis", eval = TRUE}
 equatiomatic::extract_eq(m9)
 ```
 
 ## Adding some user-level vars
 
-```{r, m10, eval = FALSE}
+```{r, m10, eval = TRUE}
 m10 <- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + isTeacher + 
               favorite_count + retweet_count + reply_count +
               favorite_count_user +
@@ -270,13 +179,13 @@ sjPlot::tab_model(m10, show.icc = TRUE)
 performance::icc(m10, by_group = TRUE)
 ```
 
-```{r, m10-eq, results = "asis", eval = FALSE}
+```{r, m10-eq, results = "asis", eval = TRUE}
 equatiomatic::extract_eq(m10)
 ```
 
 ## Adding additional user-level vars
 
-```{r, m11, eval = FALSE}
+```{r, m11, eval = TRUE}
 m11 <- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + isTeacher + 
               favorite_count + retweet_count + reply_count +
               favorite_count_user +
@@ -291,6 +200,6 @@ sjPlot::tab_model(m11, show.icc = TRUE)
 performance::icc(m11, by_group = TRUE)
 ```
 
-```{r, m11-eq, results = "asis", eval = FALSE}
+```{r, m11-eq, results = "asis", eval = TRUE}
 equatiomatic::extract_eq(m11)
 ```

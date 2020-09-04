@@ -18,6 +18,11 @@ the_plan <-
     
     loaded_processed_data = read_rds(file_in("data/ngsschat-data-for-modeling.rds")),
     
+    descriptives = rmarkdown::render(
+      knitr_in("describe-data.Rmd"),
+      output_file = file_out("docs/descriptives.html"),
+      params = list(d = loaded_processed_data)),
+    
     fitted_models = rmarkdown::render(
       knitr_in("model-sentiment.Rmd"),
       output_file = file_out("docs/models.html"),

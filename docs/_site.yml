@@ -7,6 +7,8 @@ navbar:
     href: index.html
   - text: Preparing for Modeling
     href: prepare-for-modeling.html
+  - text: Descriptive Statistics
+    href: descriptives.html
   - text: Models
     href: models.html
   - text: Drake

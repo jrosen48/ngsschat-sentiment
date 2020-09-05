@@ -5,8 +5,6 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: Preparing for Modeling
-    href: prepare-for-modeling.html
   - text: Descriptive Statistics
     href: descriptives.html
   - text: Models

@@ -13,5 +13,7 @@ navbar:
     href: models.html
   - text: Drake
     href: graph.html
+  - text: Dependencies
+    href: dependencies.html
 output:
   html_document:

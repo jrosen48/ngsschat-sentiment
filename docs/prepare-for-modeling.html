@@ -461,7 +461,10 @@ d &lt;- d %&gt;%
 d &lt;- d %&gt;% 
   mutate(year_centered = scale(year_of_post, scale = FALSE),
          time_on_twitter = (d$created_at - d$account_created_at) / (60 * 60 * 24) / 365,
-         year_fct = factor(as.numeric(as.character(d$year_fct))))</code></pre>
+         year_fct = factor(as.numeric(as.character(d$year_fct))))
+
+d &lt;- d %&gt;% 
+  mutate(year_of_post_centered = scale(year_of_post, scale = FALSE))</code></pre>
 <p>writing data</p>
 <pre class="r"><code>write_rds(rtweet::flatten(d), &#39;data/ngsschat-data-for-modeling.rds&#39;)</code></pre>
 

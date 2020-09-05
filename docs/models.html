@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-09-04" />
+<meta name="date" content="2020-09-05" />
 
 <title>#NGSSchat sentiment modeling</title>
 
@@ -1510,7 +1510,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">#NGSSchat sentiment modeling</h1>
-<h4 class="date">2020-09-04</h4>
+<h4 class="date">2020-09-05</h4>
 
 </div>
 
@@ -1529,7 +1529,7 @@ sjPlot::tab_model(m0)</code></pre>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -1616,6 +1616,12 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## Group        |   ICC
 ## --------------------
 ## state_master | 0.015</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m0, wrap = TRUE)</code></pre>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i]},\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  state_master } j  = 1, \dots ,  J
+\end{aligned}
+\]</span></p>
 </div>
 <div id="just-modeling-the-effect-of-screen_name" class="section level2">
 <h2>Just modeling the effect of screen_name</h2>
@@ -1629,7 +1635,7 @@ sjPlot::tab_model(m1)</code></pre>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -1716,10 +1722,10 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## Group       |   ICC
 ## -------------------
 ## screen_name | 0.248</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m1)</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m1, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i]},\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J
+\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i]},\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 </div>
@@ -1735,7 +1741,7 @@ sjPlot::tab_model(m2)</code></pre>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -1835,12 +1841,12 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.197
-## state_master | 0.007</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m2)</code></pre>
+## state_master | 0.197
+## screen_name  | 0.007</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m2, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]},\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]},\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
@@ -1849,14 +1855,14 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <pre class="r"><code>m3 &lt;- lmer(senti_scale ~ 1 + type_of_tweet + 
              (1|state_master) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m3, show.icc = TRUE)</code></pre>
+sjPlot::tab_model(m3, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -1867,7 +1873,7 @@ Predictors
 Estimates
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
+std. Error
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 p
@@ -1881,7 +1887,7 @@ p
 5.65
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.62 – 5.68
+0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -1895,7 +1901,7 @@ type_of_tweet<br>[ngsschat-non-chat]
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.07 – 0.09
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -1909,7 +1915,7 @@ type_of_tweet<br>[non-ngsschat]
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02 – 0.05
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -1984,12 +1990,12 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.197
-## state_master | 0.007</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m3)</code></pre>
+## state_master | 0.197
+## screen_name  | 0.007</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m3, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
@@ -1998,14 +2004,14 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <pre class="r"><code>m4 &lt;- lmer(senti_scale ~ 1 + type_of_tweet + year_fct + 
              (1|state_master) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m4, show.icc = TRUE)</code></pre>
+sjPlot::tab_model(m4, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -2016,7 +2022,7 @@ Predictors
 Estimates
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
+std. Error
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 p
@@ -2030,7 +2036,7 @@ p
 5.36
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-4.31 – 6.41
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2044,7 +2050,7 @@ type_of_tweet<br>[ngsschat-non-chat]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05 – 0.08
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2058,7 +2064,7 @@ type_of_tweet<br>[non-ngsschat]
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03 – 0.05
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2072,7 +2078,7 @@ year_fct [2010]
 -0.46
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.66 – 0.73
+0.61
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.448
@@ -2086,7 +2092,7 @@ year_fct [2011]
 -0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.13 – 1.00
+0.54
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.906
@@ -2100,7 +2106,7 @@ year_fct [2012]
 -0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.09 – 1.00
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.930
@@ -2114,7 +2120,7 @@ year_fct [2013]
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.03 – 1.07
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.968
@@ -2128,7 +2134,7 @@ year_fct [2014]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.98 – 1.11
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.906
@@ -2142,7 +2148,7 @@ year_fct [2015]
 0.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.89 – 1.20
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.773
@@ -2156,7 +2162,7 @@ year_fct [2016]
 0.19
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.86 – 1.24
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.720
@@ -2170,7 +2176,7 @@ year_fct [2017]
 0.27
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.78 – 1.31
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.619
@@ -2184,7 +2190,7 @@ year_fct [2018]
 0.45
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.59 – 1.50
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.398
@@ -2198,7 +2204,7 @@ year_fct [2019]
 0.48
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.56 – 1.53
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.366
@@ -2212,7 +2218,7 @@ year_fct [2020]
 0.52
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.52 – 1.57
+0.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.328
@@ -2287,28 +2293,32 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.174
-## state_master | 0.006</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m4)</code></pre>
+## state_master | 0.174
+## screen_name  | 0.006</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m4, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{year\_fct}_{\operatorname{2010}}) + \beta_{4}(\operatorname{year\_fct}_{\operatorname{2011}}) + \beta_{5}(\operatorname{year\_fct}_{\operatorname{2012}}) + \beta_{6}(\operatorname{year\_fct}_{\operatorname{2013}}) + \beta_{7}(\operatorname{year\_fct}_{\operatorname{2014}}) + \beta_{8}(\operatorname{year\_fct}_{\operatorname{2015}}) + \beta_{9}(\operatorname{year\_fct}_{\operatorname{2016}}) + \beta_{10}(\operatorname{year\_fct}_{\operatorname{2017}}) + \beta_{11}(\operatorname{year\_fct}_{\operatorname{2018}}) + \beta_{12}(\operatorname{year\_fct}_{\operatorname{2019}}) + \beta_{13}(\operatorname{year\_fct}_{\operatorname{2020}}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{year\_fct}_{\operatorname{2010}})\ + \\
+&amp;\quad \beta_{4}(\operatorname{year\_fct}_{\operatorname{2011}}) + \beta_{5}(\operatorname{year\_fct}_{\operatorname{2012}}) + \beta_{6}(\operatorname{year\_fct}_{\operatorname{2013}}) + \beta_{7}(\operatorname{year\_fct}_{\operatorname{2014}})\ + \\
+&amp;\quad \beta_{8}(\operatorname{year\_fct}_{\operatorname{2015}}) + \beta_{9}(\operatorname{year\_fct}_{\operatorname{2016}}) + \beta_{10}(\operatorname{year\_fct}_{\operatorname{2017}}) + \beta_{11}(\operatorname{year\_fct}_{\operatorname{2018}})\ + \\
+&amp;\quad \beta_{12}(\operatorname{year\_fct}_{\operatorname{2019}}) + \beta_{13}(\operatorname{year\_fct}_{\operatorname{2020}}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
 <div id="adding-year-centered-as-a-slope" class="section level2">
 <h2>Adding year (centered) as a slope</h2>
-<pre class="r"><code>m5 &lt;- lmer(senti_scale ~ 1 + type_of_tweet + scale(year_of_post, scale = FALSE) + 
+<p>also just trying out this technique for standardizing predictors</p>
+<pre class="r"><code>m5 &lt;- lmer(senti_scale ~ 1 + type_of_tweet + year_of_post_centered + 
              (1|state_master) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m5, show.icc = TRUE)</code></pre>
+sjPlot::tab_model(m5, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = &quot;std2&quot;)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
-<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+<th colspan="5" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+senti_scale
 </th>
 </tr>
 <tr>
@@ -2319,7 +2329,13 @@ Predictors
 Estimates
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
+std. Error
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+std. Beta
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+standardized std. Error
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 p
@@ -2333,7 +2349,13 @@ p
 5.66
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.63 – 5.69
+0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.04
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2347,7 +2369,13 @@ type_of_tweet<br>[ngsschat-non-chat]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05 – 0.08
+0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.05
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2361,7 +2389,13 @@ type_of_tweet<br>[non-ngsschat]
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03 – 0.06
+0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.04
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2369,16 +2403,200 @@ type_of_tweet<br>[non-ngsschat]
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-scale(year_of_post, scale<br>= FALSE)
+year_of_post_centered
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08 – 0.08
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.14
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
+</td>
+</tr>
+<tr>
+<td colspan="6" style="font-weight:bold; text-align:left; padding-top:.8em;">
+Random Effects
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+σ<sup>2</sup>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5">
+1.18
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+τ<sub>00</sub> <sub>screen_name</sub>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5">
+0.25
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+τ<sub>00</sub> <sub>state_master</sub>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5">
+0.01
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+ICC
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5">
+0.18
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+N <sub>state_master</sub>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5">
+52
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+N <sub>screen_name</sub>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5">
+39517
+</td>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="5">
+338054
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="5">
+0.018 / 0.195
+</td>
+</tr>
+</table>
+<pre class="r"><code>performance::icc(m5, by_group = TRUE)</code></pre>
+<pre><code>## # ICC by Group
+## 
+## Group        |   ICC
+## --------------------
+## state_master | 0.174
+## screen_name  | 0.006</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m5, wrap = TRUE)</code></pre>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{year\_of\_post\_centered}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\end{aligned}
+\]</span></p>
+</div>
+<div id="modeling-year-as-a-quadratic-curve" class="section level2">
+<h2>Modeling year as a quadratic curve</h2>
+<p>Not sure if this is the right way to do this; will also want to explore other forms, perhaps including those estimated with a GAM/spline.</p>
+<pre class="r"><code>m5i &lt;- lmer(senti_scale ~ 1 + type_of_tweet + year_of_post_centered + I(year_of_post_centered^2) + 
+             (1|state_master) + (1|screen_name), data = d)
+
+sjPlot::tab_model(m5i, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+senti_scale
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+std. Error
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+5.65
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+type_of_tweet<br>[ngsschat-non-chat]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.06
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+type_of_tweet<br>[non-ngsschat]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.04
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+year_of_post_centered
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.08
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+year_of_post_centered^2
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.011</strong>
 </td>
 </tr>
 <tr>
@@ -2445,23 +2663,24 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 </tr>
 </table>
-<pre class="r"><code>performance::icc(m5, by_group = TRUE)</code></pre>
+<pre class="r"><code>performance::icc(m5i, by_group = TRUE)</code></pre>
 <pre><code>## # ICC by Group
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.174
-## state_master | 0.006</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m5)</code></pre>
+## state_master | 0.174
+## screen_name  | 0.006</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m5i, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{scale(year\_of\_post,\ scale\ =\ FALSE)}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{4}(\operatorname{year\_of\_post\_centered}_{\operatorname{I(\char`\^2)}} \times \operatorname{I(year\_of\_post\_centered\char`\^2)}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
 <div id="adding-adoption-status" class="section level2">
 <h2>Adding adoption status</h2>
-<pre class="r"><code>m6 &lt;- lmer(senti_scale ~ -1 + type_of_tweet + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + time_on_twitter +
+<pre class="r"><code>m6 &lt;- lmer(senti_scale ~ -1 + type_of_tweet + year_of_post_centered + adoption_key + lead + modified + time_on_twitter +
              (1|state_master) + (1|screen_name), data = d)
 
 performance::icc(m6, by_group = TRUE)</code></pre>
@@ -2469,16 +2688,16 @@ performance::icc(m6, by_group = TRUE)</code></pre>
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.210
-## state_master | 0.006</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m6, show.icc = TRUE, show.se = TRUE)</code></pre>
+## state_master | 0.210
+## screen_name  | 0.006</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m6, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
-<th colspan="4" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+senti_scale
 </th>
 </tr>
 <tr>
@@ -2490,9 +2709,6 @@ Estimates
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 std. Error
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 p
@@ -2509,9 +2725,6 @@ type_of_tweet<br>[ngsschat-chat]
 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.54 – 5.73
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
 </td>
 </tr>
@@ -2524,9 +2737,6 @@ type_of_tweet<br>[ngsschat-non-chat]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.61 – 5.79
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2543,24 +2753,18 @@ type_of_tweet<br>[non-ngsschat]
 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.59 – 5.77
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
 </td>
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-scale(year_of_post, scale<br>= FALSE)
+year_of_post_centered
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.09
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.09 – 0.10
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2575,9 +2779,6 @@ adoption_key<br>[after_adoption]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.03 – 0.16
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.152
@@ -2594,9 +2795,6 @@ adoption_key<br>[before_adoption]
 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.22
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>0.006</strong>
 </td>
 </tr>
@@ -2609,9 +2807,6 @@ adoption_key<br>[near_adoption]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01 – 0.17
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.089
@@ -2628,9 +2823,6 @@ lead
 0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.06 – 0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.867
 </td>
 </tr>
@@ -2643,9 +2835,6 @@ modified
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.03
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.10
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.179
@@ -2662,14 +2851,11 @@ time_on_twitter
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – -0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
 </td>
 </tr>
 <tr>
-<td colspan="5" style="font-weight:bold; text-align:left; padding-top:.8em;">
+<td colspan="4" style="font-weight:bold; text-align:left; padding-top:.8em;">
 Random Effects
 </td>
 </tr>
@@ -2677,49 +2863,49 @@ Random Effects
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
 σ<sup>2</sup>
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
 1.18
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
 τ<sub>00</sub> <sub>screen_name</sub>
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
 0.25
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
 τ<sub>00</sub> <sub>state_master</sub>
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
 0.01
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
 ICC
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
 0.00
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
 N <sub>state_master</sub>
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
 51
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
 N <sub>screen_name</sub>
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
 39490
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
 Observations
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="4">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
 338026
 </td>
 </tr>
@@ -2727,31 +2913,33 @@ Observations
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
 0.027 / 0.027
 </td>
 </tr>
 </table>
-<pre class="r"><code>equatiomatic::extract_eq(m6)</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m6, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{3}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{4}(\operatorname{scale(year\_of\_post,\ scale\ =\ FALSE)}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{6}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{7}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{8}(\operatorname{lead}) + \beta_{9}(\operatorname{modified}) + \beta_{10}(\operatorname{time\_on\_twitter}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\beta_{0}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-chat}}) + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{6}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{7}(\operatorname{lead})\ + \\
+&amp;\quad \beta_{8}(\operatorname{modified}) + \beta_{9}(\operatorname{time\_on\_twitter}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
 <div id="adding-others-state-level-vars" class="section level2">
 <h2>Adding others state-level vars</h2>
-<pre class="r"><code>m7 &lt;- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + 
+<pre class="r"><code>m7 &lt;- lmer(senti_scale ~ 1 + year_of_post_centered + adoption_key + lead + modified + type_of_tweet + 
              (1|state_master) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m7, show.icc = TRUE)</code></pre>
+sjPlot::tab_model(m7, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -2762,7 +2950,7 @@ Predictors
 Estimates
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
+std. Error
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 p
@@ -2776,7 +2964,7 @@ p
 5.56
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.47 – 5.65
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2784,13 +2972,13 @@ p
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-scale(year_of_post, scale<br>= FALSE)
+year_of_post_centered
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08 – 0.08
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2804,7 +2992,7 @@ adoption_key<br>[after_adoption]
 0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.17
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.138
@@ -2818,7 +3006,7 @@ adoption_key<br>[before_adoption]
 0.13
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.22
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>0.005</strong>
@@ -2832,7 +3020,7 @@ adoption_key<br>[near_adoption]
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01 – 0.17
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.083
@@ -2846,7 +3034,7 @@ lead
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.06 – 0.05
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.905
@@ -2860,7 +3048,7 @@ modified
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.09
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.212
@@ -2874,7 +3062,7 @@ type_of_tweet<br>[ngsschat-non-chat]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05 – 0.08
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2888,7 +3076,7 @@ type_of_tweet<br>[non-ngsschat]
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03 – 0.06
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2963,28 +3151,30 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.174
-## state_master | 0.005</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m7)</code></pre>
+## state_master | 0.174
+## screen_name  | 0.005</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m7, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{scale(year\_of\_post,\ scale\ =\ FALSE)}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{year\_of\_post\_centered}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}})\ + \\
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}})\ + \\
+&amp;\quad \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
 <div id="adding-teacher" class="section level2">
 <h2>Adding teacher</h2>
-<pre class="r"><code>m8 &lt;- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + isTeacher + 
+<pre class="r"><code>m8 &lt;- lmer(senti_scale ~ 1 + year_of_post_centered + adoption_key + lead + modified + type_of_tweet + isTeacher + 
              (1|state_master) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m8, show.icc = TRUE)</code></pre>
+sjPlot::tab_model(m8, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -2995,7 +3185,7 @@ Predictors
 Estimates
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
+std. Error
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 p
@@ -3009,7 +3199,7 @@ p
 5.52
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.43 – 5.61
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3017,13 +3207,13 @@ p
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-scale(year_of_post, scale<br>= FALSE)
+year_of_post_centered
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08 – 0.08
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3037,7 +3227,7 @@ adoption_key<br>[after_adoption]
 0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.16
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.142
@@ -3051,7 +3241,7 @@ adoption_key<br>[before_adoption]
 0.13
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.21
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>0.005</strong>
@@ -3065,7 +3255,7 @@ adoption_key<br>[near_adoption]
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01 – 0.17
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.085
@@ -3079,7 +3269,7 @@ lead
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.06 – 0.05
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.898
@@ -3093,7 +3283,7 @@ modified
 0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.09
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.234
@@ -3107,7 +3297,7 @@ type_of_tweet<br>[ngsschat-non-chat]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05 – 0.08
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3121,7 +3311,7 @@ type_of_tweet<br>[non-ngsschat]
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03 – 0.06
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3135,7 +3325,7 @@ isTeacher
 0.12
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.10 – 0.14
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3210,29 +3400,31 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.173
-## state_master | 0.005</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m8)</code></pre>
+## state_master | 0.173
+## screen_name  | 0.005</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m8, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{scale(year\_of\_post,\ scale\ =\ FALSE)}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{9}(\operatorname{isTeacher}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{year\_of\_post\_centered}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}})\ + \\
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}})\ + \\
+&amp;\quad \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{9}(\operatorname{isTeacher}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
 <div id="adding-some-tweet-level-vars" class="section level2">
 <h2>Adding some tweet-level vars</h2>
-<pre class="r"><code>m9 &lt;- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key +  lead + modified + type_of_tweet + isTeacher + 
+<pre class="r"><code>m9 &lt;- lmer(senti_scale ~ 1 + year_of_post_centered + adoption_key +  lead + modified + type_of_tweet + isTeacher + 
              favorite_count + retweet_count + reply_count +
              (1|state_master) + (1|screen_name), data = d)
 
-sjPlot::tab_model(m9, show.icc = TRUE)</code></pre>
+sjPlot::tab_model(m9, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -3243,7 +3435,7 @@ Predictors
 Estimates
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
+std. Error
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 p
@@ -3257,7 +3449,7 @@ p
 5.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.44 – 5.62
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3265,13 +3457,13 @@ p
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-scale(year_of_post, scale<br>= FALSE)
+year_of_post_centered
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08 – 0.08
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3285,7 +3477,7 @@ adoption_key<br>[after_adoption]
 0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.16
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.142
@@ -3299,7 +3491,7 @@ adoption_key<br>[before_adoption]
 0.12
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.21
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>0.005</strong>
@@ -3313,7 +3505,7 @@ adoption_key<br>[near_adoption]
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01 – 0.17
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.084
@@ -3327,7 +3519,7 @@ lead
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.06 – 0.05
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.905
@@ -3341,7 +3533,7 @@ modified
 0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.09
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.216
@@ -3355,7 +3547,7 @@ type_of_tweet<br>[ngsschat-non-chat]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.07
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3369,7 +3561,7 @@ type_of_tweet<br>[non-ngsschat]
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02 – 0.05
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3383,7 +3575,7 @@ isTeacher
 0.12
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.10 – 0.14
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3397,7 +3589,7 @@ favorite_count
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01 – 0.01
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3411,7 +3603,7 @@ retweet_count
 -0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01 – -0.01
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3425,7 +3617,7 @@ reply_count
 -0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.04 – -0.02
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3500,32 +3692,35 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.172
-## state_master | 0.005</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m9)</code></pre>
+## state_master | 0.172
+## screen_name  | 0.005</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m9, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{scale(year\_of\_post,\ scale\ =\ FALSE)}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{9}(\operatorname{isTeacher}) + \beta_{10}(\operatorname{favorite\_count}) + \beta_{11}(\operatorname{retweet\_count}) + \beta_{12}(\operatorname{reply\_count}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{year\_of\_post\_centered}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}})\ + \\
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}})\ + \\
+&amp;\quad \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{9}(\operatorname{isTeacher}) + \beta_{10}(\operatorname{favorite\_count}) + \beta_{11}(\operatorname{retweet\_count})\ + \\
+&amp;\quad \beta_{12}(\operatorname{reply\_count}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
 <div id="adding-some-user-level-vars" class="section level2">
 <h2>Adding some user-level vars</h2>
-<pre class="r"><code>m10 &lt;- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + isTeacher + 
+<pre class="r"><code>m10 &lt;- lmer(senti_scale ~ 1 + year_of_post_centered + adoption_key + lead + modified + type_of_tweet + isTeacher + 
               favorite_count + retweet_count + reply_count +
               favorite_count_user +
               retweet_count_user +
               (1|state_master) + (1|screen_name), data = d)</code></pre>
 <pre><code>## Warning: Some predictor variables are on very different scales: consider
 ## rescaling</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m10, show.icc = TRUE)</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m10, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -3536,7 +3731,7 @@ Predictors
 Estimates
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
+std. Error
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 p
@@ -3550,7 +3745,7 @@ p
 5.53
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.44 – 5.62
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3558,13 +3753,13 @@ p
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-scale(year_of_post, scale<br>= FALSE)
+year_of_post_centered
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08 – 0.08
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3578,7 +3773,7 @@ adoption_key<br>[after_adoption]
 0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.16
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.147
@@ -3592,7 +3787,7 @@ adoption_key<br>[before_adoption]
 0.12
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.21
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>0.005</strong>
@@ -3606,7 +3801,7 @@ adoption_key<br>[near_adoption]
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01 – 0.16
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.087
@@ -3620,7 +3815,7 @@ lead
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.06 – 0.05
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.906
@@ -3634,7 +3829,7 @@ modified
 0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.09
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.217
@@ -3648,7 +3843,7 @@ type_of_tweet<br>[ngsschat-non-chat]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.07
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3662,7 +3857,7 @@ type_of_tweet<br>[non-ngsschat]
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02 – 0.05
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3676,7 +3871,7 @@ isTeacher
 0.12
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.10 – 0.14
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3690,7 +3885,7 @@ favorite_count
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01 – 0.01
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3704,7 +3899,7 @@ retweet_count
 -0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01 – -0.01
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3718,7 +3913,7 @@ reply_count
 -0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.04 – -0.02
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3732,7 +3927,7 @@ favorite_count_user
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00 – 0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.294
@@ -3746,7 +3941,7 @@ retweet_count_user
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00 – 0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.225
@@ -3821,18 +4016,21 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.173
-## state_master | 0.005</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m10)</code></pre>
+## state_master | 0.173
+## screen_name  | 0.005</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m10, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{scale(year\_of\_post,\ scale\ =\ FALSE)}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{9}(\operatorname{isTeacher}) + \beta_{10}(\operatorname{favorite\_count}) + \beta_{11}(\operatorname{retweet\_count}) + \beta_{12}(\operatorname{reply\_count}) + \beta_{13}(\operatorname{favorite\_count}_{\operatorname{\_user}} \times \operatorname{favorite\_count\_user}) + \beta_{14}(\operatorname{retweet\_count}_{\operatorname{\_user}} \times \operatorname{retweet\_count\_user}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{year\_of\_post\_centered}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}})\ + \\
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}})\ + \\
+&amp;\quad \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{9}(\operatorname{isTeacher}) + \beta_{10}(\operatorname{favorite\_count}) + \beta_{11}(\operatorname{retweet\_count})\ + \\
+&amp;\quad \beta_{12}(\operatorname{reply\_count}) + \beta_{13}(\operatorname{favorite\_count}_{\operatorname{\_user}} \times \operatorname{favorite\_count\_user}) + \beta_{14}(\operatorname{retweet\_count}_{\operatorname{\_user}} \times \operatorname{retweet\_count\_user}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
 <div id="adding-additional-user-level-vars" class="section level2">
 <h2>Adding additional user-level vars</h2>
-<pre class="r"><code>m11 &lt;- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key + lead + modified + type_of_tweet + isTeacher + 
+<pre class="r"><code>m11 &lt;- lmer(senti_scale ~ 1 + year_of_post_centered + adoption_key + lead + modified + type_of_tweet + isTeacher + 
               favorite_count + retweet_count + reply_count +
               favorite_count_user +
               retweet_count_user +
@@ -3842,14 +4040,14 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
               (1|state_master) + (1|screen_name), data = d)</code></pre>
 <pre><code>## Warning: Some predictor variables are on very different scales: consider
 ## rescaling</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m11, show.icc = TRUE)</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m11, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
+senti_scale
 </th>
 </tr>
 <tr>
@@ -3860,7 +4058,7 @@ Predictors
 Estimates
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
+std. Error
 </td>
 <td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
 p
@@ -3874,7 +4072,7 @@ p
 5.55
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.46 – 5.64
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3882,13 +4080,13 @@ p
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-scale(year_of_post, scale<br>= FALSE)
+year_of_post_centered
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08 – 0.08
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3902,7 +4100,7 @@ adoption_key<br>[after_adoption]
 0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.16
+0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.133
@@ -3916,7 +4114,7 @@ adoption_key<br>[before_adoption]
 0.12
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.21
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>0.005</strong>
@@ -3930,7 +4128,7 @@ adoption_key<br>[near_adoption]
 0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01 – 0.16
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.082
@@ -3944,7 +4142,7 @@ lead
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.06 – 0.05
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.890
@@ -3958,7 +4156,7 @@ modified
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02 – 0.09
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.202
@@ -3972,7 +4170,7 @@ type_of_tweet<br>[ngsschat-non-chat]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.07
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -3986,7 +4184,7 @@ type_of_tweet<br>[non-ngsschat]
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02 – 0.05
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4000,7 +4198,7 @@ isTeacher
 0.11
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.09 – 0.13
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4014,7 +4212,7 @@ favorite_count
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01 – 0.01
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4028,7 +4226,7 @@ retweet_count
 -0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01 – -0.01
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4042,7 +4240,7 @@ reply_count
 -0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.04 – -0.02
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4056,7 +4254,7 @@ favorite_count_user
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00 – 0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.349
@@ -4070,7 +4268,7 @@ retweet_count_user
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00 – 0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.288
@@ -4084,7 +4282,7 @@ statuses_count
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00 – -0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4098,7 +4296,7 @@ followers_count
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00 – 0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.845
@@ -4112,7 +4310,7 @@ friends_count
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00 – -0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4187,12 +4385,16 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## screen_name  | 0.171
-## state_master | 0.005</code></pre>
-<pre class="r"><code>equatiomatic::extract_eq(m11)</code></pre>
+## state_master | 0.171
+## screen_name  | 0.005</code></pre>
+<pre class="r"><code>equatiomatic::extract_eq(m11, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{scale(year\_of\_post,\ scale\ =\ FALSE)}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{9}(\operatorname{isTeacher}) + \beta_{10}(\operatorname{favorite\_count}) + \beta_{11}(\operatorname{retweet\_count}) + \beta_{12}(\operatorname{reply\_count}) + \beta_{13}(\operatorname{favorite\_count}_{\operatorname{\_user}} \times \operatorname{favorite\_count\_user}) + \beta_{14}(\operatorname{retweet\_count}_{\operatorname{\_user}} \times \operatorname{retweet\_count\_user}) + \beta_{15}(\operatorname{statuses\_count}) + \beta_{16}(\operatorname{followers\_count}) + \beta_{17}(\operatorname{friends\_count}),\sigma^2 \right) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha},\sigma^2_{\alpha} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{year\_of\_post\_centered}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}})\ + \\
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{lead}) + \beta_{6}(\operatorname{modified}) + \beta_{7}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}})\ + \\
+&amp;\quad \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{9}(\operatorname{isTeacher}) + \beta_{10}(\operatorname{favorite\_count}) + \beta_{11}(\operatorname{retweet\_count})\ + \\
+&amp;\quad \beta_{12}(\operatorname{reply\_count}) + \beta_{13}(\operatorname{favorite\_count}_{\operatorname{\_user}} \times \operatorname{favorite\_count\_user}) + \beta_{14}(\operatorname{retweet\_count}_{\operatorname{\_user}} \times \operatorname{retweet\_count\_user}) + \beta_{15}(\operatorname{statuses\_count})\ + \\
+&amp;\quad \beta_{16}(\operatorname{followers\_count}) + \beta_{17}(\operatorname{friends\_count}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>

@@ -28,6 +28,10 @@ the_plan <-
     
     # for site
     
+    dependencies = rmarkdown::render(
+      knitr_in("dependencies.Rmd"),
+      output_file = file_out("docs/dependencies.html")),
+    
     rendered_site = render_site()
     
 )

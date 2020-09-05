@@ -4,7 +4,6 @@ output: html_document
 params:
   tweets_dl: ""
   state_data: ""
-  state_acronyms: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -14,7 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, renaming-params}
 tweets_dl <- params$tweets_dl
 state_data <- params$state_data
-state_acronyms <- params$state_acronyms
 ```
 
 ```{r, loading-data}
@@ -25,10 +23,6 @@ rm(tweets_dl)
 ```
 
 ```{r, proc-state-data}
-state_acronyms <- state_acronyms %>% 
-  select(state, acronym) %>% 
-  mutate(state = tolower(state))
-
 state_data$month <- state_data$date_month %>% 
   str_split("\\-") %>% 
   purrr::map(~.[[1]]) %>% as.integer()
@@ -58,14 +52,13 @@ state_data_adopt <- state_data %>%
   select(state, adoption_status)
 
 state_data_merged <- state_data_merge %>% 
-  left_join(state_data_adopt) %>% 
-  left_join(state_acronyms)
+  left_join(state_data_adopt)
 
 state_data_final <- state_data_merged %>% 
   complete(state, year = 2011:2020) %>% 
   group_by(state) %>% 
-  fill(adopted, year_month, adoption_status, acronym) %>% 
-  fill(adopted, year_month, adoption_status, acronym, .direction = "up")
+  fill(adopted, year_month, adoption_status) %>% 
+  fill(adopted, year_month, adoption_status, .direction = "up")
 
 state_data_final <- state_data_final %>% 
   mutate(year_adopted_plus = year_adopted + 1) %>% 

@@ -367,17 +367,12 @@ summary {
 
 
 <pre class="r"><code>tweets_dl &lt;- params$tweets_dl
-state_data &lt;- params$state_data
-state_acronyms &lt;- params$state_acronyms</code></pre>
+state_data &lt;- params$state_data</code></pre>
 <pre class="r"><code>tweets_dl &lt;- tweets_dl %&gt;% as_tibble()
 
 d &lt;- tweets_dl
 rm(tweets_dl)</code></pre>
-<pre class="r"><code>state_acronyms &lt;- state_acronyms %&gt;% 
-  select(state, acronym) %&gt;% 
-  mutate(state = tolower(state))
-
-state_data$month &lt;- state_data$date_month %&gt;% 
+<pre class="r"><code>state_data$month &lt;- state_data$date_month %&gt;% 
   str_split(&quot;\\-&quot;) %&gt;% 
   purrr::map(~.[[1]]) %&gt;% as.integer()
 
@@ -406,15 +401,13 @@ state_data_adopt &lt;- state_data %&gt;%
   select(state, adoption_status)
 
 state_data_merged &lt;- state_data_merge %&gt;% 
-  left_join(state_data_adopt) %&gt;% 
-  left_join(state_acronyms)</code></pre>
-<pre><code>## Joining, by = &quot;state&quot;
-## Joining, by = &quot;state&quot;</code></pre>
+  left_join(state_data_adopt)</code></pre>
+<pre><code>## Joining, by = &quot;state&quot;</code></pre>
 <pre class="r"><code>state_data_final &lt;- state_data_merged %&gt;% 
   complete(state, year = 2011:2020) %&gt;% 
   group_by(state) %&gt;% 
-  fill(adopted, year_month, adoption_status, acronym) %&gt;% 
-  fill(adopted, year_month, adoption_status, acronym, .direction = &quot;up&quot;)
+  fill(adopted, year_month, adoption_status) %&gt;% 
+  fill(adopted, year_month, adoption_status, .direction = &quot;up&quot;)
 
 state_data_final &lt;- state_data_final %&gt;% 
   mutate(year_adopted_plus = year_adopted + 1) %&gt;% 

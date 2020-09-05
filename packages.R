@@ -10,6 +10,7 @@ library(sjPlot)
 library(performance)
 library(equatiomatic)
 library(fs)
+library(knitr)
 
 conflict_prefer("load", "base")
 conflict_prefer("filter", "dplyr")

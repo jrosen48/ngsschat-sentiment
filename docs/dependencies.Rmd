@@ -1,0 +1,14 @@
+---
+title: "Dependencies"
+date: "`r stringr::str_c('Updated ', format(Sys.time(), '%d %B, %Y'))`"
+output: html_document
+---
+
+```{r}
+renv::dependencies() %>% 
+  knitr::kable()
+```
+
+```{r}
+sessionInfo()
+```

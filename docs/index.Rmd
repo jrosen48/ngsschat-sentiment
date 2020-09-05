@@ -10,6 +10,8 @@ The repository for this analysis is here: https://github.com/jrosen48/ngsschat-s
 
 The data is available via request here: https://osf.io/vk67n/
 
+## Authors
+
 This project is carried out by:
 
 Joshua Rosenberg

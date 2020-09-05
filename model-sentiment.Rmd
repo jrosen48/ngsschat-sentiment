@@ -191,7 +191,7 @@ m11 <- lmer(senti_scale ~ 1 + scale(year_of_post, scale = FALSE) + adoption_key 
               favorite_count_user +
               retweet_count_user +
               statuses_count +
-              follower_count +
+              followers_count +
               friends_count +
               (1|state_master) + (1|screen_name), data = d)
 

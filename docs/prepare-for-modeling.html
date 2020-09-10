@@ -466,7 +466,8 @@ d &lt;- d %&gt;%
 d &lt;- d %&gt;% 
   mutate(year_of_post_centered = scale(year_of_post, scale = FALSE))</code></pre>
 <p>writing data</p>
-<pre class="r"><code>write_rds(rtweet::flatten(d), &#39;data/ngsschat-data-for-modeling.rds&#39;)</code></pre>
+<pre class="r"><code>if(!(fs::dir_exists(&quot;data&quot;))) fs::dir_create(&quot;data&quot;)
+write_rds(rtweet::flatten(d), &#39;data/ngsschat-data-for-modeling.rds&#39;)</code></pre>
 
 
 

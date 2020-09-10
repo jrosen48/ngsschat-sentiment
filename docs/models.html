@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-09-09" />
+<meta name="date" content="2020-09-10" />
 
 <title>#NGSSchat sentiment modeling</title>
 
@@ -1510,7 +1510,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">#NGSSchat sentiment modeling</h1>
-<h4 class="date">2020-09-09</h4>
+<h4 class="date">2020-09-10</h4>
 
 </div>
 
@@ -1529,7 +1529,7 @@ sjPlot::tab_model(m0)</code></pre>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -1635,7 +1635,7 @@ sjPlot::tab_model(m1)</code></pre>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -1741,7 +1741,7 @@ sjPlot::tab_model(m2)</code></pre>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -1841,8 +1841,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.197
-## screen_name  | 0.007</code></pre>
+## screen_name  | 0.197
+## state_master | 0.007</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m2, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
@@ -1862,7 +1862,7 @@ sjPlot::tab_model(m3, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -1990,8 +1990,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.197
-## screen_name  | 0.007</code></pre>
+## screen_name  | 0.197
+## state_master | 0.007</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m3, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
@@ -2011,7 +2011,7 @@ sjPlot::tab_model(m4, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -2293,8 +2293,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.174
-## screen_name  | 0.006</code></pre>
+## screen_name  | 0.174
+## state_master | 0.006</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m4, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
@@ -2318,7 +2318,7 @@ sjPlot::tab_model(m5, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std
  
 </th>
 <th colspan="5" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -2490,8 +2490,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.174
-## screen_name  | 0.006</code></pre>
+## screen_name  | 0.174
+## state_master | 0.006</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m5, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
@@ -2512,7 +2512,7 @@ sjPlot::tab_model(m5i, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code><
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -2668,13 +2668,13 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.174
-## screen_name  | 0.006</code></pre>
+## screen_name  | 0.174
+## state_master | 0.006</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m5i, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{4}(\operatorname{year\_of\_post\_centered}_{\operatorname{I(\char`\^2)}} \times \operatorname{I(year\_of\_post\_centered\char`\^2)}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+&amp;\quad \beta_{4}(\operatorname{I(year\_of\_post\_centered\char`\^2)}) \\ \alpha_{j} &amp;\sim N \left(\mu_{\alpha_{j}},\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\mu_{\alpha_{k}},\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
@@ -2688,8 +2688,8 @@ performance::icc(m6, by_group = TRUE)</code></pre>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.210
-## screen_name  | 0.006</code></pre>
+## screen_name  | 0.210
+## state_master | 0.006</code></pre>
 <pre class="r"><code>sjPlot::tab_model(m6, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
@@ -2697,7 +2697,7 @@ performance::icc(m6, by_group = TRUE)</code></pre>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -2938,7 +2938,7 @@ sjPlot::tab_model(m7, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -3150,8 +3150,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.174
-## screen_name  | 0.005</code></pre>
+## screen_name  | 0.174
+## state_master | 0.005</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m7, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
@@ -3172,7 +3172,7 @@ sjPlot::tab_model(m8, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -3398,8 +3398,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.173
-## screen_name  | 0.005</code></pre>
+## screen_name  | 0.173
+## state_master | 0.005</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m8, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
@@ -3421,7 +3421,7 @@ sjPlot::tab_model(m9, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -3689,8 +3689,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.172
-## screen_name  | 0.005</code></pre>
+## screen_name  | 0.172
+## state_master | 0.005</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m9, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
@@ -3716,7 +3716,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -4012,20 +4012,14 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.173
-## screen_name  | 0.005</code></pre>
+## screen_name  | 0.173
+## state_master | 0.005</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m10, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{year\_of\_post\_centered}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}})\ + \\
 &amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{6}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{7}(\operatorname{isTeacher})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) \\ \alpha_{j} &amp;\sim N \left(\left(
- \begin{array}{c} 
-\begin{aligned}
-&amp;\gamma^{\beta_{8}}_{0}  + \gamma^{\beta_{8}}_{1} ( \operatorname{favorite\_count}_{\operatorname{\_user}} \times \operatorname{favorite\_count\_user} ) \\ &amp;\gamma^{\beta_{9}}_{0}  + \gamma^{\beta_{9}}_{1} ( \operatorname{retweet\_count}_{\operatorname{\_user}} \times \operatorname{retweet\_count\_user} )
-\end{aligned}
- \end{array}
- \right),\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{lead} ) + \gamma^{\alpha}_{2} ( \operatorname{modified} ),\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{favorite\_count\_user} ) + \gamma^{\alpha}_{2} ( \operatorname{retweet\_count\_user} ),\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{lead} ) + \gamma^{\alpha}_{2} ( \operatorname{modified} ),\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
@@ -4048,7 +4042,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -4386,8 +4380,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.171
-## screen_name  | 0.005</code></pre>
+## screen_name  | 0.171
+## state_master | 0.005</code></pre>
 </div>
 <div id="adding-new-ngss-related-user-level-vars" class="section level2">
 <h2>Adding new NGSS-related user-level vars</h2>
@@ -4409,7 +4403,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -4803,21 +4797,15 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.171
-## screen_name  | 0.005</code></pre>
+## screen_name  | 0.171
+## state_master | 0.005</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m12, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i],k[i]} + \beta_{1}(\operatorname{year\_of\_post\_centered}) + \beta_{2}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}})\ + \\
 &amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{5}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{6}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{7}(\operatorname{isTeacher})\ + \\
 &amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{statuses\_count})\ + \\
-&amp;\quad \beta_{12}(\operatorname{followers\_count}) + \beta_{13}(\operatorname{friends\_count}) + \beta_{14}(\operatorname{hasJoinedChat}) \\ \alpha_{j} &amp;\sim N \left(\left(
- \begin{array}{c} 
-\begin{aligned}
-&amp;\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{2} ( \operatorname{postedChatSession} ) + \gamma^{\alpha}_{3} ( \operatorname{total\_n\_chats} ) \\ &amp;\gamma^{\beta_{8}}_{0}  + \gamma^{\beta_{8}}_{1} ( \operatorname{favorite\_count}_{\operatorname{\_user}} \times \operatorname{favorite\_count\_user} ) \\ &amp;\gamma^{\beta_{9}}_{0}  + \gamma^{\beta_{9}}_{1} ( \operatorname{retweet\_count}_{\operatorname{\_user}} \times \operatorname{retweet\_count\_user} )
-\end{aligned}
- \end{array}
- \right),\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{lead} ) + \gamma^{\alpha}_{2} ( \operatorname{modified} ),\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
+&amp;\quad \beta_{12}(\operatorname{followers\_count}) + \beta_{13}(\operatorname{friends\_count}) + \beta_{14}(\operatorname{hasJoinedChat}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{favorite\_count\_user} ) + \gamma^{\alpha}_{2} ( \operatorname{retweet\_count\_user} ) + \gamma^{\alpha}_{3} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{4} ( \operatorname{postedChatSession} ) + \gamma^{\alpha}_{5} ( \operatorname{total\_n\_chats} ),\sigma^2_{\alpha_{j}} \right) , \text{ for  screen_name } j  = 1, \dots ,  J \\ \alpha_{k} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{lead} ) + \gamma^{\alpha}_{2} ( \operatorname{modified} ),\sigma^2_{\alpha_{k}} \right) , \text{ for  state_master } k  = 1, \dots ,  K
 \end{aligned}
 \]</span></p>
 </div>
@@ -4841,7 +4829,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -5251,8 +5239,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.193
-## screen_name  | 0.004</code></pre>
+## screen_name  | 0.193
+## state_master | 0.004</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m13, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
@@ -5268,7 +5256,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
  \right) &amp;\sim N \left(\left(
  \begin{array}{c} 
 \begin{aligned}
-&amp;\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{2} ( \operatorname{postedChatSession} ) \\ &amp;\gamma^{\beta_{8}}_{0}  + \gamma^{\beta_{8}}_{1} ( \operatorname{favorite\_count}_{\operatorname{\_user}} \times \operatorname{favorite\_count\_user} ) \\ &amp;\gamma^{\beta_{9}}_{0}  + \gamma^{\beta_{9}}_{1} ( \operatorname{retweet\_count}_{\operatorname{\_user}} \times \operatorname{retweet\_count\_user} )
+&amp;\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{favorite\_count\_user} ) + \gamma^{\alpha}_{2} ( \operatorname{retweet\_count\_user} ) + \gamma^{\alpha}_{3} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{4} ( \operatorname{postedChatSession} ) \\ &amp;\mu_{\beta_{1j}}
 \end{aligned}
  \end{array}
  \right),\left(
@@ -5290,7 +5278,7 @@ sjPlot::tab_model(m14, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code><
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti_scale
+senti scale
 </th>
 </tr>
 <tr>
@@ -5446,8 +5434,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## 
 ## Group        |   ICC
 ## --------------------
-## state_master | 0.197
-## screen_name  | 0.007</code></pre>
+## screen_name  | 0.197
+## state_master | 0.007</code></pre>
 <pre class="r"><code>equatiomatic::extract_eq(m14, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}

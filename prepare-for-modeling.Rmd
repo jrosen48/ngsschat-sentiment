@@ -129,5 +129,6 @@ d <- d %>%
 writing data
 
 ```{r, writing-data}
+if(!(fs::dir_exists("data"))) fs::dir_create("data")
 write_rds(rtweet::flatten(d), 'data/ngsschat-data-for-modeling.rds')
 ```

@@ -26,6 +26,11 @@ the_plan <-
       output_file = file_out("docs/models.html"),
       params = list(d = loaded_processed_data)),
     
+    fitted_models_no_state = rmarkdown::render(
+      knitr_in("model-sentiment-no-state.Rmd"),
+      output_file = file_out("docs/models-without-states.html"),
+      params = list(d = loaded_processed_data)),
+    
     # for site
     
     dependencies = rmarkdown::render(

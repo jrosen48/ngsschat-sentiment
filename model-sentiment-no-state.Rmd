@@ -41,7 +41,7 @@ equatiomatic::extract_eq(m1, wrap = TRUE)
 m3 <- lmer(senti_scale ~ 1 + type_of_tweet + 
              (1|screen_name), data = d)
 
-sjPlot::tab_model(m3, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m3, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m3, by_group = TRUE)
 ```
@@ -56,7 +56,7 @@ equatiomatic::extract_eq(m3, wrap = TRUE)
 m4 <- lmer(senti_scale ~ 1 + type_of_tweet + year_fct + 
              (1|screen_name), data = d)
 
-sjPlot::tab_model(m4, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m4, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m4, by_group = TRUE)
 ```
@@ -91,7 +91,7 @@ perhaps including those estimated with a GAM/spline.
 m5i <- lmer(senti_scale ~ 1 + type_of_tweet + year_of_post_centered + I(year_of_post_centered^2) + 
               (1|screen_name), data = d)
 
-sjPlot::tab_model(m5i, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m5i, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m5i, by_group = TRUE)
 ```
@@ -106,7 +106,7 @@ equatiomatic::extract_eq(m5i, wrap = TRUE)
 m8 <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher + 
              (1|screen_name), data = d)
 
-sjPlot::tab_model(m8, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m8, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m8, by_group = TRUE)
 ```
@@ -122,7 +122,7 @@ m9 <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher +
              favorite_count + retweet_count + reply_count +
              (1|screen_name), data = d)
 
-sjPlot::tab_model(m9, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m9, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m9, by_group = TRUE)
 ```
@@ -140,7 +140,7 @@ m10 <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher 
               retweet_count_user +
               (1|screen_name), data = d)
 
-sjPlot::tab_model(m10, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m10, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m10, by_group = TRUE)
 ```
@@ -161,7 +161,7 @@ m11 <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher 
               friends_count +
               (1|screen_name), data = d)
 
-sjPlot::tab_model(m11, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m11, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m11, by_group = TRUE)
 ```
@@ -179,7 +179,7 @@ m12 <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher 
               postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
               (1|screen_name), data = d)
 
-sjPlot::tab_model(m12, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m12, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m12, by_group = TRUE)
 ```
@@ -201,7 +201,7 @@ m13 <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher 
               postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
               (hasJoinedChat|screen_name), data = d)
 
-sjPlot::tab_model(m13, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m13, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m13, by_group = TRUE)
 ```
@@ -217,7 +217,7 @@ m14 <- lmer(senti_scale ~ 1 +
               postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
               (1|screen_name), data = d)
 
-sjPlot::tab_model(m14, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m14, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
 
 performance::icc(m14, by_group = TRUE)
 ```

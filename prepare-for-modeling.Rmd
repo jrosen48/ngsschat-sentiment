@@ -121,6 +121,9 @@ d <- d %>%
   mutate(year_centered = scale(year_of_post, scale = FALSE),
          time_on_twitter = (d$created_at - d$account_created_at) / (60 * 60 * 24) / 365,
          year_fct = factor(as.numeric(as.character(d$year_fct))))
+
+d <- d %>% 
+  mutate(year_of_post_centered = scale(year_of_post, scale = FALSE))
 ```
 
 writing data

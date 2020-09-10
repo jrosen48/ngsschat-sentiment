@@ -11,6 +11,8 @@ library(performance)
 library(equatiomatic)
 library(fs)
 library(knitr)
+library(hrbrthemes)
+library(corrr)
 
 conflict_prefer("load", "base")
 conflict_prefer("filter", "dplyr")

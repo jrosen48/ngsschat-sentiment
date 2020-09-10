@@ -3,7 +3,7 @@ the_plan <-
 
     # loading data
     
-    loaded_rda_data = load_rda(file_in("data-raw/data_final_2020_09_04.rda")),
+    loaded_rda_data = load_rda(file_in("data-raw/data_final_2020_09_09.rda")),
     state_data = read_csv(file_in("data-raw/ngsschat-state-data.csv")),
     
     # for RMD output

@@ -3,3 +3,4 @@
 .Rproj.user
 *.csv
 *.rda
+.drake

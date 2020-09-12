@@ -16,3 +16,10 @@ To run the analysis, run:
 
 `drake::r_make()`
 
+## Results
+
+See the results here: https://jrosen48.github.io/ngsschat-sentiment/
+
+## Data
+
+To request access to the raw data, please contact Joshua Rosenberg at jmrosenberg AT utk DOT edu.

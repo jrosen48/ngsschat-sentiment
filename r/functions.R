@@ -14,7 +14,7 @@ join_liwc <- function(d, liwc) {
     select(posemo, negemo, Analytic, cogproc, social)
   
   d <- d %>% 
-    bind_rows(liwc)
+    bind_cols(liwc)
 }
 
 join_state <- function(d, state_data) {

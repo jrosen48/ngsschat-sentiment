@@ -83,7 +83,7 @@ total_n_chats: number of #NGSSchat chat sessions each user has participated in i
 
 ```{r, desciptive-stats}
 d %>% 
-  select(type_of_tweet, year_fct, scale_neg, scale_pos, senti_scale, senti_binary, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher, postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
+  select(type_of_tweet, year_fct, scale_neg, scale_pos, senti_scale, senti_binary, posemo, negemo, Analytic, cogproc, social, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher, postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
   skimr::skim()
 ```
 
@@ -91,7 +91,7 @@ d %>%
 
 ```{r, correlations}
 d %>% 
-  select(senti_scale, posemo, negemo, Analytic, cogproc, social, type_of_tweet, year_fct, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher, postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
+  select(senti_scale, scale_neg, scale_pos, senti_binary, posemo, negemo, Analytic, cogproc, social, type_of_tweet, year_fct, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher, postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
   select_if(is.numeric) %>% 
   corrr::correlate() %>% 
   corrr::fashion() %>%

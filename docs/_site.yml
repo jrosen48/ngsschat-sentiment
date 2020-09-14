@@ -11,6 +11,8 @@ navbar:
     href: models.html
   - text: Models (Without Any State-level Variables)
     href: models-without-states.html
+  - text: Final Models
+    href: final-models.html
   - text: Drake
     href: graph.html
   - text: Dependencies

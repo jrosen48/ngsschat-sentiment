@@ -1,0 +1,102 @@
+---
+title: "Final models"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+params:
+  d: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, cache = FALSE)
+knitr::clean_cache()
+```
+
+```{r, renaming-params}
+d <- params$d
+d <- readd(data_to_model)
+```
+
+# Final models
+
+## Original DV
+
+```{r, m_final, eval = TRUE}
+m_final <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher + 
+              favorite_count + retweet_count + reply_count +
+              favorite_count_user +
+              retweet_count_user +
+              statuses_count +
+              followers_count +
+              friends_count +
+              postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
+              (hasJoinedChat|screen_name), data = d)
+
+sjPlot::tab_model(m_final, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_final, by_group = TRUE)
+performance::check_model(m_final)
+report::report(m_final)
+equatiomatic::extract_eq(m_final, wrap = TRUE)
+```
+
+## Cogproc
+
+```{r, m_final_cogproc, eval = TRUE}
+m_final_cogproc <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher + 
+              favorite_count + retweet_count + reply_count +
+              favorite_count_user +
+              retweet_count_user +
+              statuses_count +
+              followers_count +
+              friends_count +
+              postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
+              (hasJoinedChat|screen_name), data = d)
+
+sjPlot::tab_model(m_final_cogproc, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_final_cogproc, by_group = TRUE)
+performance::check_model(m_final_cogproc)
+report::report(m_final_cogproc)
+equatiomatic::extract_eq(m_final_cogproc, wrap = TRUE)
+````
+
+## Posemo
+
+```{r, m_final_posemo, eval = TRUE}
+m_final_posemo <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher + 
+              favorite_count + retweet_count + reply_count +
+              favorite_count_user +
+              retweet_count_user +
+              statuses_count +
+              followers_count +
+              friends_count +
+              postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
+              (hasJoinedChat|screen_name), data = d)
+
+sjPlot::tab_model(m_final_posemo, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_final_posemo, by_group = TRUE)
+performance::check_model(m_final_posemo)
+report::report(m_final_posemo)
+equatiomatic::extract_eq(m_final_posemo, wrap = TRUE)
+````
+
+## Negemo
+
+```{r, m_final_negemo, eval = TRUE}
+m_final_negemo <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher + 
+              favorite_count + retweet_count + reply_count +
+              favorite_count_user +
+              retweet_count_user +
+              statuses_count +
+              followers_count +
+              friends_count +
+              postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
+              (hasJoinedChat|screen_name), data = d)
+
+sjPlot::tab_model(m_final_negemo, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_final_negemo, by_group = TRUE)
+performance::check_model(m_final_negemo)
+report::report(m_final_negemo)
+equatiomatic::extract_eq(m_final_negemo, wrap = TRUE)
+````

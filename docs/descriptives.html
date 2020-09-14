@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-09-10" />
+<meta name="date" content="2020-09-14" />
 
 <title>#NGSSchat sentiment: descriptive statistics</title>
 
@@ -1510,7 +1510,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">#NGSSchat sentiment: descriptive statistics</h1>
-<h4 class="date">2020-09-10</h4>
+<h4 class="date">2020-09-14</h4>
 
 </div>
 
@@ -1995,7 +1995,7 @@ div.tocify {
 <div id="correlations" class="section level2">
 <h2>Correlations</h2>
 <pre class="r"><code>d %&gt;% 
-  select(type_of_tweet, year_fct, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher, postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %&gt;% 
+  select(senti_scale, posemo, negemo, Analytic, cogproc, social, type_of_tweet, year_fct, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher, postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %&gt;% 
   select_if(is.numeric) %&gt;% 
   corrr::correlate() %&gt;% 
   corrr::fashion() %&gt;%
@@ -2004,30 +2004,42 @@ div.tocify {
 ## deviation is zero</code></pre>
 <table>
 <colgroup>
-<col width="7%"></col>
+<col width="6%"></col>
+<col width="3%"></col>
+<col width="1%"></col>
+<col width="1%"></col>
+<col width="2%"></col>
+<col width="2%"></col>
+<col width="1%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
 <col width="4%"></col>
 <col width="4%"></col>
+<col width="3%"></col>
+<col width="5%"></col>
 <col width="5%"></col>
 <col width="4%"></col>
 <col width="3%"></col>
 <col width="6%"></col>
-<col width="6%"></col>
-<col width="5%"></col>
-<col width="4%"></col>
-<col width="7%"></col>
 <col width="3%"></col>
-<col width="4%"></col>
-<col width="4%"></col>
 <col width="4%"></col>
 <col width="3%"></col>
 <col width="4%"></col>
-<col width="5%"></col>
+<col width="2%"></col>
 <col width="4%"></col>
 <col width="4%"></col>
+<col width="3%"></col>
+<col width="3%"></col>
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">rowname</th>
+<th align="left">senti_scale</th>
+<th align="left">posemo</th>
+<th align="left">negemo</th>
+<th align="left">Analytic</th>
+<th align="left">cogproc</th>
+<th align="left">social</th>
 <th align="left">year_of_post</th>
 <th align="left">near_adoption</th>
 <th align="left">before_adoption</th>
@@ -2051,7 +2063,181 @@ div.tocify {
 </thead>
 <tbody>
 <tr class="odd">
+<td align="left">senti_scale</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">.13</td>
+<td align="left">-.08</td>
+<td align="left">-.07</td>
+<td align="left">.11</td>
+<td align="left">-.04</td>
+<td align="left">.03</td>
+<td align="left">.01</td>
+<td align="left">-.02</td>
+<td align="left">-.02</td>
+<td align="left">-.00</td>
+<td align="left">-.01</td>
+<td align="left">.02</td>
+<td align="left">-.01</td>
+<td align="left">-.06</td>
+<td align="left">.02</td>
+<td align="left">-.03</td>
+<td align="left">-.01</td>
+<td align="left">.01</td>
+<td align="left">.03</td>
+</tr>
+<tr class="even">
+<td align="left">posemo</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">negemo</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Analytic</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">cogproc</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">social</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
 <td align="left">year_of_post</td>
+<td align="left">.13</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left"></td>
 <td align="left">-.45</td>
 <td align="left">-.40</td>
@@ -2074,6 +2260,12 @@ div.tocify {
 </tr>
 <tr class="even">
 <td align="left">near_adoption</td>
+<td align="left">-.08</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">-.45</td>
 <td align="left"></td>
 <td align="left">-.16</td>
@@ -2096,6 +2288,12 @@ div.tocify {
 </tr>
 <tr class="odd">
 <td align="left">before_adoption</td>
+<td align="left">-.07</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">-.40</td>
 <td align="left">-.16</td>
 <td align="left"></td>
@@ -2118,6 +2316,12 @@ div.tocify {
 </tr>
 <tr class="even">
 <td align="left">after_adoption</td>
+<td align="left">.11</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">.63</td>
 <td align="left">-.86</td>
 <td align="left">-.37</td>
@@ -2140,6 +2344,12 @@ div.tocify {
 </tr>
 <tr class="odd">
 <td align="left">no_adoption</td>
+<td align="left">-.04</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">-.07</td>
 <td align="left"></td>
 <td align="left"></td>
@@ -2162,6 +2372,12 @@ div.tocify {
 </tr>
 <tr class="even">
 <td align="left">favorite_count_user</td>
+<td align="left">.03</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">.01</td>
 <td align="left">.00</td>
 <td align="left">-.07</td>
@@ -2184,6 +2400,12 @@ div.tocify {
 </tr>
 <tr class="odd">
 <td align="left">retweet_count_user</td>
+<td align="left">.01</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">-.01</td>
 <td align="left">-.02</td>
 <td align="left">-.06</td>
@@ -2206,6 +2428,12 @@ div.tocify {
 </tr>
 <tr class="even">
 <td align="left">followers_count</td>
+<td align="left">-.02</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">-.03</td>
 <td align="left">.01</td>
 <td align="left">-.00</td>
@@ -2228,6 +2456,12 @@ div.tocify {
 </tr>
 <tr class="odd">
 <td align="left">friends_count</td>
+<td align="left">-.02</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">-.04</td>
 <td align="left">.04</td>
 <td align="left">.01</td>
@@ -2251,6 +2485,12 @@ div.tocify {
 <tr class="even">
 <td align="left">time_on_twitter_period</td>
 <td align="left">-.00</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">-.00</td>
 <td align="left">-.00</td>
 <td align="left">.00</td>
 <td align="left">.00</td>
@@ -2272,6 +2512,12 @@ div.tocify {
 </tr>
 <tr class="odd">
 <td align="left">reply_count</td>
+<td align="left">-.01</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">.01</td>
 <td align="left">.01</td>
 <td align="left">.01</td>
@@ -2294,6 +2540,12 @@ div.tocify {
 </tr>
 <tr class="even">
 <td align="left">favorite_count</td>
+<td align="left">.02</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">.09</td>
 <td align="left">-.07</td>
 <td align="left">-.06</td>
@@ -2316,6 +2568,12 @@ div.tocify {
 </tr>
 <tr class="odd">
 <td align="left">retweet_count</td>
+<td align="left">-.01</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">.02</td>
 <td align="left">-.02</td>
 <td align="left">-.02</td>
@@ -2338,6 +2596,12 @@ div.tocify {
 </tr>
 <tr class="even">
 <td align="left">statuses_count</td>
+<td align="left">-.06</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">-.09</td>
 <td align="left">.05</td>
 <td align="left">.03</td>
@@ -2360,6 +2624,12 @@ div.tocify {
 </tr>
 <tr class="odd">
 <td align="left">isTeacher</td>
+<td align="left">.02</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">.09</td>
 <td align="left">-.01</td>
 <td align="left">-.05</td>
@@ -2382,6 +2652,12 @@ div.tocify {
 </tr>
 <tr class="even">
 <td align="left">postedNGSSchat</td>
+<td align="left">-.03</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">.07</td>
 <td align="left">.01</td>
 <td align="left">-.05</td>
@@ -2404,6 +2680,12 @@ div.tocify {
 </tr>
 <tr class="odd">
 <td align="left">postedChatSession</td>
+<td align="left">-.01</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">-.04</td>
 <td align="left">.06</td>
 <td align="left">.01</td>
@@ -2426,6 +2708,12 @@ div.tocify {
 </tr>
 <tr class="even">
 <td align="left">hasJoinedChat</td>
+<td align="left">.01</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">.04</td>
 <td align="left">.05</td>
 <td align="left">-.04</td>
@@ -2448,6 +2736,12 @@ div.tocify {
 </tr>
 <tr class="odd">
 <td align="left">total_n_chats</td>
+<td align="left">.03</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">-.10</td>
 <td align="left">.07</td>
 <td align="left">-.03</td>
@@ -2492,10 +2786,8 @@ div.tocify {
   spread(senti_binary, n) %&gt;% 
   set_names(c(&quot;neg&quot;, &quot;pos&quot;)) %&gt;% 
   mutate(senti_ratio = neg/pos)</code></pre>
-<pre><code>## # A tibble: 1 x 3
-##     neg    pos senti_ratio
-##   &lt;int&gt;  &lt;int&gt;       &lt;dbl&gt;
-## 1 53421 483297       0.111</code></pre>
+<pre><code>##     neg    pos senti_ratio
+## 1 53421 483297   0.1105345</code></pre>
 </div>
 <div id="by-year" class="section level2">
 <h2>by year</h2>
@@ -2519,12 +2811,10 @@ div.tocify {
   spread(senti_binary, n) %&gt;% 
   set_names(c(&quot;type_of_tweet&quot;, &quot;neg&quot;, &quot;pos&quot;)) %&gt;% 
   mutate(senti_ratio = neg/pos)</code></pre>
-<pre><code>## # A tibble: 3 x 4
-##   type_of_tweet       neg    pos senti_ratio
-##   &lt;chr&gt;             &lt;int&gt;  &lt;int&gt;       &lt;dbl&gt;
-## 1 ngsschat-chat      7715  58223       0.133
-## 2 ngsschat-non-chat 11094  90673       0.122
-## 3 non-ngsschat      34612 334401       0.104</code></pre>
+<pre><code>##       type_of_tweet   neg    pos senti_ratio
+## 1     ngsschat-chat  7715  58223   0.1325078
+## 2 ngsschat-non-chat 11094  90673   0.1223517
+## 3      non-ngsschat 34612 334401   0.1035045</code></pre>
 </div>
 <div id="by-state" class="section level2">
 <h2>by state</h2>
@@ -2563,14 +2853,12 @@ div.tocify {
   set_names(c(&quot;adoption_status&quot;, &quot;neg&quot;, &quot;pos&quot;)) %&gt;% 
   mutate(senti_ratio = neg/pos) %&gt;% 
   arrange(desc(senti_ratio))</code></pre>
-<pre><code>## # A tibble: 5 x 4
-##   adoption_status   neg    pos senti_ratio
-##   &lt;fct&gt;           &lt;int&gt;  &lt;int&gt;       &lt;dbl&gt;
-## 1 after_adoption   6715  53781       0.125
-## 2 before_adoption 14135 124071       0.114
-## 3 near_adoption   11016 102051       0.108
-## 4 &lt;NA&gt;            19109 179583       0.106
-## 5 no_adoption      2446  23811       0.103</code></pre>
+<pre><code>##   adoption_status   neg    pos senti_ratio
+## 1  after_adoption  6715  53781   0.1248582
+## 2 before_adoption 14135 124071   0.1139267
+## 3   near_adoption 11016 102051   0.1079460
+## 4            &lt;NA&gt; 19109 179583   0.1064076
+## 5     no_adoption  2446  23811   0.1027256</code></pre>
 </div>
 <div id="by-adoption-status-by-year" class="section level2">
 <h2>by adoption status by year</h2>
@@ -2596,11 +2884,9 @@ div.tocify {
   set_names(c(&quot;teacher&quot;, &quot;neg&quot;, &quot;pos&quot;)) %&gt;% 
   mutate(senti_ratio = neg/pos) %&gt;% 
   arrange(desc(senti_ratio))</code></pre>
-<pre><code>## # A tibble: 2 x 4
-##   teacher   neg    pos senti_ratio
-##     &lt;int&gt; &lt;int&gt;  &lt;int&gt;       &lt;dbl&gt;
-## 1       1 22865 198041       0.115
-## 2       0 30486 284890       0.107</code></pre>
+<pre><code>##   teacher   neg    pos senti_ratio
+## 1       1 22865 198041   0.1154559
+## 2       0 30486 284890   0.1070097</code></pre>
 </div>
 <div id="by-whether-someone-posted-to-ngsschat" class="section level2">
 <h2>by whether someone posted to NGSSchat</h2>
@@ -2611,11 +2897,9 @@ div.tocify {
   set_names(c(&quot;postedNGSSchat&quot;, &quot;neg&quot;, &quot;pos&quot;)) %&gt;% 
   mutate(senti_ratio = neg/pos) %&gt;% 
   arrange(desc(senti_ratio))</code></pre>
-<pre><code>## # A tibble: 2 x 4
-##   postedNGSSchat   neg    pos senti_ratio
-##            &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;       &lt;dbl&gt;
-## 1              1 40059 352400       0.114
-## 2              0 13292 130531       0.102</code></pre>
+<pre><code>##   postedNGSSchat   neg    pos senti_ratio
+## 1              1 40059 352400   0.1136748
+## 2              0 13292 130531   0.1018302</code></pre>
 </div>
 </div>
 

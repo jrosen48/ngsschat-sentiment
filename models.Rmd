@@ -26,7 +26,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -37,7 +37,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -48,7 +48,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -61,7 +61,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -72,7 +72,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -83,7 +83,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -96,7 +96,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -107,7 +107,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -118,7 +118,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -131,7 +131,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -142,7 +142,7 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```
 
@@ -153,6 +153,6 @@ m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
 
 m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_full, wrap = TRUE)
 ```

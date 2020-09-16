@@ -23,8 +23,7 @@ processing adoption status
 
 ```{r}
 d <- d %>% 
-  mutate(adoption_key = ifelse(is.na(adoption_key), "missing", adoption_key)) %>% 
-  count(adoption_key)
+  mutate(adoption_key = ifelse(is.na(adoption_key), "missing", adoption_key))
 ```
 
 ## scaled variable

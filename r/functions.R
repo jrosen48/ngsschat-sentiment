@@ -114,7 +114,7 @@ create_new_variables_and_filter_by_language <- function(d) {
   d <- d %>% filter(lang == "en")  
   
   d <- d %>% 
-    mutate(adoption_key %>% forcats::fct_explicit_na())
+    mutate(adoption_key = adoption_key %>% forcats::fct_explicit_na())
   
   d %>% 
     as_tibble()

@@ -19,39 +19,22 @@ d <- params$d
 d <- readd(data_to_model)
 ```
 
-# Original DV, senti_scale composite variable
+processing adoption status
 
-```{r, m_final, eval = TRUE}
-m_senti_scale <- lmer(senti_scale ~ 1 + 
-                        
-                        type_of_tweet + 
-                        
-                        isTeacher + 
-                        
-                        year_of_post_centered + 
-                        
-                        favorite_count + retweet_count + reply_count +
-                        favorite_count_user +
-                        retweet_count_user +
-                        statuses_count +
-                        followers_count +
-                        friends_count +
-                        
-                        postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
-                        (1|screen_name), data = d)
-
-write_rds(m_final, "out/m_final.rds")
-
-sjPlot::tab_model(m_senti_scale, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
-performance::icc(m_senti_scale, by_group = TRUE)
-equatiomatic::extract_eq(m_senti_scale, wrap = TRUE)
+```{r}
+d <- d %>% 
+  mutate(adoption_key = ifelse(is.na(adoption_key), "missing", adoption_key)) %>% 
+  count(adoption_key)
 ```
 
 ## scaled variable
+
 ```{r, m-senti-scale, eval = TRUE}
 m_senti_scale <- lmer(senti_scale ~ 1 + 
                         
                         type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                        
+                        adoption_status + # status of an individual's state regarding when they adopted the NGSS
                         
                         isTeacher + # participant is a teacher or not
                         
@@ -76,20 +59,22 @@ equatiomatic::extract_eq(m_senti_scale, wrap = TRUE)
 
 ```{r, m-senti-scale-pos, eval = TRUE}
 m_senti_scale_pos <- lmer(senti_scale ~ 1 + 
-                        
-                        type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
-                        
-                        isTeacher + # participant is a teacher or not
-                        
-                        year_of_post_centered + 
-                        
-                        favorite_count + retweet_count + reply_count + # these are tweet-level variables; may not need to include
-                        
-                        postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # these are user-level variables; see describe-data.Rmd for definitions
-                        
-                        (1|screen_name), 
-                      
-                      data = d)
+                            
+                            type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                            
+                            adoption_status + # status of an individual's state regarding when they adopted the NGSS
+                            
+                            isTeacher + # participant is a teacher or not
+                            
+                            year_of_post_centered + 
+                            
+                            favorite_count + retweet_count + reply_count + # these are tweet-level variables; may not need to include
+                            
+                            postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # these are user-level variables; see describe-data.Rmd for definitions
+                            
+                            (1|screen_name), 
+                          
+                          data = d)
 
 write_rds(m_senti_scale_pos, "out/m_senti_scale.rds")
 
@@ -104,6 +89,8 @@ equatiomatic::extract_eq(m_senti_scale_pos, wrap = TRUE)
 m_senti_scale_neg <- lmer(scale_neg ~ 1 + 
                             
                             type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                            
+                            adoption_status + # status of an individual's state regarding when they adopted the NGSS
                             
                             isTeacher + # participant is a teacher or not
                             
@@ -133,6 +120,8 @@ m_liwc <- lmer(liwc_affect_scale ~
                  
                  type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
                  
+                 adoption_status + # status of an individual's state regarding when they adopted the NGSS
+                 
                  isTeacher + # participant is a teacher or not
                  
                  year_of_post_centered + 
@@ -159,6 +148,8 @@ m_liwc_pos <- lmer(posemo ~
                      
                      type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
                      
+                     adoption_status + # status of an individual's state regarding when they adopted the NGSS
+                     
                      isTeacher + # participant is a teacher or not
                      
                      year_of_post_centered + 
@@ -184,6 +175,8 @@ equatiomatic::extract_eq(m_liwc_pos, wrap = TRUE)
 m_liwc_neg <- lmer(negemo ~ 
                      
                      type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                     
+                     adoption_status + # status of an individual's state regarding when they adopted the NGSS
                      
                      isTeacher + # participant is a teacher or not
                      

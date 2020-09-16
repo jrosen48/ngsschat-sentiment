@@ -10,7 +10,7 @@ params:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message = TRUE)
+knitr::opts_chunk$set(message = TRUE, echo = FALSE)
 ```
 
 ```{r, renaming-params}

@@ -7,7 +7,7 @@ navbar:
     href: index.html
   - text: Descriptive Statistics
     href: descriptives.html
-  - text: Descriptive Statistics for Binary Sale
+  - text: Binary Scale Results
     href: descriptives-binary.html
   - text: Models
     href: models.html

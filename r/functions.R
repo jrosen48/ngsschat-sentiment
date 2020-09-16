@@ -114,7 +114,7 @@ create_new_variables_and_filter_by_language <- function(d) {
   d <- d %>% filter(lang == "en")  
   
   d <- d %>% 
-    mutate(adoption_key %>% forcats::fct_explicit_na())
+    mutate(adoption_key = adoption_key %>% forcats::fct_explicit_na())
   
   d %>% 
     as_tibble()
@@ -151,19 +151,19 @@ model_full_model <- function(d, dependent_variable_string) {
   
   m <- lmer(dependent_variable ~ 
               
-              type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclueds e.g. NGSS)
+              type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
               adoption_key + # status of an individual's state regarding when they adopted the NGSS
               
-              time_on_twitter_period + # for how long a person has been on Twitter
+              scale(time_on_twitter_period) + # for how long a person has been on Twitter
               isTeacher + # participant is a teacher or not
               
               year_of_post_centered + 
               
-              favorite_count + retweet_count + reply_count + # tweet-level variables
+              scale(favorite_count) + scale(retweet_count) + scale(reply_count) + # tweet-level variables
               
               postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # user-level variables
               
-              #n_posted_chatsessions + n_posted_ngsschat_nonchat + n_posted_non_ngsschat + # also user-level variables; should these be time-varying?
+              scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables; should these be time-varying?
               
               (1|screen_name), 
             

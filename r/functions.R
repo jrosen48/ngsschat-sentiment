@@ -9,14 +9,6 @@ render_site <- function() {
   rmarkdown::render_site("docs")
 }
 
-join_liwc <- function(d, liwc) {
-  liwc <- liwc %>% 
-    select(posemo, negemo, Analytic, cogproc, social)
-  
-  d <- d %>% 
-    bind_cols(liwc)
-}
-
 join_state <- function(d, state_data) {
   
   ## ---- proc-state-data---------------------------------------------------------------------------------------------------
@@ -99,6 +91,11 @@ join_state <- function(d, state_data) {
 
 create_new_variables_and_filter_by_language <- function(d) {
   
+  # creating factor for chat_id
+  d <- d %>% 
+    mutate(chat_id_fct = as.factor(chat_id)) %>%
+    mutate(chat_id_fct = forcats::fct_explicit_na(chat_id_fct))
+  
   d$year_fct <- factor(d$year_of_post) %>% forcats::fct_relevel('2016')
   
   d <- d %>% 
@@ -117,9 +114,65 @@ create_new_variables_and_filter_by_language <- function(d) {
   d <- d %>% filter(lang == "en")  
   
   d <- d %>% 
-    mutate(liwc_affect_scale = posemo - negemo)
+    mutate(adoption_key %>% forcats::fct_explicit_na())
   
   d %>% 
     as_tibble()
+  
+}
+
+model_null_model <- function(d, dependent_variable_string) {
+  
+  d <- d %>% 
+    rename(dependent_variable = all_of(dependent_variable_string)) # probably better to use NSE in this function, but this seems to work
+  
+  print(str_c("running lme4::lmer() with ", dependent_variable_string, " as the dependent variable and the full random effects structure with no fixed effects"))
+  
+  m <- lmer(dependent_variable ~ 
+              
+              #(1|chat_id_fct) + 
+              
+              (1|state_master) +
+              
+              (1|screen_name), 
+            
+            data = d)
+  
+  m
+  
+}
+
+model_full_model <- function(d, dependent_variable_string) {
+  
+  d <- d %>% 
+    rename(dependent_variable = all_of(dependent_variable_string)) # probably better to use NSE in this function, but this seems to work
+  
+  print(str_c("running lme4::lmer() with ", dependent_variable_string, " as the dependent variable and the full set of independent variables"))
+  
+  m <- lmer(dependent_variable ~ 
+              
+              type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclueds e.g. NGSS)
+              adoption_key + # status of an individual's state regarding when they adopted the NGSS
+              
+              time_on_twitter_period + # for how long a person has been on Twitter
+              isTeacher + # participant is a teacher or not
+              
+              year_of_post_centered + 
+              
+              favorite_count + retweet_count + reply_count + # tweet-level variables
+              
+              postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # user-level variables
+              
+              #n_posted_chatsessions + n_posted_ngsschat_nonchat + n_posted_non_ngsschat + # also user-level variables; should these be time-varying?
+              
+              (1|screen_name), 
+            
+            data = d)
+  
+  print("estimation complete; saving and then returning output")
+  
+  write_rds(m, str_c("out/", dependent_variable_string))
+  
+  m
   
 }

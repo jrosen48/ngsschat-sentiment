@@ -80,10 +80,59 @@ hasJoinedChat: 0 until user has posted inside a #NGSSchat chat session,
 
 total_n_chats: number of #NGSSchat chat sessions each user has participated in in total
 
+dl_at: Exact timestamp of download of tweet
+
+dl_at_day: Day in which tweet was downloaded
+
+nrc_pos: Sentiment positivity rating based on nrc dictionary, non-matches coded as 0 (neutral), 
+normalized by number of words in tweets
+
+nrc_neg: Sentiment negativity rating based on nrc dictionary, non-matches coded as 0 (neutral), 
+normalized by number of words in tweets
+
+nrc_scale: nrc_pos + nrc_neg
+
+tidytext_pos: Sentiment positivity rating based on the dictionaries "nrc", "bing", "afinn" and "loughran"
+from the package "tidytext", non-matches coded as 0 (neutral), normalized by number of words in tweets,
+multiple matches in dictionaries aggregated by mean
+
+tidytext_neg: Sentiment negativity rating based on the dictionaries "nrc", "bing", "afinn" and "loughran"
+from the package "tidytext", non-matches coded as 0 (neutral), normalized by number of words in tweets,
+multiple matches in dictionaries aggregated by mean
+
+tidytext_scale: tidytext_pos + tidytext_neg
+
+chat_id: Chronological number of #NGSSchat chat session, nonchats coded as NA
+
+n_posted_chatsessions: Number of tweets this user has posted in #NGSSchat chat sessions in total (user-level variable)
+
+n_posted_ngsschat_nonchat: Number of tweets this user has posted in #NGSSchat outside of chat sessions in total (user-level variable)
+
+n_posted_non_ngsschat: Number of tweets this user has posted outside of #NGSSchat (user-level variable)
+
+liwc_pos: Sentiment positivity rating based on LIWC
+
+liwc_neg: Sentiment negativity rating based on LIWC
+
+liwc_scale: liwc_pos + liwc_neg
+
+Analytic, social, cogproc, insight, affect, anx, anger, sad: LIWC-specific Sentiment variables
 
 ```{r, desciptive-stats}
 d %>% 
-  select(type_of_tweet, year_fct, scale_neg, scale_pos, senti_scale, senti_binary, liwc_affect_scale, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher, postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
+  select(type_of_tweet, 
+         chat_id,
+         senti_binary, senti_scale, scale_pos, scale_neg,
+         nrc_pos, nrc_neg, nrc_scale,
+         tidytext_pos, tidytext_neg, tidytext_scale,
+         liwc_pos, liwc_neg, liwc_scale,
+         n_posted_chatsessions, n_posted_ngsschat_nonchat ,n_posted_non_ngsschat,
+         favorite_count, retweet_count, reply_count, 
+         state_master, screen_name, 
+         year_of_post, 
+         adoption_key, 
+         time_on_twitter_period, isTeacher, 
+         postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
   skimr::skim()
 ```
 
@@ -91,11 +140,105 @@ d %>%
 
 ```{r, correlations}
 d %>% 
-  select(senti_scale, scale_neg, scale_pos, senti_binary, posemo, negemo, liwc_affect_scale, type_of_tweet, year_fct, state_master, screen_name, year_of_post, near_adoption, before_adoption, after_adoption, no_adoption, favorite_count_user, retweet_count_user, followers_count, friends_count, time_on_twitter_period, reply_count, favorite_count, retweet_count, statuses_count, isTeacher, postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
+  select(type_of_tweet, 
+         chat_id,
+         senti_binary, senti_scale, scale_pos, scale_neg,
+         nrc_pos, nrc_neg, nrc_scale,
+         tidytext_pos, tidytext_neg, tidytext_scale,
+         liwc_pos, liwc_neg, liwc_scale,
+         n_posted_chatsessions, n_posted_ngsschat_nonchat ,n_posted_non_ngsschat,
+         favorite_count, retweet_count, reply_count, 
+         state_master, screen_name, 
+         year_of_post, 
+         adoption_key, 
+         time_on_twitter_period, isTeacher, 
+         postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
   select_if(is.numeric) %>% 
   corrr::correlate() %>% 
   corrr::fashion() %>%
   knitr::kable()
+```
+
+## Histograms of the DVs
+
+### sentistrength 
+
+```{r}
+d %>% 
+  ggplot(aes(x = senti_scale)) +
+  geom_histogram()
+```
+
+```{r}
+d %>% 
+  ggplot(aes(x = scale_pos)) +
+  geom_histogram()
+```
+
+```{r}
+d %>% 
+  ggplot(aes(x = scale_neg)) +
+  geom_histogram()
+```
+
+### nrc
+
+```{r}
+d %>% 
+  ggplot(aes(x = nrc_scale)) +
+  geom_histogram()
+```
+
+```{r}
+d %>% 
+  ggplot(aes(x = nrc_pos)) +
+  geom_histogram()
+```
+
+```{r}
+d %>% 
+  ggplot(aes(x = nrc_neg)) +
+  geom_histogram()
+```
+
+### tidytext
+
+```{r}
+d %>% 
+  ggplot(aes(x = tidytext_scale)) +
+  geom_histogram()
+```
+
+```{r}
+d %>% 
+  ggplot(aes(x = tidytext_pos)) +
+  geom_histogram()
+```
+
+```{r}
+d %>% 
+  ggplot(aes(x = tidytext_neg)) +
+  geom_histogram()
+```
+
+### liwc
+
+```{r}
+d %>% 
+  ggplot(aes(x = liwc_scale)) +
+  geom_histogram()
+```
+
+```{r}
+d %>% 
+  ggplot(aes(x = liwc_pos)) +
+  geom_histogram()
+```
+
+```{r}
+d %>% 
+  ggplot(aes(x = liwc_neg)) +
+  geom_histogram()
 ```
 
 ## Time series
@@ -113,117 +256,4 @@ d %>%
   ggtitle("Posts to the #NGSSchat Hashtag on Twitter Per Day")
 
 ggsave("img/ngsschat-posts-per-day.png", width = 8, height = 6)
-```
-
-## overall
-
-```{r}
-d %>% count(senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos)
-```
-
-## by year 
-
-```{r}
-d %>% count(year_of_post, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("year_of_post", "neg", "pos")) %>%
-  mutate(senti_ratio = neg/pos) %>% 
-  ggplot(aes(x = year_of_post, y = senti_ratio)) +
-  geom_point() +
-  geom_line() +
-  geom_smooth()
-```
-
-## by tweet type
-
-```{r}
-d %>% 
-  count(type_of_tweet, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("type_of_tweet", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos)
-```
-
-## by state
-
-```{r}
-d %>% 
-  count(state_master, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip()
-```
-
-## by state, by year
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(state_master, year_of_post, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "year_of_post", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip() +
-  facet_wrap(~year_of_post)
-```
-
-## by adoption status
-
-```{r}
-d %>% 
-  count(adoption_key, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("adoption_status", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio))
-```
-
-## by adoption status by year
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(adoption_key, year_of_post, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "year_of_post", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip() +
-  facet_wrap(~year_of_post)
-```
-
-## by teacher
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(isTeacher, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("teacher", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio))
-```
-
-## by whether someone posted to NGSSchat
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(postedNGSSchat, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("postedNGSSchat", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio))
 ```

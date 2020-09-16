@@ -1,0 +1,19 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning = FALSE, message = FALSE}
+source("R/functions.R")
+source("packages.R")
+
+d <- drake::readd(data_to_model)
+
+m <- model_full_model(d, "posemo")
+sjPlot::tab_model(m, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+equatiomatic::extract_eq(m, wrap = TRUE)
+```

@@ -1,0 +1,158 @@
+---
+title: "Final models"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+params:
+  d: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = TRUE)
+```
+
+```{r, renaming-params}
+d <- params$d
+```
+
+# sentiment analysis technique: sentistrength
+
+```{r}
+dependent_variable_string <- "senti_scale"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+```{r}
+dependent_variable_string <- "scale_pos"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+```{r}
+dependent_variable_string <- "scale_neg"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+# sentiment analysis technique: nrc
+
+```{r}
+dependent_variable_string <- "nrc_scale"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+```{r}
+dependent_variable_string <- "nrc_pos"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+```{r}
+dependent_variable_string <- "nrc_neg"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+# sentiment analysis technique: tidytext
+
+```{r}
+dependent_variable_string <- "tidytext_scale"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+```{r}
+dependent_variable_string <- "tidytext_pos"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+```{r}
+dependent_variable_string <- "tidytext_neg"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+# sentiment analysis technique: liwc
+
+```{r}
+dependent_variable_string <- "liwc_scale"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+```{r}
+dependent_variable_string <- "liwc_pos"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```
+
+```{r}
+dependent_variable_string <- "liwc_neg"
+
+m_null <- model_null_model(d, dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+
+m_full <- model_full_model(d, dependent_variable_string)
+sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m_full, wrap = TRUE)
+```

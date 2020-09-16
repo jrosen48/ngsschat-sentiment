@@ -1532,25 +1532,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with senti_scale as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+senti_scale
 </th>
 </tr>
 <tr>
@@ -1572,10 +1561,10 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.61
+5.63
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -1620,7 +1609,7 @@ adoption_key<br>[after_adoption]
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.446
+0.454
 </td>
 </tr>
 <tr>
@@ -1698,7 +1687,7 @@ year_of_post_centered
 favorite_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
+0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -1712,7 +1701,7 @@ favorite_count
 retweet_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01
+-0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -1726,7 +1715,7 @@ retweet_count
 reply_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.03
+-0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -1754,13 +1743,13 @@ postedNGSSchat
 postedChatSession
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01
+-0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.794
+0.834
 </td>
 </tr>
 <tr>
@@ -1774,7 +1763,7 @@ hasJoinedChat
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.964
+0.965
 </td>
 </tr>
 <tr>
@@ -1785,10 +1774,52 @@ total_n_chats
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.08
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.914
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.28
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.16
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.080
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.22
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.13
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.085
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.848
+0.059
 </td>
 </tr>
 <tr>
@@ -1837,7 +1868,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.023 / 0.201
+0.033 / 0.208
 </td>
 </tr>
 </table>
@@ -1848,9 +1879,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 <pre class="r"><code>dependent_variable_string &lt;- &quot;scale_pos&quot;
@@ -1867,25 +1898,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with scale_pos as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+scale_pos
 </th>
 </tr>
 <tr>
@@ -1907,7 +1927,7 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.84
+1.85
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.03
@@ -1955,7 +1975,7 @@ adoption_key<br>[after_adoption]
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.450
+0.453
 </td>
 </tr>
 <tr>
@@ -1997,7 +2017,7 @@ time_on_twitter_period
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.368
+0.367
 </td>
 </tr>
 <tr>
@@ -2033,7 +2053,7 @@ year_of_post_centered
 favorite_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
+0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -2047,7 +2067,7 @@ favorite_count
 retweet_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01
+-0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -2095,7 +2115,7 @@ postedChatSession
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.225
+0.250
 </td>
 </tr>
 <tr>
@@ -2109,7 +2129,7 @@ hasJoinedChat
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.308
+0.309
 </td>
 </tr>
 <tr>
@@ -2117,13 +2137,55 @@ hasJoinedChat
 total_n_chats
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
+0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04
+0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.853
+0.780
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.23
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.15
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.133
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.19
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.12
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.118
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.06
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.05
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.220
 </td>
 </tr>
 <tr>
@@ -2172,7 +2234,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.039 / 0.238
+0.044 / 0.242
 </td>
 </tr>
 </table>
@@ -2180,9 +2242,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 <pre class="r"><code>dependent_variable_string &lt;- &quot;scale_neg&quot;
@@ -2199,25 +2261,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with scale_neg as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+scale_neg
 </th>
 </tr>
 <tr>
@@ -2287,7 +2338,7 @@ adoption_key<br>[after_adoption]
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.285
+0.310
 </td>
 </tr>
 <tr>
@@ -2301,7 +2352,7 @@ adoption_key<br>[before_adoption]
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.557
+0.536
 </td>
 </tr>
 <tr>
@@ -2315,7 +2366,7 @@ adoption_key<br>[near_adoption]
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.035</strong>
+<strong>0.037</strong>
 </td>
 </tr>
 <tr>
@@ -2343,7 +2394,7 @@ isTeacher
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.997
+0.959
 </td>
 </tr>
 <tr>
@@ -2393,7 +2444,7 @@ retweet_count
 reply_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.02
+-0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -2413,7 +2464,7 @@ postedNGSSchat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.808
+0.731
 </td>
 </tr>
 <tr>
@@ -2427,7 +2478,7 @@ postedChatSession
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.222
+0.215
 </td>
 </tr>
 <tr>
@@ -2441,7 +2492,7 @@ hasJoinedChat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.106
+0.109
 </td>
 </tr>
 <tr>
@@ -2449,13 +2500,55 @@ hasJoinedChat
 total_n_chats
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
+-0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.721
+0.588
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.05
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.03
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.111
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.306
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.03
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.006</strong>
 </td>
 </tr>
 <tr>
@@ -2504,7 +2597,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.008 / 0.042
+0.014 / 0.047
 </td>
 </tr>
 </table>
@@ -2512,9 +2605,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 </div>
@@ -2534,25 +2627,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with nrc_scale as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+nrc_scale
 </th>
 </tr>
 <tr>
@@ -2622,7 +2704,7 @@ adoption_key<br>[after_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.436
+0.361
 </td>
 </tr>
 <tr>
@@ -2636,7 +2718,7 @@ adoption_key<br>[before_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.345
+0.379
 </td>
 </tr>
 <tr>
@@ -2650,7 +2732,7 @@ adoption_key<br>[near_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.016</strong>
+<strong>0.013</strong>
 </td>
 </tr>
 <tr>
@@ -2678,7 +2760,7 @@ isTeacher
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.257
+0.329
 </td>
 </tr>
 <tr>
@@ -2720,7 +2802,7 @@ retweet_count
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.201
+0.202
 </td>
 </tr>
 <tr>
@@ -2748,7 +2830,7 @@ postedNGSSchat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.003</strong>
+<strong>0.001</strong>
 </td>
 </tr>
 <tr>
@@ -2762,7 +2844,7 @@ postedChatSession
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.070
+<strong>0.045</strong>
 </td>
 </tr>
 <tr>
@@ -2776,7 +2858,7 @@ hasJoinedChat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.049</strong>
+<strong>0.046</strong>
 </td>
 </tr>
 <tr>
@@ -2784,13 +2866,55 @@ hasJoinedChat
 total_n_chats
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.990
+0.564
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.010</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.002</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
 </td>
 </tr>
 <tr>
@@ -2817,7 +2941,7 @@ Random Effects
 ICC
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.04
+0.03
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
@@ -2839,7 +2963,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.008 / 0.044
+0.037 / 0.071
 </td>
 </tr>
 </table>
@@ -2847,9 +2971,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 <pre class="r"><code>dependent_variable_string &lt;- &quot;nrc_pos&quot;
@@ -2868,24 +2992,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with nrc_pos as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+nrc_pos
 </th>
 </tr>
 <tr>
@@ -2955,7 +3069,7 @@ adoption_key<br>[after_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.658
+0.574
 </td>
 </tr>
 <tr>
@@ -2969,7 +3083,7 @@ adoption_key<br>[before_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.083
+0.093
 </td>
 </tr>
 <tr>
@@ -3011,7 +3125,7 @@ isTeacher
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.080
+0.112
 </td>
 </tr>
 <tr>
@@ -3053,7 +3167,7 @@ retweet_count
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.144
+0.145
 </td>
 </tr>
 <tr>
@@ -3095,7 +3209,7 @@ postedChatSession
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.018</strong>
+<strong>0.010</strong>
 </td>
 </tr>
 <tr>
@@ -3109,7 +3223,7 @@ hasJoinedChat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.071
+0.066
 </td>
 </tr>
 <tr>
@@ -3123,7 +3237,49 @@ total_n_chats
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.996
+0.943
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.025</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.002</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
 </td>
 </tr>
 <tr>
@@ -3172,7 +3328,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.007 / 0.044
+0.033 / 0.068
 </td>
 </tr>
 </table>
@@ -3180,9 +3336,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 <pre class="r"><code>dependent_variable_string &lt;- &quot;nrc_neg&quot;
@@ -3199,25 +3355,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with nrc_neg as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+nrc_neg
 </th>
 </tr>
 <tr>
@@ -3287,7 +3432,7 @@ adoption_key<br>[after_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.248
+0.227
 </td>
 </tr>
 <tr>
@@ -3301,7 +3446,7 @@ adoption_key<br>[before_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.042</strong>
+<strong>0.038</strong>
 </td>
 </tr>
 <tr>
@@ -3329,7 +3474,7 @@ time_on_twitter_period
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.798
+0.797
 </td>
 </tr>
 <tr>
@@ -3343,7 +3488,7 @@ isTeacher
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.055
+0.052
 </td>
 </tr>
 <tr>
@@ -3371,7 +3516,7 @@ favorite_count
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.788
+0.789
 </td>
 </tr>
 <tr>
@@ -3385,7 +3530,7 @@ retweet_count
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.755
+0.746
 </td>
 </tr>
 <tr>
@@ -3427,7 +3572,7 @@ postedChatSession
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.314
+0.303
 </td>
 </tr>
 <tr>
@@ -3441,7 +3586,7 @@ hasJoinedChat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.565
+0.576
 </td>
 </tr>
 <tr>
@@ -3455,7 +3600,49 @@ total_n_chats
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.970
+0.248
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.333
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.943
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.024</strong>
 </td>
 </tr>
 <tr>
@@ -3482,7 +3669,7 @@ Random Effects
 ICC
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.06
+0.05
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
@@ -3504,7 +3691,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.002 / 0.057
+0.007 / 0.061
 </td>
 </tr>
 </table>
@@ -3512,9 +3699,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 </div>
@@ -3534,25 +3721,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with tidytext_scale as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+tidytext_scale
 </th>
 </tr>
 <tr>
@@ -3574,7 +3750,7 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.07
+0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -3622,7 +3798,7 @@ adoption_key<br>[after_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.714
+0.624
 </td>
 </tr>
 <tr>
@@ -3636,7 +3812,7 @@ adoption_key<br>[before_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.008</strong>
+<strong>0.010</strong>
 </td>
 </tr>
 <tr>
@@ -3664,7 +3840,7 @@ time_on_twitter_period
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.909
+0.911
 </td>
 </tr>
 <tr>
@@ -3748,7 +3924,7 @@ postedNGSSchat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.487
+0.728
 </td>
 </tr>
 <tr>
@@ -3762,7 +3938,7 @@ postedChatSession
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.375
+0.252
 </td>
 </tr>
 <tr>
@@ -3776,7 +3952,7 @@ hasJoinedChat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.335
+0.328
 </td>
 </tr>
 <tr>
@@ -3790,7 +3966,49 @@ total_n_chats
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.460
+0.149
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.327
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.228
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
 </td>
 </tr>
 <tr>
@@ -3839,7 +4057,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.006 / 0.070
+0.041 / 0.101
 </td>
 </tr>
 </table>
@@ -3847,9 +4065,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 <pre class="r"><code>dependent_variable_string &lt;- &quot;tidytext_pos&quot;
@@ -3866,25 +4084,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with tidytext_pos as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+tidytext_pos
 </th>
 </tr>
 <tr>
@@ -3954,7 +4161,7 @@ adoption_key<br>[after_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.915
+0.827
 </td>
 </tr>
 <tr>
@@ -3968,7 +4175,7 @@ adoption_key<br>[before_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.008</strong>
+<strong>0.010</strong>
 </td>
 </tr>
 <tr>
@@ -3996,7 +4203,7 @@ time_on_twitter_period
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.873
+0.875
 </td>
 </tr>
 <tr>
@@ -4074,13 +4281,13 @@ reply_count
 postedNGSSchat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.994
+0.755
 </td>
 </tr>
 <tr>
@@ -4094,7 +4301,7 @@ postedChatSession
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.112
+0.066
 </td>
 </tr>
 <tr>
@@ -4108,7 +4315,7 @@ hasJoinedChat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.398
+0.391
 </td>
 </tr>
 <tr>
@@ -4122,7 +4329,49 @@ total_n_chats
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.421
+0.189
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.458
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.284
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
 </td>
 </tr>
 <tr>
@@ -4171,7 +4420,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.006 / 0.075
+0.038 / 0.104
 </td>
 </tr>
 </table>
@@ -4179,9 +4428,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 <pre class="r"><code>dependent_variable_string &lt;- &quot;tidytext_neg&quot;
@@ -4198,25 +4447,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with tidytext_neg as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+tidytext_neg
 </th>
 </tr>
 <tr>
@@ -4286,7 +4524,7 @@ adoption_key<br>[after_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.327
+0.307
 </td>
 </tr>
 <tr>
@@ -4300,7 +4538,7 @@ adoption_key<br>[before_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.847
+0.869
 </td>
 </tr>
 <tr>
@@ -4314,7 +4552,7 @@ adoption_key<br>[near_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.122
+0.125
 </td>
 </tr>
 <tr>
@@ -4328,7 +4566,7 @@ time_on_twitter_period
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.876
+0.875
 </td>
 </tr>
 <tr>
@@ -4342,7 +4580,7 @@ isTeacher
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.208
+0.221
 </td>
 </tr>
 <tr>
@@ -4356,7 +4594,7 @@ year_of_post_centered
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.844
+0.836
 </td>
 </tr>
 <tr>
@@ -4370,7 +4608,7 @@ favorite_count
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.586
+0.585
 </td>
 </tr>
 <tr>
@@ -4384,7 +4622,7 @@ retweet_count
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.719
+0.713
 </td>
 </tr>
 <tr>
@@ -4412,7 +4650,7 @@ postedNGSSchat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.002</strong>
+<strong>0.003</strong>
 </td>
 </tr>
 <tr>
@@ -4440,12 +4678,26 @@ hasJoinedChat
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.539
+0.546
 </td>
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
 total_n_chats
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.678
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 -0.00
@@ -4454,7 +4706,35 @@ total_n_chats
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.657
+0.318
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.625
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.045</strong>
 </td>
 </tr>
 <tr>
@@ -4503,7 +4783,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.002 / 0.045
+0.004 / 0.048
 </td>
 </tr>
 </table>
@@ -4511,9 +4791,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 </div>
@@ -4533,25 +4813,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with liwc_scale as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+liwc_scale
 </th>
 </tr>
 <tr>
@@ -4573,10 +4842,10 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-4.51
+4.50
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08
+0.09
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4587,7 +4856,7 @@ p
 type_of_tweet<br>[ngsschat-non-chat]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.03
+-1.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.03
@@ -4615,13 +4884,13 @@ type_of_tweet<br>[non-ngsschat]
 adoption_key<br>[after_adoption]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.10
+0.09
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.095
+0.110
 </td>
 </tr>
 <tr>
@@ -4635,7 +4904,7 @@ adoption_key<br>[before_adoption]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.026</strong>
+<strong>0.031</strong>
 </td>
 </tr>
 <tr>
@@ -4660,10 +4929,10 @@ time_on_twitter_period
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.792
+0.791
 </td>
 </tr>
 <tr>
@@ -4699,10 +4968,10 @@ year_of_post_centered
 favorite_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
+0.12
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
+0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4713,10 +4982,10 @@ favorite_count
 retweet_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.05
+-0.16
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4727,7 +4996,7 @@ retweet_count
 reply_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.03
+-0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.01
@@ -4741,13 +5010,13 @@ reply_count
 postedNGSSchat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.04
+-0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.211
+0.344
 </td>
 </tr>
 <tr>
@@ -4755,13 +5024,13 @@ postedNGSSchat
 postedChatSession
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.13
+0.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.020</strong>
+<strong>0.005</strong>
 </td>
 </tr>
 <tr>
@@ -4775,7 +5044,7 @@ hasJoinedChat
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.004</strong>
+<strong>0.003</strong>
 </td>
 </tr>
 <tr>
@@ -4783,13 +5052,55 @@ hasJoinedChat
 total_n_chats
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.34
+0.31
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.09
+0.15
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.042</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.30
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.32
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.64
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.26
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.013</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.16
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.128
 </td>
 </tr>
 <tr>
@@ -4838,7 +5149,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.029 / 0.076
+0.067 / 0.112
 </td>
 </tr>
 </table>
@@ -4846,9 +5157,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 <pre class="r"><code>dependent_variable_string &lt;- &quot;liwc_pos&quot;
@@ -4865,25 +5176,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with liwc_pos as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+liwc_pos
 </th>
 </tr>
 <tr>
@@ -4905,10 +5205,10 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-3.89
+3.90
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.07
+0.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -4947,13 +5247,13 @@ type_of_tweet<br>[non-ngsschat]
 adoption_key<br>[after_adoption]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.07
+0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.243
+0.269
 </td>
 </tr>
 <tr>
@@ -4967,7 +5267,7 @@ adoption_key<br>[before_adoption]
 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.013</strong>
+<strong>0.015</strong>
 </td>
 </tr>
 <tr>
@@ -4992,10 +5292,10 @@ time_on_twitter_period
 -0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.663
+0.662
 </td>
 </tr>
 <tr>
@@ -5031,10 +5331,10 @@ year_of_post_centered
 favorite_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02
+0.14
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
+0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -5045,10 +5345,10 @@ favorite_count
 retweet_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.05
+-0.16
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -5059,7 +5359,7 @@ retweet_count
 reply_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.09
+-0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.01
@@ -5073,13 +5373,13 @@ reply_count
 postedNGSSchat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.04
+-0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.134
+0.226
 </td>
 </tr>
 <tr>
@@ -5087,13 +5387,13 @@ postedNGSSchat
 postedChatSession
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.12
+0.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.024</strong>
+<strong>0.005</strong>
 </td>
 </tr>
 <tr>
@@ -5107,7 +5407,7 @@ hasJoinedChat
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.052
+<strong>0.045</strong>
 </td>
 </tr>
 <tr>
@@ -5115,13 +5415,55 @@ hasJoinedChat
 total_n_chats
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.31
+0.24
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.09
+0.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.001</strong>
+0.104
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.41
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.30
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.67
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.25
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.007</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.09
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.340
 </td>
 </tr>
 <tr>
@@ -5141,7 +5483,7 @@ Random Effects
 τ<sub>00</sub> <sub>screen_name</sub>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.91
+0.90
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
@@ -5170,7 +5512,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.025 / 0.072
+0.067 / 0.112
 </td>
 </tr>
 </table>
@@ -5178,9 +5520,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 <pre class="r"><code>dependent_variable_string &lt;- &quot;liwc_neg&quot;
@@ -5197,25 +5539,14 @@ m_null &lt;- model_null_model(d, dependent_variable_string)</code></pre>
 <pre class="r"><code>m_full &lt;- model_full_model(d, dependent_variable_string)</code></pre>
 <pre><code>## [1] &quot;running lme4::lmer() with liwc_neg as the dependent variable and the full set of independent variables&quot;
 ## [1] &quot;estimation complete; saving and then returning output&quot;</code></pre>
-<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
-<pre><code>## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length
-
-## Warning in x@.Data + 60 * x@minute: longer object length is not a multiple of
-## shorter object length</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
  
 </th>
 <th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-Dependent variable
+liwc_neg
 </th>
 </tr>
 <tr>
@@ -5237,10 +5568,10 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.62
+0.60
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -5285,7 +5616,7 @@ adoption_key<br>[after_adoption]
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.086
+0.094
 </td>
 </tr>
 <tr>
@@ -5299,7 +5630,7 @@ adoption_key<br>[before_adoption]
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.683
+0.660
 </td>
 </tr>
 <tr>
@@ -5313,7 +5644,7 @@ adoption_key<br>[near_adoption]
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.132
+0.134
 </td>
 </tr>
 <tr>
@@ -5341,7 +5672,7 @@ isTeacher
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.617
+0.597
 </td>
 </tr>
 <tr>
@@ -5363,10 +5694,10 @@ year_of_post_centered
 favorite_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00
+-0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>0.001</strong>
@@ -5377,13 +5708,13 @@ favorite_count
 retweet_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00
+-0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.211
+0.215
 </td>
 </tr>
 <tr>
@@ -5391,7 +5722,7 @@ retweet_count
 reply_count
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.06
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -5405,13 +5736,13 @@ reply_count
 postedNGSSchat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.641
+0.569
 </td>
 </tr>
 <tr>
@@ -5425,7 +5756,7 @@ postedChatSession
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.576
+0.612
 </td>
 </tr>
 <tr>
@@ -5447,13 +5778,55 @@ hasJoinedChat
 total_n_chats
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03
+0.07
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.05
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.130
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_chatsessions
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.11
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.258
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_ngsschat_nonchat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.344
+0.08
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.750
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n_posted_non_ngsschat
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.06
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.03
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.054
 </td>
 </tr>
 <tr>
@@ -5502,7 +5875,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.008 / 0.050
+0.010 / 0.052
 </td>
 </tr>
 </table>
@@ -5510,9 +5883,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
-&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{time\_on\_twitter\_period}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{favorite\_count}) + \beta_{9}(\operatorname{retweet\_count}) + \beta_{10}(\operatorname{reply\_count}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
-&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter\_period)}) + \beta_{7}(\operatorname{year\_of\_post\_centered})\ + \\
+&amp;\quad \beta_{8}(\operatorname{scale(favorite\_count)}) + \beta_{9}(\operatorname{scale(retweet\_count)}) + \beta_{10}(\operatorname{scale(reply\_count)}) + \beta_{11}(\operatorname{hasJoinedChat})\ + \\
+&amp;\quad \beta_{12}(\operatorname{scale(total\_n\_chats)}) + \beta_{13}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{14}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{15}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) + \gamma^{\alpha}_{2} ( \operatorname{postedNGSSchat} ) + \gamma^{\alpha}_{3} ( \operatorname{postedChatSession} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 </div>

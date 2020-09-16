@@ -23,10 +23,10 @@ the_plan <-
       output_file = file_out("docs/descriptives.html"),
       params = list(d = data_to_model)),
     
-    # final_models = rmarkdown::render(
-    #   knitr_in("final-models.Rmd"),
-    #   output_file = file_out("docs/final-models.html"),
-    #   params = list(d = data_to_model)),
+    final_models = rmarkdown::render(
+      knitr_in("final-models.Rmd"),
+      output_file = file_out("docs/final-models.html"),
+      params = list(d = data_to_model)),
   
     # for site
     

@@ -30,7 +30,7 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r}
+```{r, eval = FALSE}
 dependent_variable_string <- "scale_pos"
 
 m_null <- model_null_model(d, dependent_variable_string)
@@ -41,7 +41,7 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r}
+```{r, eval = FALSE}
 dependent_variable_string <- "scale_neg"
 
 m_null <- model_null_model(d, dependent_variable_string)
@@ -65,7 +65,7 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r}
+```{r, eval = FALSE}
 dependent_variable_string <- "nrc_pos"
 
 m_null <- model_null_model(d, dependent_variable_string)
@@ -76,7 +76,7 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r}
+```{r, eval = FALSE}
 dependent_variable_string <- "nrc_neg"
 
 m_null <- model_null_model(d, dependent_variable_string)
@@ -100,7 +100,7 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r}
+```{r, eval = FALSE}
 dependent_variable_string <- "tidytext_pos"
 
 m_null <- model_null_model(d, dependent_variable_string)
@@ -111,7 +111,7 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r}
+```{r, eval = FALSE}
 dependent_variable_string <- "tidytext_neg"
 
 m_null <- model_null_model(d, dependent_variable_string)
@@ -135,7 +135,7 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r}
+```{r, eval = FALSE}
 dependent_variable_string <- "liwc_pos"
 
 m_null <- model_null_model(d, dependent_variable_string)
@@ -146,7 +146,7 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r}
+```{r, eval = FALSE}
 dependent_variable_string <- "liwc_neg"
 
 m_null <- model_null_model(d, dependent_variable_string)

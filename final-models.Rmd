@@ -19,84 +19,187 @@ d <- params$d
 d <- readd(data_to_model)
 ```
 
-# Final models
-
-## Original DV
+# Original DV, senti_scale composite variable
 
 ```{r, m_final, eval = TRUE}
-m_final <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher + 
-              favorite_count + retweet_count + reply_count +
-              favorite_count_user +
-              retweet_count_user +
-              statuses_count +
-              followers_count +
-              friends_count +
-              postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
-              (hasJoinedChat|screen_name), data = d)
+m_senti_scale <- lmer(senti_scale ~ 1 + 
+                        
+                        type_of_tweet + 
+                        
+                        isTeacher + 
+                        
+                        year_of_post_centered + 
+                        
+                        favorite_count + retweet_count + reply_count +
+                        favorite_count_user +
+                        retweet_count_user +
+                        statuses_count +
+                        followers_count +
+                        friends_count +
+                        
+                        postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
+                        (1|screen_name), data = d)
 
-sjPlot::tab_model(m_final, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
-performance::icc(m_final, by_group = TRUE)
-performance::check_model(m_final)
-report::report(m_final)
-equatiomatic::extract_eq(m_final, wrap = TRUE)
+write_rds(m_final, "out/m_final.rds")
+
+sjPlot::tab_model(m_senti_scale, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_senti_scale, by_group = TRUE)
+equatiomatic::extract_eq(m_senti_scale, wrap = TRUE)
 ```
 
-## Cogproc
+## scaled variable
+```{r, m-senti-scale, eval = TRUE}
+m_senti_scale <- lmer(senti_scale ~ 1 + 
+                        
+                        type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                        
+                        isTeacher + # participant is a teacher or not
+                        
+                        year_of_post_centered + 
+                        
+                        favorite_count + retweet_count + reply_count + # these are tweet-level variables; may not need to include
+                        
+                        postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # these are user-level variables; see describe-data.Rmd for definitions
+                        
+                        (1|screen_name), 
+                      
+                      data = d)
 
-```{r, m_final_cogproc, eval = TRUE}
-m_final_cogproc <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher + 
-              favorite_count + retweet_count + reply_count +
-              favorite_count_user +
-              retweet_count_user +
-              statuses_count +
-              followers_count +
-              friends_count +
-              postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
-              (hasJoinedChat|screen_name), data = d)
+write_rds(m_final, "out/m_senti_scale.rds")
 
-sjPlot::tab_model(m_final_cogproc, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
-performance::icc(m_final_cogproc, by_group = TRUE)
-performance::check_model(m_final_cogproc)
-report::report(m_final_cogproc)
-equatiomatic::extract_eq(m_final_cogproc, wrap = TRUE)
+sjPlot::tab_model(m_senti_scale, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_senti_scale, by_group = TRUE)
+equatiomatic::extract_eq(m_senti_scale, wrap = TRUE)
+```
+
+## just positive
+
+```{r, m-senti-scale-pos, eval = TRUE}
+m_senti_scale_pos <- lmer(senti_scale ~ 1 + 
+                        
+                        type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                        
+                        isTeacher + # participant is a teacher or not
+                        
+                        year_of_post_centered + 
+                        
+                        favorite_count + retweet_count + reply_count + # these are tweet-level variables; may not need to include
+                        
+                        postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # these are user-level variables; see describe-data.Rmd for definitions
+                        
+                        (1|screen_name), 
+                      
+                      data = d)
+
+write_rds(m_senti_scale_pos, "out/m_senti_scale.rds")
+
+sjPlot::tab_model(m_senti_scale_pos, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_senti_scale_pos, by_group = TRUE)
+equatiomatic::extract_eq(m_senti_scale_pos, wrap = TRUE)
+```
+
+## just negative
+
+```{r, m-senti-scale-neg, eval = TRUE}
+m_senti_scale_neg <- lmer(scale_neg ~ 1 + 
+                            
+                            type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                            
+                            isTeacher + # participant is a teacher or not
+                            
+                            year_of_post_centered + 
+                            
+                            favorite_count + retweet_count + reply_count + # these are tweet-level variables; may not need to include
+                            
+                            postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # these are user-level variables; see describe-data.Rmd for definitions
+                            
+                            (1|screen_name), 
+                          
+                          data = d)
+
+write_rds(m_senti_scale_neg, "out/m-senti-scale-neg.rds")
+
+sjPlot::tab_model(m_senti_scale_neg, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_senti_scale_neg, by_group = TRUE)
+equatiomatic::extract_eq(m_senti_scale_neg, wrap = TRUE)
+```
+
+# LIWC affect
+
+## scaled variable
+
+```{r, m-liwc, eval = TRUE}
+m_liwc <- lmer(liwc_affect_scale ~ 
+                 
+                 type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                 
+                 isTeacher + # participant is a teacher or not
+                 
+                 year_of_post_centered + 
+                 
+                 favorite_count + retweet_count + reply_count + # these are tweet-level variables; may not need to include
+                 
+                 postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # these are user-level variables; see describe-data.Rmd for definitions
+                 
+                 (1|screen_name), 
+               
+               data = d)
+
+write_rds(m_liwc, "out/m-liwc.rds")
+
+sjPlot::tab_model(m_liwc, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_liwc, by_group = TRUE)
+equatiomatic::extract_eq(m_liwc, wrap = TRUE)
 ````
 
-## Posemo
+## just positive
 
 ```{r, m_final_posemo, eval = TRUE}
-m_final_posemo <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher + 
-              favorite_count + retweet_count + reply_count +
-              favorite_count_user +
-              retweet_count_user +
-              statuses_count +
-              followers_count +
-              friends_count +
-              postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
-              (hasJoinedChat|screen_name), data = d)
+m_liwc_pos <- lmer(posemo ~ 
+                     
+                     type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                     
+                     isTeacher + # participant is a teacher or not
+                     
+                     year_of_post_centered + 
+                     
+                     favorite_count + retweet_count + reply_count + # these are tweet-level variables; may not need to include
+                     
+                     postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # these are user-level variables; see describe-data.Rmd for definitions
+                     
+                     (1|screen_name), 
+                   
+                   data = d)
 
-sjPlot::tab_model(m_final_posemo, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
-performance::icc(m_final_posemo, by_group = TRUE)
-performance::check_model(m_final_posemo)
-report::report(m_final_posemo)
-equatiomatic::extract_eq(m_final_posemo, wrap = TRUE)
+write_rds(m_liwc_pos, "out/m-liwc-pos.rds")
+
+sjPlot::tab_model(m_liwc_pos, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_liwc_pos, by_group = TRUE)
+equatiomatic::extract_eq(m_liwc_pos, wrap = TRUE)
 ````
 
-## Negemo
+## just negative
 
-```{r, m_final_negemo, eval = TRUE}
-m_final_negemo <- lmer(senti_scale ~ 1 + year_of_post_centered + type_of_tweet + isTeacher + 
-              favorite_count + retweet_count + reply_count +
-              favorite_count_user +
-              retweet_count_user +
-              statuses_count +
-              followers_count +
-              friends_count +
-              postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) +
-              (hasJoinedChat|screen_name), data = d)
+```{r, m-liwc-neg, eval = TRUE}
+m_liwc_neg <- lmer(negemo ~ 
+                     
+                     type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (inclues e.g. NGSS)
+                     
+                     isTeacher + # participant is a teacher or not
+                     
+                     year_of_post_centered + 
+                     
+                     favorite_count + retweet_count + reply_count + # these are tweet-level variables; may not need to include
+                     
+                     postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # these are user-level variables; see describe-data.Rmd for definitions
+                     
+                     (1|screen_name), 
+                   
+                   data = d)
 
-sjPlot::tab_model(m_final_negemo, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
-performance::icc(m_final_negemo, by_group = TRUE)
-performance::check_model(m_final_negemo)
-report::report(m_final_negemo)
-equatiomatic::extract_eq(m_final_negemo, wrap = TRUE)
+write_rds(m_liwc_neg, "out/m-liwc-neg.rds")
+
+sjPlot::tab_model(m_liwc_neg, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std")
+performance::icc(m_liwc_neg, by_group = TRUE)
+equatiomatic::extract_eq(m_liwc_neg, wrap = TRUE)
 ````

@@ -116,6 +116,10 @@ create_new_variables_and_filter_by_language <- function(d) {
   
   d <- d %>% filter(lang == "en")  
   
-  d
+  d <- d %>% 
+    mutate(liwc_affect_scale = posemo - negemo)
+  
+  d %>% 
+    as_tibble()
   
 }

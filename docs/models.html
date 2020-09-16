@@ -1515,6 +1515,7 @@ div.tocify {
 </div>
 
 
+<p>right now, only the scale variables are run</p>
 <div id="sentiment-analysis-technique-sentistrength" class="section level1">
 <h1>sentiment analysis technique: sentistrength</h1>
 <pre><code>## [1] &quot;running lme4::lmer() with senti_scale as the dependent variable and the full random effects structure with no fixed effects&quot;</code></pre>
@@ -1557,7 +1558,7 @@ p
 5.59
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03
+0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -1602,7 +1603,7 @@ adoption_key<br>[after_adoption]
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.286
+0.276
 </td>
 </tr>
 <tr>
@@ -1644,7 +1645,7 @@ adoption_key [(Missing)]
 0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.006</strong>
+<strong>0.007</strong>
 </td>
 </tr>
 <tr>
@@ -1658,7 +1659,7 @@ time_on_twitter_period
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.303
+0.305
 </td>
 </tr>
 <tr>
@@ -1691,44 +1692,16 @@ year_of_post_centered
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_chatsessions
+hasJoinedChat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.25
+-0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.12
+0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.032</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_ngsschat_nonchat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.19
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.09
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.030</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_non_ngsschat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.474
+<strong>0.001</strong>
 </td>
 </tr>
 <tr>
@@ -1777,7 +1750,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.029 / 0.245
+0.024 / 0.240
 </td>
 </tr>
 </table>
@@ -1788,7 +1761,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
 &amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{adoption\_key}_{\operatorname{(Missing)}}) + \beta_{7}(\operatorname{scale(time\_on\_twitter\_period)})\ + \\
-&amp;\quad \beta_{8}(\operatorname{year\_of\_post\_centered}) + \beta_{9}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{10}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{11}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{8}(\operatorname{year\_of\_post\_centered}) + \beta_{9}(\operatorname{hasJoinedChat}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 </div>
@@ -1879,7 +1852,7 @@ adoption_key<br>[after_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.404
+0.542
 </td>
 </tr>
 <tr>
@@ -1893,7 +1866,7 @@ adoption_key<br>[before_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.286
+0.241
 </td>
 </tr>
 <tr>
@@ -1907,7 +1880,7 @@ adoption_key<br>[near_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.013</strong>
+<strong>0.009</strong>
 </td>
 </tr>
 <tr>
@@ -1935,7 +1908,7 @@ time_on_twitter_period
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.540
+0.530
 </td>
 </tr>
 <tr>
@@ -1949,7 +1922,7 @@ isTeacher
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.262
+0.607
 </td>
 </tr>
 <tr>
@@ -1968,38 +1941,10 @@ year_of_post_centered
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_chatsessions
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00
+hasJoinedChat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.256
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_ngsschat_nonchat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.042</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_non_ngsschat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -2054,7 +1999,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.018 / 0.056
+0.008 / 0.047
 </td>
 </tr>
 </table>
@@ -2062,7 +2007,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
 &amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{adoption\_key}_{\operatorname{(Missing)}}) + \beta_{7}(\operatorname{scale(time\_on\_twitter\_period)})\ + \\
-&amp;\quad \beta_{8}(\operatorname{year\_of\_post\_centered}) + \beta_{9}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{10}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{11}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{8}(\operatorname{year\_of\_post\_centered}) + \beta_{9}(\operatorname{hasJoinedChat}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 </div>
@@ -2105,7 +2050,7 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.06
+0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -2153,7 +2098,7 @@ adoption_key<br>[after_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.669
+0.795
 </td>
 </tr>
 <tr>
@@ -2167,7 +2112,7 @@ adoption_key<br>[before_adoption]
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.008</strong>
+<strong>0.006</strong>
 </td>
 </tr>
 <tr>
@@ -2209,7 +2154,7 @@ time_on_twitter_period
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.712
+0.707
 </td>
 </tr>
 <tr>
@@ -2242,38 +2187,10 @@ year_of_post_centered
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_chatsessions
+hasJoinedChat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.594
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_ngsschat_nonchat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.577
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_non_ngsschat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.00
@@ -2328,7 +2245,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.027 / 0.099
+0.005 / 0.079
 </td>
 </tr>
 </table>
@@ -2336,7 +2253,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
 &amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{adoption\_key}_{\operatorname{(Missing)}}) + \beta_{7}(\operatorname{scale(time\_on\_twitter\_period)})\ + \\
-&amp;\quad \beta_{8}(\operatorname{year\_of\_post\_centered}) + \beta_{9}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{10}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{11}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{8}(\operatorname{year\_of\_post\_centered}) + \beta_{9}(\operatorname{hasJoinedChat}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 </div>
@@ -2379,10 +2296,10 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-4.57
+4.35
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08
+0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2393,7 +2310,7 @@ p
 type_of_tweet<br>[ngsschat-non-chat]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.02
+-1.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.03
@@ -2407,7 +2324,7 @@ type_of_tweet<br>[ngsschat-non-chat]
 type_of_tweet<br>[non-ngsschat]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--1.21
+-1.18
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.03
@@ -2427,7 +2344,7 @@ adoption_key<br>[after_adoption]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.145
+0.118
 </td>
 </tr>
 <tr>
@@ -2441,7 +2358,7 @@ adoption_key<br>[before_adoption]
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.038</strong>
+<strong>0.030</strong>
 </td>
 </tr>
 <tr>
@@ -2449,13 +2366,13 @@ adoption_key<br>[before_adoption]
 adoption_key<br>[near_adoption]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.14
+0.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.012</strong>
+<strong>0.009</strong>
 </td>
 </tr>
 <tr>
@@ -2463,7 +2380,7 @@ adoption_key<br>[near_adoption]
 adoption_key [(Missing)]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.24
+0.26
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.06
@@ -2483,7 +2400,7 @@ time_on_twitter_period
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.991
+0.998
 </td>
 </tr>
 <tr>
@@ -2491,7 +2408,7 @@ time_on_twitter_period
 isTeacher
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.31
+0.30
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.02
@@ -2516,44 +2433,16 @@ year_of_post_centered
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_chatsessions
+hasJoinedChat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.20
+0.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.21
+0.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_ngsschat_nonchat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.23
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.16
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.163
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_non_ngsschat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.17
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.10
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.089
 </td>
 </tr>
 <tr>
@@ -2573,7 +2462,7 @@ Random Effects
 τ<sub>00</sub> <sub>screen_name</sub>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-1.05
+1.06
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
@@ -2602,7 +2491,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.070 / 0.115
+0.012 / 0.061
 </td>
 </tr>
 </table>
@@ -2610,7 +2499,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 \begin{aligned}
 \operatorname{dependent\_variable}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{non-ngsschat}}) + \beta_{3}(\operatorname{adoption\_key}_{\operatorname{after\_adoption}})\ + \\
 &amp;\quad \beta_{4}(\operatorname{adoption\_key}_{\operatorname{before\_adoption}}) + \beta_{5}(\operatorname{adoption\_key}_{\operatorname{near\_adoption}}) + \beta_{6}(\operatorname{adoption\_key}_{\operatorname{(Missing)}}) + \beta_{7}(\operatorname{scale(time\_on\_twitter\_period)})\ + \\
-&amp;\quad \beta_{8}(\operatorname{year\_of\_post\_centered}) + \beta_{9}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{10}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{11}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+&amp;\quad \beta_{8}(\operatorname{year\_of\_post\_centered}) + \beta_{9}(\operatorname{hasJoinedChat}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
 </div>

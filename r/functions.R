@@ -161,9 +161,11 @@ model_full_model <- function(d, dependent_variable_string) {
               
               # scale(favorite_count) + scale(retweet_count) + scale(reply_count) + # tweet-level variables
               
+              hasJoinedChat + 
+              
               # postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # user-level variables
               
-              scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables; should these be time-varying?
+              # scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables; should these be time-varying?
               
               (1|screen_name), 
             

@@ -167,8 +167,7 @@ d %>%
   select(senti_scale,
          nrc_pos,
          tidytext_pos,
-         liwc_pos)
-  select_if(is.numeric) %>% 
+         liwc_pos) %>%
   corrr::correlate() %>% 
   corrr::fashion() %>%
   knitr::kable()

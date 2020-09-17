@@ -142,10 +142,11 @@ d %>%
 d %>% 
   select(type_of_tweet, 
          chat_id,
-         senti_binary, senti_scale, scale_pos, scale_neg,
-         nrc_pos, nrc_neg, nrc_scale,
-         tidytext_pos, tidytext_neg, tidytext_scale,
-         liwc_pos, liwc_neg, liwc_scale,
+         senti_binary, 
+         senti_scale,
+         nrc_pos,
+         tidytext_pos,
+         liwc_pos,
          n_posted_chatsessions, n_posted_ngsschat_nonchat ,n_posted_non_ngsschat,
          favorite_count, retweet_count, reply_count, 
          state_master, screen_name, 
@@ -153,6 +154,20 @@ d %>%
          adoption_key, 
          time_on_twitter, isTeacher, 
          postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
+  select_if(is.numeric) %>% 
+  corrr::correlate() %>% 
+  corrr::fashion() %>%
+  knitr::kable()
+```
+
+just the scale variables
+
+```{r}
+d %>% 
+  select(senti_scale,
+         nrc_pos,
+         tidytext_pos,
+         liwc_pos)
   select_if(is.numeric) %>% 
   corrr::correlate() %>% 
   corrr::fashion() %>%

@@ -1,4 +1,26 @@
-# modeling notes
+# modeling notes 2020-09-17
+
+conensus findings:
+
+- those who post to chats more are more positive
+- teachers are more positive 
+- sentiment becomes more positive over time
+
+things that are a bit ambiguous:
+
+- NGSSchat chats are more negative by senti_scale, more positive by others
+- generally, after adoption, sentiment is slightly more negative than during years around initial adoption and before it
+
+things that are ambiguous: 
+
+- after chat, sometimes more positive and some times negative
+
+things that are unimportant:
+
+- how long someone has been on Twitter
+- quadratic growth term
+
+# older modeling notes
 
 ## preliminary
 

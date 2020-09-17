@@ -17,25 +17,12 @@ knitr::opts_chunk$set(message = TRUE, echo = FALSE)
 d <- params$d
 ```
 
-DV is scaled, all continuous IVs are scaled.
+DV is scaled, all continuous IVs are scaled; with year added
 
 # sentiment analysis technique: sentistrength
 
 ```{r}
 dependent_variable_string <- "senti_scale"
-
-m_null <- model_null_model(d, dependent_variable_string)
-performance::icc(m_null, by_group = TRUE)
-
-m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
-extract_eq(m_full, wrap = TRUE)
-```
-
-# sentiment analysis technique: nrc
-
-```{r}
-dependent_variable_string <- "nrc_scale"
 
 m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)

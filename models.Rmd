@@ -32,54 +32,10 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r, eval = FALSE}
-dependent_variable_string <- "scale_pos"
-
-m_null <- model_null_model(d, dependent_variable_string)
-performance::icc(m_null, by_group = TRUE)
-
-m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
-extract_eq(m_full, wrap = TRUE)
-```
-
-```{r, eval = FALSE}
-dependent_variable_string <- "scale_neg"
-
-m_null <- model_null_model(d, dependent_variable_string)
-performance::icc(m_null, by_group = TRUE)
-
-m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
-extract_eq(m_full, wrap = TRUE)
-```
-
 # sentiment analysis technique: nrc
 
 ```{r}
 dependent_variable_string <- "nrc_scale"
-
-m_null <- model_null_model(d, dependent_variable_string)
-performance::icc(m_null, by_group = TRUE)
-
-m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
-extract_eq(m_full, wrap = TRUE)
-```
-
-```{r, eval = FALSE}
-dependent_variable_string <- "nrc_pos"
-
-m_null <- model_null_model(d, dependent_variable_string)
-performance::icc(m_null, by_group = TRUE)
-
-m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
-extract_eq(m_full, wrap = TRUE)
-```
-
-```{r, eval = FALSE}
-dependent_variable_string <- "nrc_neg"
 
 m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)
@@ -102,54 +58,10 @@ sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.l
 extract_eq(m_full, wrap = TRUE)
 ```
 
-```{r, eval = FALSE}
-dependent_variable_string <- "tidytext_pos"
-
-m_null <- model_null_model(d, dependent_variable_string)
-performance::icc(m_null, by_group = TRUE)
-
-m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
-extract_eq(m_full, wrap = TRUE)
-```
-
-```{r, eval = FALSE}
-dependent_variable_string <- "tidytext_neg"
-
-m_null <- model_null_model(d, dependent_variable_string)
-performance::icc(m_null, by_group = TRUE)
-
-m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
-extract_eq(m_full, wrap = TRUE)
-```
-
 # sentiment analysis technique: liwc
 
 ```{r}
 dependent_variable_string <- "liwc_scale"
-
-m_null <- model_null_model(d, dependent_variable_string)
-performance::icc(m_null, by_group = TRUE)
-
-m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
-extract_eq(m_full, wrap = TRUE)
-```
-
-```{r, eval = FALSE}
-dependent_variable_string <- "liwc_pos"
-
-m_null <- model_null_model(d, dependent_variable_string)
-performance::icc(m_null, by_group = TRUE)
-
-m_full <- model_full_model(d, dependent_variable_string)
-sjPlot::tab_model(m_full, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
-extract_eq(m_full, wrap = TRUE)
-```
-
-```{r, eval = FALSE}
-dependent_variable_string <- "liwc_neg"
 
 m_null <- model_null_model(d, dependent_variable_string)
 performance::icc(m_null, by_group = TRUE)

@@ -154,7 +154,7 @@ model_full_model <- function(d, dependent_variable_string) {
               type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
               adoption_key + # status of an individual's state regarding when they adopted the NGSS
               
-              scale(time_on_twitter_period) + # for how long a person has been on Twitter
+              scale(time_on_twitter) + # for how long a person has been on Twitter
               isTeacher + # participant is a teacher or not
               
               year_of_post_centered + 

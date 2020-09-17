@@ -131,7 +131,7 @@ d %>%
          state_master, screen_name, 
          year_of_post, 
          adoption_key, 
-         time_on_twitter_period, isTeacher, 
+         time_on_twitter, isTeacher, 
          postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
   skimr::skim()
 ```
@@ -151,7 +151,7 @@ d %>%
          state_master, screen_name, 
          year_of_post, 
          adoption_key, 
-         time_on_twitter_period, isTeacher, 
+         time_on_twitter, isTeacher, 
          postedNGSSchat, postedChatSession, hasJoinedChat, total_n_chats) %>% 
   select_if(is.numeric) %>% 
   corrr::correlate() %>% 
@@ -186,6 +186,14 @@ d %>%
 ```{r}
 d %>% 
   ggplot(aes(x = nrc_scale)) +
+  geom_histogram()
+```
+
+with a log transformation
+
+```{r}
+d %>% 
+  ggplot(aes(x = log(liwc_scale))) +
   geom_histogram()
 ```
 
@@ -226,6 +234,14 @@ d %>%
 ```{r}
 d %>% 
   ggplot(aes(x = liwc_scale)) +
+  geom_histogram()
+```
+
+with a log transformation
+
+```{r}
+d %>% 
+  ggplot(aes(x = log(liwc_scale))) +
   geom_histogram()
 ```
 

@@ -149,7 +149,7 @@ model_full_model <- function(d, dependent_variable_string) {
   
   print(str_c("running lme4::lmer() with ", dependent_variable_string, " as the dependent variable and the full set of independent variables"))
   
-  m <- lmer(dependent_variable ~ 
+  m <- lmer(scale(dependent_variable) ~ 
               
               type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
               adoption_key + # status of an individual's state regarding when they adopted the NGSS

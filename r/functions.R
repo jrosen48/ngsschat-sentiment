@@ -149,6 +149,10 @@ model_full_model <- function(d, dependent_variable_string) {
   
   print(str_c("running lme4::lmer() with ", dependent_variable_string, " as the dependent variable and the full set of independent variables"))
   
+  d <- d %>% mutate(type_of_tweet = forcats::fct_relevel(type_of_tweet, "non-ngsschat"))
+  
+  d <- d %>% mutate(adoption_key = forcats::fct_relevel(adoption_key, "near_adoption"))
+  
   m <- lmer(scale(dependent_variable) ~ 
               
               type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
@@ -157,9 +161,11 @@ model_full_model <- function(d, dependent_variable_string) {
               scale(time_on_twitter) + # for how long a person has been on Twitter
               isTeacher + # participant is a teacher or not
               
-              year_of_post_centered + 
+              year_of_post_centered + I(year_of_post_centered^2) +
               
-              scale(favorite_count) + scale(retweet_count) + scale(reply_count) + # tweet-level variables
+              # scale(favorite_count) + scale(retweet_count) + scale(reply_count) + # tweet-level variables
+              
+              hasJoinedChat +
               
               #postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # user-level variables
               
@@ -169,9 +175,9 @@ model_full_model <- function(d, dependent_variable_string) {
             
             data = d)
   
-  print("estimation complete; saving and then returning output")
+  print("estimation complete; saving output in out/ for further inspection and returning output")
   
-  write_rds(m, str_c("out/", dependent_variable_string))
+  write_rds(m, str_c("out/", dependent_variable_string, ".rds"))
   
   m
   

@@ -149,19 +149,19 @@ model_full_model <- function(d, dependent_variable_string) {
   
   print(str_c("running lme4::lmer() with ", dependent_variable_string, " as the dependent variable and the full set of independent variables"))
   
-  m <- lmer(dependent_variable ~ 
+  m <- lmer(scale(dependent_variable) ~ 
               
               type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
               adoption_key + # status of an individual's state regarding when they adopted the NGSS
               
-              scale(time_on_twitter_period) + # for how long a person has been on Twitter
+              scale(time_on_twitter) + # for how long a person has been on Twitter
               isTeacher + # participant is a teacher or not
               
               year_of_post_centered + 
               
-              # scale(favorite_count) + scale(retweet_count) + scale(reply_count) + # tweet-level variables
+              scale(favorite_count) + scale(retweet_count) + scale(reply_count) + # tweet-level variables
               
-              # postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # user-level variables
+              #postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # user-level variables
               
               scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables; should these be time-varying?
               

@@ -28,26 +28,11 @@ join_state <- function(d, state_data) {
     mutate(lead = ifelse(lead == "Yes", 1, lead),
            lead = ifelse(is.na(lead), 0, lead))
   
-  state_data_adopt <- state_data %>%
-    select(State, Early:Not) %>%
-    gather(key, val, -State) %>%
-    rename(state = State,
-           adoption_status = key) %>%
-    mutate(state = tolower(state),
-           adoption_status = if_else(adoption_status == "Near", "Mid", adoption_status),
-           adoption_status = factor(adoption_status, levels = c("Not", "Early", "Mid", "Late"))) %>%
-    filter(!is.na(val)) %>%
-    select(-val) %>% 
-    select(state, adoption_status)
-  
-  state_data_merged <- state_data_merge %>% 
-    left_join(state_data_adopt)
-  
-  state_data_final <- state_data_merged %>% 
+  state_data_final <- state_data_merge %>% 
     complete(state, year = 2011:2020) %>% 
     group_by(state) %>% 
-    fill(adopted, year_month, adoption_status) %>% 
-    fill(adopted, year_month, adoption_status, .direction = "up")
+    fill(adopted, year_month) %>% 
+    fill(adopted, year_month, .direction = "up")
   
   state_data_final <- state_data_final %>% 
     mutate(year_adopted_plus = year_adopted + 1) %>% 
@@ -58,29 +43,12 @@ join_state <- function(d, state_data) {
            near_adoption = ifelse(year == year_adopted_plus, 1, near_adoption)) %>% 
     mutate(before_adoption = ifelse(year < year_adopted_minus, 1, 0)) %>% 
     mutate(after_adoption = ifelse(year > year_adopted_plus, 1, 0)) %>% 
-    fill(modified, lead, .direction = 'updown') %>% 
+    fill(modified, lead, adopted, .direction = 'updown') %>% 
     ungroup()
   
   state_data_final <- state_data_final %>% 
-    mutate(no_adoption = ifelse(adoption_status == "Not", 1, 0)) %>% 
-    select(state, year, contains("_adoption"), modified, lead)
-  
-  dstatus <- state_data_final %>% 
-    select(contains("_adoption")) %>% 
-    gather(key, val) %>% 
-    mutate(val = ifelse(is.na(val), 0, val)) %>% 
-    filter(val == 1) %>% 
-    select(-val) %>% 
-    rename(adoption_key = key)
-  
-  state_data_final$adoption_key <- factor(dstatus$adoption_key) %>% 
-    forcats::fct_relevel("no_adoption")
-  
-  state_data_final <- rename(state_data_final, state_master = state)
-  
-  ## ---- joining-state-data------------------------------------------------------------------------------------------------
-  state_data_final <- state_data_final %>% 
-    rename(year_of_post = year)
+    mutate(adopted = ifelse(year <= year_adopted, 0, 1)) %>% 
+    select(state_master = state, year_of_post = year, adopted)
   
   d <- d %>% 
     left_join(state_data_final, by = c("state_master", "year_of_post"))
@@ -111,10 +79,7 @@ create_new_variables_and_filter_by_language <- function(d) {
   d <- d %>% 
     mutate(year_of_post_centered = scale(year_of_post, scale = FALSE))
   
-  d <- d %>% filter(lang == "en")  
-  
-  d <- d %>% 
-    mutate(adoption_key = adoption_key %>% forcats::fct_explicit_na())
+  d <- d %>% filter(lang == "en")
   
   d %>% 
     as_tibble()
@@ -151,12 +116,13 @@ model_full_model <- function(d, dependent_variable_string) {
   
   d <- d %>% mutate(type_of_tweet = forcats::fct_relevel(type_of_tweet, "non-ngsschat"))
   
-  d <- d %>% mutate(adoption_key = forcats::fct_relevel(adoption_key, "near_adoption"))
+  d <- d %>% mutate(adopted = as.factor(adopted),
+                    adopted = forcats::fct_explicit_na(adopted))
   
   m <- lmer(scale(dependent_variable) ~ 
               
               type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
-              adoption_key + # status of an individual's state regarding when they adopted the NGSS
+              adopted + # status of an individual's state regarding when they adopted the NGSS
               
               scale(time_on_twitter) + # for how long a person has been on Twitter
               isTeacher + # participant is a teacher or not
@@ -171,7 +137,7 @@ model_full_model <- function(d, dependent_variable_string) {
               
               scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables; should these be time-varying?
               
-              (1|screen_name), 
+              (1 + hasJoinedChat|screen_name), 
             
             data = d)
   

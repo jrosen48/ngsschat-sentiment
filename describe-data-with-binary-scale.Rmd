@@ -17,7 +17,6 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, cache = FALSE)
 d <- params$d
 ```
 
-
 ## overall
 
 ```{r}
@@ -84,7 +83,7 @@ d %>%
 
 ```{r}
 d %>% 
-  count(adoption_key, senti_binary) %>% 
+  count(adopted, senti_binary) %>% 
   spread(senti_binary, n) %>% 
   set_names(c("adoption_status", "neg", "pos")) %>% 
   mutate(senti_ratio = neg/pos) %>% 
@@ -96,7 +95,7 @@ d %>%
 ```{r}
 d %>% 
   filter(year_of_post >= 2012) %>% 
-  count(adoption_key, year_of_post, senti_binary) %>% 
+  count(adopted, year_of_post, senti_binary) %>% 
   spread(senti_binary, n) %>% 
   set_names(c("state_master", "year_of_post", "neg", "pos")) %>% 
   mutate(senti_ratio = neg/pos) %>% 

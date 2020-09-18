@@ -52,7 +52,10 @@ d <- d %>% mutate(adopted = as.factor(adopted),
                   adopted = forcats::fct_explicit_na(adopted),
                   adopted = forcats::fct_relevel(adopted, "0"))
 
-m <- lmer(scale(dependent_variable) ~ 
+d <- d %>% 
+  filter(year_of_post >= 2010)
+
+m3 <- lmer(scale(dependent_variable) ~ 
             
             type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
             #adopted +
@@ -70,12 +73,12 @@ m <- lmer(scale(dependent_variable) ~
             
             scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables; should these be time-varying?
             
-            (1|screen_name), 
+            (year_of_post_centered|screen_name), 
           
           data = d)
 
 # performance::icc(m, by_group = TRUE)
 
-sjPlot::tab_model(m, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
+sjPlot::tab_model(m3, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
 extract_eq(m_null, wrap = TRUE)
 ```

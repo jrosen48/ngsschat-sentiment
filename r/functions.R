@@ -86,7 +86,7 @@ create_new_variables_and_filter_by_language <- function(d) {
   
 }
 
-filter_data_by_year(d) {
+filter_data_by_year <- function(d) {
   d %>% 
     filter(year_of_post >= 2010)
 }

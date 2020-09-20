@@ -12,7 +12,9 @@ the_plan <-
     
     # preparing for modeling
     
-    data_to_model = create_new_variables_and_filter_by_language(loaded_rda_data_with_state),
+    joined_data = create_new_variables_and_filter_by_language(loaded_rda_data_with_state),
+    
+    data_to_model = filter_data_by_year(joined_data), # removes 20 cases before 2010
     
     # for RMD output
     

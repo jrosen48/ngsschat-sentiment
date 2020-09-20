@@ -86,65 +86,7 @@ create_new_variables_and_filter_by_language <- function(d) {
   
 }
 
-model_null_model <- function(d, dependent_variable_string) {
-  
-  d <- d %>% 
-    rename(dependent_variable = all_of(dependent_variable_string)) # probably better to use NSE in this function, but this seems to work
-  
-  print(str_c("running lme4::lmer() with ", dependent_variable_string, " as the dependent variable and the full random effects structure with no fixed effects"))
-  
-  m <- lmer(dependent_variable ~ 
-              
-              #(1|chat_id_fct) + 
-              
-              (1|state_master) +
-              
-              (1|screen_name), 
-            
-            data = d)
-  
-  m
-  
-}
-
-model_full_model <- function(d, dependent_variable_string) {
-  
-  d <- d %>% 
-    rename(dependent_variable = all_of(dependent_variable_string)) # probably better to use NSE in this function, but this seems to work
-  
-  print(str_c("running lme4::lmer() with ", dependent_variable_string, " as the dependent variable and the full set of independent variables"))
-  
-  d <- d %>% mutate(type_of_tweet = forcats::fct_relevel(type_of_tweet, "non-ngsschat"))
-  
-  d <- d %>% mutate(adopted = as.factor(adopted),
-                    adopted = forcats::fct_explicit_na(adopted))
-  
-  m <- lmer(scale(dependent_variable) ~ 
-              
-              type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
-              adopted + # status of an individual's state regarding when they adopted the NGSS
-              
-              scale(time_on_twitter) + # for how long a person has been on Twitter
-              isTeacher + # participant is a teacher or not
-              
-              year_of_post_centered + I(year_of_post_centered^2) +
-              
-              # scale(favorite_count) + scale(retweet_count) + scale(reply_count) + # tweet-level variables
-              
-              hasJoinedChat +
-              
-              #postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # user-level variables
-              
-              scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables; should these be time-varying?
-              
-              (1 + hasJoinedChat|screen_name), 
-            
-            data = d)
-  
-  print("estimation complete; saving output in out/ for further inspection and returning output")
-  
-  write_rds(m, str_c("out/", dependent_variable_string, ".rds"))
-  
-  m
-  
+filter_data_by_year(d) {
+  d %>% 
+    filter(year_of_post >= 2010)
 }

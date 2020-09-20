@@ -21,17 +21,14 @@ d <- params$d
 d <- readd(data_to_mode)
 ```
 
-## sentiment analysis technique: sentistrength
+# sentiment analysis technique: sentistrength
+
+## null model
+
+### results
 
 ```{r}
-dependent_variable_string <- "senti_scale"
-
-d <- d %>% 
-  rename(dependent_variable = all_of(dependent_variable_string)) # probably better to use NSE in this function, but this seems to work
-
-m_null <- lmer(dependent_variable ~ 
-                 
-                 #(1|chat_id_fct) + 
+m_null <- lmer(senti_scale ~ 
                  
                  (1|state_master) +
                  
@@ -41,21 +38,27 @@ m_null <- lmer(dependent_variable ~
 
 performance::icc(m_null, by_group = TRUE)
 
-sjPlot::tab_model(m_null, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
+sjPlot::tab_model(m_null, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
 extract_eq(m_null, wrap = TRUE)
 ```
+
+### assumption check
+
+```{r}
+performance::check_model(m2)
+```
+
+## full model without state due to minimal ICC
+
+### results
 
 ```{r}
 d <- d %>% mutate(type_of_tweet = forcats::fct_relevel(type_of_tweet, "non-ngsschat"))
 
-d <- d %>% mutate(adopted = as.factor(adopted),
-                  adopted = forcats::fct_explicit_na(adopted),
-                  adopted = forcats::fct_relevel(adopted, "0"))
-
 d <- d %>% 
   filter(year_of_post >= 2010)
 
-m3 <- lmer(scale(dependent_variable) ~ 
+m2 <- lmer(senti_scale ~ 
             
             type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
             #adopted +
@@ -65,20 +68,21 @@ m3 <- lmer(scale(dependent_variable) ~
             
             year_of_post_centered +
             
-            # scale(favorite_count) + scale(retweet_count) + scale(reply_count) + # tweet-level variables
-            
             hasJoinedChat +
             
-            #postedNGSSchat + postedChatSession + hasJoinedChat + scale(total_n_chats) + # user-level variables
-            
-            scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables; should these be time-varying?
-            
-            (year_of_post_centered|screen_name), 
+            scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
+             
+            (year_of_post_centered|screen_name), # varying slope of year of post within individuals
           
           data = d)
 
-# performance::icc(m, by_group = TRUE)
-
-sjPlot::tab_model(m3, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, dv.labels = dependent_variable_string)
+performance::icc(m, by_group = TRUE)
+sjPlot::tab_model(m3, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
 extract_eq(m_null, wrap = TRUE)
+```
+
+### model check
+
+```{r}
+performance::check_model(m2)
 ```

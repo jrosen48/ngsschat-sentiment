@@ -171,6 +171,12 @@ d %>%
   knitr::kable()
 ```
 
+## Year of post
+
+```{r}
+d %>% count(year_of_post)
+```
+
 ## Histograms of the DVs
 
 ### sentistrength 
@@ -278,7 +284,7 @@ d %>%
 ## Time series
 
 ```{r, ts-plot}
-d %>% 
+p <- d %>% 
   mutate(date_r = lubridate::round_date(created_at, "day")) %>% 
   count(date_r) %>% 
   ggplot(aes(y = n, x = date_r)) +
@@ -288,6 +294,8 @@ d %>%
   xlab(NULL) +
   ylab("Posts") +
   ggtitle("Posts to the #NGSSchat Hashtag on Twitter Per Day")
+
+p
 
 ggsave("img/ngsschat-posts-per-day.png", width = 8, height = 6)
 ```

@@ -17,10 +17,6 @@ knitr::opts_chunk$set(message = TRUE, echo = FALSE)
 d <- params$d
 ```
 
-```{r}
-d <- readd(data_to_mode)
-```
-
 # sentiment analysis technique: sentistrength
 
 ## null model
@@ -42,12 +38,6 @@ sjPlot::tab_model(m_null, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
 extract_eq(m_null, wrap = TRUE)
 ```
 
-### assumption check
-
-```{r}
-performance::check_model(m2)
-```
-
 ## full model without state due to minimal ICC
 
 ### results
@@ -58,31 +48,25 @@ d <- d %>% mutate(type_of_tweet = forcats::fct_relevel(type_of_tweet, "non-ngssc
 d <- d %>% 
   filter(year_of_post >= 2010)
 
-m2 <- lmer(senti_scale ~ 
+m <- lmer(senti_scale ~ 
             
             type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
             #adopted +
             
             scale(time_on_twitter) + # for how long a person has been on Twitter
             isTeacher + # participant is a teacher or not
-            
+
             year_of_post_centered +
             
             hasJoinedChat +
             
             scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
              
-            (year_of_post_centered|screen_name), # varying slope of year of post within individuals
+            (1|screen_name), # varying slope of year of post within individuals
           
           data = d)
 
 performance::icc(m, by_group = TRUE)
-sjPlot::tab_model(m3, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
-extract_eq(m_null, wrap = TRUE)
-```
-
-### model check
-
-```{r}
-performance::check_model(m2)
+sjPlot::tab_model(m, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+extract_eq(m, wrap = TRUE)
 ```

@@ -95,7 +95,7 @@ with the tweet engagement measures at the tweet-level included
 ```{r}
 m1 <- lmer(senti_scale ~ 
             
-            #favorite_count + retweet_count + reply_count + 
+            favorite_count + retweet_count + reply_count + 
             
             type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
             #adopted +
@@ -124,8 +124,6 @@ with the tweet engagement measures at the user-level also included
 
 ```{r}
 m2 <- lmer(senti_scale ~ 
-            
-            favorite_count + retweet_count + reply_count + 
             
             favorite_count_user + retweet_count_user +
             

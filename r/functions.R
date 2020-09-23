@@ -81,6 +81,8 @@ create_new_variables_and_filter_by_language <- function(d) {
   
   d <- d %>% filter(lang == "en")
   
+  d <- d %>% mutate(type_of_tweet = forcats::fct_relevel(type_of_tweet, "non-ngsschat"))
+  
   d %>% 
     as_tibble()
   

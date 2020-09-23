@@ -43,11 +43,6 @@ extract_eq(m_null, wrap = TRUE)
 ### results
 
 ```{r}
-d <- d %>% mutate(type_of_tweet = forcats::fct_relevel(type_of_tweet, "non-ngsschat"))
-
-d <- d %>% 
-  filter(year_of_post >= 2010)
-
 m <- lmer(senti_scale ~ 
             
             type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
@@ -55,18 +50,80 @@ m <- lmer(senti_scale ~
             
             scale(time_on_twitter) + # for how long a person has been on Twitter
             isTeacher + # participant is a teacher or not
-
+            
             year_of_post_centered +
             
             hasJoinedChat +
             
             scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
-             
+            
             (1|screen_name), # varying slope of year of post within individuals
           
           data = d)
 
 performance::icc(m, by_group = TRUE)
-sjPlot::tab_model(m, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m, show.icc = TRUE, show.ci = TRUE, show.se = TRUE)
 extract_eq(m, wrap = TRUE)
+```
+
+with the tweet engagement measures at the tweet-level included
+
+```{r}
+m1 <- lmer(senti_scale ~ 
+            
+            favorite_count + retweet_count + reply_count + 
+            
+            type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
+            #adopted +
+            
+            scale(time_on_twitter) + # for how long a person has been on Twitter
+            isTeacher + # participant is a teacher or not
+            
+            year_of_post_centered +
+            
+            hasJoinedChat +
+            
+            scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
+            
+            (1|screen_name), # varying slope of year of post within individuals
+          
+          data = d)
+
+performance::icc(m1, by_group = TRUE)
+sjPlot::tab_model(m1, show.icc = TRUE, show.ci = TRUE, show.se = TRUE)
+extract_eq(m1, wrap = TRUE)
+
+anova(m, m1)
+```
+
+with the tweet engagement measures at the user-level also included
+
+```{r}
+m2 <- lmer(senti_scale ~ 
+            
+            favorite_count + retweet_count + reply_count + 
+            
+            favorite_count_user + retweet_count_user +
+            
+            type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
+            #adopted +
+            
+            scale(time_on_twitter) + # for how long a person has been on Twitter
+            isTeacher + # participant is a teacher or not
+            
+            year_of_post_centered +
+            
+            hasJoinedChat +
+            
+            scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
+            
+            (1|screen_name), # varying slope of year of post within individuals
+          
+          data = d)
+
+performance::icc(m2, by_group = TRUE)
+sjPlot::tab_model(m2, show.icc = TRUE, show.ci = TRUE, show.se = TRUE)
+extract_eq(m2, wrap = TRUE)
+
+anova(m1, m2)
 ```

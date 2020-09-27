@@ -86,6 +86,10 @@ create_new_variables_and_filter_by_language <- function(d) {
   d %>% 
     as_tibble()
   
+  d <- d[-536375, ] # performance::check_outliers(m_rs) revealed this to be an outlier; inspection of it confirms
+  
+  d
+  
 }
 
 filter_data_by_year <- function(d) {

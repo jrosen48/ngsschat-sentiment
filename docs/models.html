@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-09-23" />
+<meta name="date" content="2020-09-25" />
 
 <title>Models</title>
 
@@ -1510,7 +1510,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Models</h1>
-<h4 class="date">2020-09-23</h4>
+<h4 class="date">2020-09-25</h4>
 
 </div>
 
@@ -1848,7 +1848,7 @@ N <sub>screen_name</sub>
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-536698
+536697
 </td>
 </tr>
 <tr>
@@ -1867,6 +1867,8 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 &amp;\quad \beta_{8}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
+<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
+## Model failed to converge with max|grad| = 0.0159347 (tol = 0.002, component 1)</code></pre>
 <pre><code>## Warning: Model contains random slopes. Cannot compute accurate ICCs by group
 ## factors.</code></pre>
 <pre><code>## # ICC by Group
@@ -1992,7 +1994,7 @@ hasJoinedChat
 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.373
+0.372
 </td>
 </tr>
 <tr>
@@ -2089,7 +2091,7 @@ N <sub>screen_name</sub>
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-536698
+536697
 </td>
 </tr>
 <tr>
@@ -2124,7 +2126,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 \]</span></p>
 <p>with the tweet engagement measures at the tweet-level included</p>
 <pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
-## Model failed to converge with max|grad| = 0.0103766 (tol = 0.002, component 1)</code></pre>
+## Model failed to converge with max|grad| = 0.0101232 (tol = 0.002, component 1)</code></pre>
 <pre><code>## Warning: Model contains random slopes. Cannot compute accurate ICCs by group
 ## factors.</code></pre>
 <pre><code>## # ICC by Group
@@ -2389,7 +2391,7 @@ N <sub>screen_name</sub>
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-536698
+536697
 </td>
 </tr>
 <tr>
@@ -2434,15 +2436,15 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## m1:     hasJoinedChat + scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + 
 ## m1:     scale(n_posted_non_ngsschat) + (year_of_post_centered | screen_name)
 ##      npar     AIC     BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
-## m_rs   14 1630528 1630685 -815250  1630500                         
-## m1     17 1630247 1630437 -815106  1630213 287.52  3  &lt; 2.2e-16 ***
+## m_rs   14 1630526 1630683 -815249  1630498                         
+## m1     17 1630245 1630435 -815105  1630211 287.54  3  &lt; 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>with the tweet engagement measures at the user-level also included</p>
 <pre><code>## Warning: Some predictor variables are on very different scales: consider
 ## rescaling</code></pre>
 <pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
-## Model failed to converge with max|grad| = 0.0165324 (tol = 0.002, component 1)</code></pre>
+## Model failed to converge with max|grad| = 0.017011 (tol = 0.002, component 1)</code></pre>
 <pre><code>## Warning: Model contains random slopes. Cannot compute accurate ICCs by group
 ## factors.</code></pre>
 <pre><code>## # ICC by Group
@@ -2693,7 +2695,7 @@ N <sub>screen_name</sub>
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-536698
+536697
 </td>
 </tr>
 <tr>
@@ -2737,9 +2739,9 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## m1:     type_of_tweet + scale(time_on_twitter) + isTeacher + year_of_post_centered + 
 ## m1:     hasJoinedChat + scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + 
 ## m1:     scale(n_posted_non_ngsschat) + (year_of_post_centered | screen_name)
-##    npar     AIC     BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
-## m2   16 1630530 1630709 -815249  1630498                         
-## m1   17 1630247 1630437 -815106  1630213 284.68  1  &lt; 2.2e-16 ***
+##    npar     AIC     BIC  logLik deviance Chisq Df Pr(&gt;Chisq)    
+## m2   16 1630528 1630707 -815248  1630496                        
+## m1   17 1630245 1630435 -815105  1630211 284.7  1  &lt; 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>

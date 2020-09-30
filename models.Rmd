@@ -21,3 +21,11 @@ icc(null_model, by_group = TRUE)
 tab_model(full_model, show.std = "std2", show.icc = TRUE)
 ```
 
+```{r}
+p <- augmented_full_model_data %>% ggplot(aes(x = year_of_post_centered, y = .fitted)) + geom_jitter() + geom_smooth(method = "lm")
+```
+
+```{r}
+tidied_full_model <- broom.mixed::tidy(full_model)
+```
+

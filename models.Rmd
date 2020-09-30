@@ -62,34 +62,10 @@ m <- lmer(senti_scale ~
           data = d)
 
 performance::icc(m, by_group = TRUE)
-sjPlot::tab_model(m, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
+sjPlot::tab_model(m, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std2")
 extract_eq(m, wrap = TRUE)
 ```
 
-```{r}
-m_rs <- lmer(senti_scale ~ 
-            
-            type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
-            #adopted +
-            
-            scale(time_on_twitter) + # for how long a person has been on Twitter
-            isTeacher + # participant is a teacher or not
-            
-            year_of_post_centered +
-            
-            #hasJoinedChat +
-            
-            scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
-            
-            (year_of_post_centered|screen_name), # varying slope of year of post within individuals
-          
-          data = d, REML = TRUE)
-
-performance::icc(m_rs, by_group = TRUE)
-sjPlot::tab_model(m_rs, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
-extract_eq(m_rs, wrap = TRUE)
-```
-
 ```{r, results = "markup"}
-extract_eq(m_rs)
+extract_eq(m)
 ```

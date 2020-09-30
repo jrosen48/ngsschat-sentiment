@@ -49,63 +49,6 @@ d %>%
   mutate(senti_ratio = neg/pos)
 ```
 
-## by state
-
-```{r}
-d %>% 
-  count(state_master, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip()
-```
-
-## by state, by year
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(state_master, year_of_post, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "year_of_post", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip() +
-  facet_wrap(~year_of_post)
-```
-
-## by adoption status
-
-```{r}
-d %>% 
-  count(adopted, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("adoption_status", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio))
-```
-
-## by adoption status by year
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(adopted, year_of_post, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "year_of_post", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip() +
-  facet_wrap(~year_of_post)
-```
-
 ## by teacher
 
 ```{r}

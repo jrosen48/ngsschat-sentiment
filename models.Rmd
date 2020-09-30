@@ -6,82 +6,18 @@ output:
     toc: true
     toc_float: true
 params:
-  d: ""
+  null_model: ""
+  full_model: ""
+  augmented_full_model_data: ""
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set()
 ```
 
-```{r, renaming-params}
-d <- params$d
-```
-
-# sentiment analysis technique: sentistrength
-
-## null model
-
-### results
-
 ```{r}
-m_null <- lmer(scale(senti_scale) ~ 
-                 
-                 (1|state_master) +
-                 
-                 (1|screen_name), 
-               
-               data = d)
+icc(null_model, by_group = TRUE)
 
-performance::icc(m_null, by_group = TRUE)
-
-sjPlot::tab_model(m_null, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)
-extract_eq(m_null, wrap = TRUE)
+tab_model(full_model, show.std = "std2", show.icc = TRUE)
 ```
 
-## full model without state due to minimal ICC
-
-### results
-
-```{r}
-m <- lmer(scale(senti_scale) ~ 
-            
-            type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
-            #adopted +
-            
-            scale(time_on_twitter) + # for how long a person has been on Twitter
-            isTeacher + # participant is a teacher or not
-            
-            year_of_post_centered +
-            
-            hasJoinedChat +
-            
-            scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
-            
-            (1|screen_name), # varying slope of year of post within individuals
-          
-          data = d)
-
-performance::icc(m, by_group = TRUE)
-sjPlot::tab_model(m, show.icc = TRUE, show.ci = FALSE, show.se = TRUE, show.std = "std2")
-extract_eq(m, wrap = TRUE)
-```
-
-```{r, results = "markup"}
-extract_eq(m)
-```
-
-### predicted values
-
-```{r}
-augmented_data <- broom.mixed::augment(m)
-write_rds(augmented_data, "augmented_data.rds")
-```
-
-```{r, eval = FALSE}
-augmented_data %>% 
-  group_by(year_of_post_centered) %>% 
-  summarize(mean_scale = mean(senti_scale)) %>% 
-  ggplot(aes(x = year_of_post_centered, y = mean_scale)) +
-  geom_point() +
-  theme_bw()
-```

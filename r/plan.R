@@ -30,25 +30,19 @@ the_plan <-
     
     # models
     
-    null_model = estimate_null_model(data_to_model),
+    test_model = lm(senti_scale ~ isTeacher, data = data_to_model),
     
-    full_model = lmer(scale(senti_scale) ~
-
-                        type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
-                        #adopted +
-
-                        scale(time_on_twitter) + # for how long a person has been on Twitter
-                        isTeacher + # participant is a teacher or not
-
-                        year_of_post_centered +
-
-                        hasJoinedChat +
-
-                        scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
-
-                        (1|screen_name),
-
-                      data = data_to_model),
+    null_model = lmer(senti_scale ~ isTeacher + (1|screen_name), data = data_to_model),
+    
+    # full_model = lmer(scale(senti_scale) ~ 
+    #                     type_of_tweet + 
+    #                     scale(time_on_twitter) +
+    #                     isTeacher +
+    #                     year_of_post_centered +
+    #                     hasJoinedChat +
+    #                     scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) +
+    #                     (1|screen_name),
+    #                   data = data_to_model),
     
     # for site
     

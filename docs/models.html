@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2020-09-25" />
+<meta name="date" content="2020-09-28" />
 
 <title>Models</title>
 
@@ -1510,23 +1510,34 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Models</h1>
-<h4 class="date">2020-09-25</h4>
+<h4 class="date">2020-09-28</h4>
 
 </div>
 
 
+<pre class="r"><code>d &lt;- params$d</code></pre>
 <div id="sentiment-analysis-technique-sentistrength" class="section level1">
 <h1>sentiment analysis technique: sentistrength</h1>
 <div id="null-model" class="section level2">
 <h2>null model</h2>
 <div id="results" class="section level3">
 <h3>results</h3>
+<pre class="r"><code>m_null &lt;- lmer(senti_scale ~ 
+                 
+                 (1|state_master) +
+                 
+                 (1|screen_name), 
+               
+               data = d)
+
+performance::icc(m_null, by_group = TRUE)</code></pre>
 <pre><code>## # ICC by Group
 ## 
 ## Group        |   ICC
 ## --------------------
 ## screen_name  | 0.202
 ## state_master | 0.009</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_null, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -1628,6 +1639,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 </tr>
 </table>
+<pre class="r"><code>extract_eq(m_null, wrap = TRUE)</code></pre>
 <pre><code>## Registered S3 method overwritten by &#39;broom.mixed&#39;:
 ##   method      from 
 ##   tidy.gamlss broom</code></pre>
@@ -1642,11 +1654,31 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <h2>full model without state due to minimal ICC</h2>
 <div id="results-1" class="section level3">
 <h3>results</h3>
+<pre class="r"><code>m &lt;- lmer(senti_scale ~ 
+            
+            type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
+            #adopted +
+            
+            scale(time_on_twitter) + # for how long a person has been on Twitter
+            isTeacher + # participant is a teacher or not
+            
+            year_of_post_centered +
+            
+            hasJoinedChat +
+            
+            scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
+            
+            (1|screen_name), # varying slope of year of post within individuals
+          
+          data = d)
+
+performance::icc(m, by_group = TRUE)</code></pre>
 <pre><code>## # ICC by Group
 ## 
 ## Group       |   ICC
 ## -------------------
 ## screen_name | 0.221</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -1848,7 +1880,7 @@ N <sub>screen_name</sub>
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-536697
+536698
 </td>
 </tr>
 <tr>
@@ -1860,6 +1892,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 </tr>
 </table>
+<pre class="r"><code>extract_eq(m, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{3}(\operatorname{scale(time\_on\_twitter)})\ + \\
@@ -1867,8 +1900,26 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 &amp;\quad \beta_{8}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \alpha_{j} &amp;\sim N \left(\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ),\sigma^2_{\alpha_{j}} \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
+<pre class="r"><code>m_rs &lt;- lmer(senti_scale ~ 
+            
+            type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
+            #adopted +
+            
+            scale(time_on_twitter) + # for how long a person has been on Twitter
+            isTeacher + # participant is a teacher or not
+            
+            year_of_post_centered +
+            
+            #hasJoinedChat +
+            
+            scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
+            
+            (year_of_post_centered|screen_name), # varying slope of year of post within individuals
+          
+          data = d, REML = TRUE)</code></pre>
 <pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
-## Model failed to converge with max|grad| = 0.0159347 (tol = 0.002, component 1)</code></pre>
+## Model failed to converge with max|grad| = 0.0106566 (tol = 0.002, component 1)</code></pre>
+<pre class="r"><code>performance::icc(m_rs, by_group = TRUE)</code></pre>
 <pre><code>## Warning: Model contains random slopes. Cannot compute accurate ICCs by group
 ## factors.</code></pre>
 <pre><code>## # ICC by Group
@@ -1876,6 +1927,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 ## Group       |   ICC
 ## -------------------
 ## screen_name | 0.193</code></pre>
+<pre class="r"><code>sjPlot::tab_model(m_rs, show.icc = TRUE, show.ci = FALSE, show.se = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -1908,306 +1960,6 @@ p
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-type_of_tweet<br>[ngsschat-chat]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-type_of_tweet<br>[ngsschat-non-chat]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-time_on_twitter
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.03
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-isTeacher
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.11
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-year_of_post_centered
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.11
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-hasJoinedChat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.372
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_chatsessions
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.15
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.004</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_ngsschat_nonchat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.03
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.461
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_non_ngsschat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.10
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.001</strong>
-</td>
-</tr>
-<tr>
-<td colspan="4" style="font-weight:bold; text-align:left; padding-top:.8em;">
-Random Effects
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-σ<sup>2</sup>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-1.13
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-τ<sub>00</sub> <sub>screen_name</sub>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.29
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-τ<sub>11</sub> <sub>screen_name.year_of_post_centered</sub>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.01
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-ρ<sub>01</sub> <sub>screen_name</sub>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.90
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-ICC
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.24
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-N <sub>screen_name</sub>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-76216
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
-Observations
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-536697
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.042 / 0.267
-</td>
-</tr>
-</table>
-<p><span class="math display">\[
-\begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{3}(\operatorname{scale(time\_on\_twitter)})\ + \\
-&amp;\quad \beta_{4j[i]}(\operatorname{year\_of\_post\_centered}) + \beta_{5}(\operatorname{hasJoinedChat}) + \beta_{6}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{7}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)})\ + \\
-&amp;\quad \beta_{8}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \left(
- \begin{array}{c} 
-\begin{aligned}
-&amp;\alpha_{j} \\ &amp;\beta_{4j}
-\end{aligned}
- \end{array}
- \right) &amp;\sim N \left(\left(
- \begin{array}{c} 
-\begin{aligned}
-&amp;\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) \\ &amp;\mu_{\beta_{4j}}
-\end{aligned}
- \end{array}
- \right),\left(
-    \begin{array}{cc}\sigma^2_{\alpha_{j}} &amp; \rho \alpha_{j} \beta_{4j}\\\rho \beta_{4j} \alpha_{j} &amp; \sigma^2_{\beta_{4j}}\end{array}
-    \right) \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
-\end{aligned}
-\]</span></p>
-<p>with the tweet engagement measures at the tweet-level included</p>
-<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
-## Model failed to converge with max|grad| = 0.0101232 (tol = 0.002, component 1)</code></pre>
-<pre><code>## Warning: Model contains random slopes. Cannot compute accurate ICCs by group
-## factors.</code></pre>
-<pre><code>## # ICC by Group
-## 
-## Group       |   ICC
-## -------------------
-## screen_name | 0.192</code></pre>
-<table style="border-collapse:collapse; border:none;">
-<tr>
-<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
- 
-</th>
-<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
-</th>
-</tr>
-<tr>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
-Predictors
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-Estimates
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-std. Error
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-p
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-(Intercept)
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.74
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-favorite_count
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-retweet_count
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-reply_count
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.03
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -2285,20 +2037,6 @@ year_of_post_centered
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-hasJoinedChat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.254
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
 n_posted_chatsessions
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
@@ -2322,7 +2060,7 @@ n_posted_ngsschat_nonchat
 0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.484
+0.504
 </td>
 </tr>
 <tr>
@@ -2337,310 +2075,6 @@ n_posted_non_ngsschat
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>0.001</strong>
-</td>
-</tr>
-<tr>
-<td colspan="4" style="font-weight:bold; text-align:left; padding-top:.8em;">
-Random Effects
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-σ<sup>2</sup>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-1.13
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-τ<sub>00</sub> <sub>screen_name</sub>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.28
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-τ<sub>11</sub> <sub>screen_name.year_of_post_centered</sub>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.01
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-ρ<sub>01</sub> <sub>screen_name</sub>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.90
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-ICC
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.23
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-N <sub>screen_name</sub>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-76216
-</td>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
-Observations
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-536697
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.043 / 0.268
-</td>
-</tr>
-</table>
-<p><span class="math display">\[
-\begin{aligned}
-\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{favorite\_count}) + \beta_{2}(\operatorname{retweet\_count}) + \beta_{3}(\operatorname{reply\_count})\ + \\
-&amp;\quad \beta_{4}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-chat}}) + \beta_{5}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{6}(\operatorname{scale(time\_on\_twitter)}) + \beta_{7j[i]}(\operatorname{year\_of\_post\_centered})\ + \\
-&amp;\quad \beta_{8}(\operatorname{hasJoinedChat}) + \beta_{9}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{10}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{11}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \left(
- \begin{array}{c} 
-\begin{aligned}
-&amp;\alpha_{j} \\ &amp;\beta_{7j}
-\end{aligned}
- \end{array}
- \right) &amp;\sim N \left(\left(
- \begin{array}{c} 
-\begin{aligned}
-&amp;\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) \\ &amp;\mu_{\beta_{7j}}
-\end{aligned}
- \end{array}
- \right),\left(
-    \begin{array}{cc}\sigma^2_{\alpha_{j}} &amp; \rho \alpha_{j} \beta_{7j}\\\rho \beta_{7j} \alpha_{j} &amp; \sigma^2_{\beta_{7j}}\end{array}
-    \right) \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
-\end{aligned}
-\]</span></p>
-<pre><code>## refitting model(s) with ML (instead of REML)</code></pre>
-<pre><code>## Data: d
-## Models:
-## m_rs: senti_scale ~ type_of_tweet + scale(time_on_twitter) + isTeacher + 
-## m_rs:     year_of_post_centered + hasJoinedChat + scale(n_posted_chatsessions) + 
-## m_rs:     scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + 
-## m_rs:     (year_of_post_centered | screen_name)
-## m1: senti_scale ~ favorite_count + retweet_count + reply_count + 
-## m1:     type_of_tweet + scale(time_on_twitter) + isTeacher + year_of_post_centered + 
-## m1:     hasJoinedChat + scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + 
-## m1:     scale(n_posted_non_ngsschat) + (year_of_post_centered | screen_name)
-##      npar     AIC     BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
-## m_rs   14 1630526 1630683 -815249  1630498                         
-## m1     17 1630245 1630435 -815105  1630211 287.54  3  &lt; 2.2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>with the tweet engagement measures at the user-level also included</p>
-<pre><code>## Warning: Some predictor variables are on very different scales: consider
-## rescaling</code></pre>
-<pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
-## Model failed to converge with max|grad| = 0.017011 (tol = 0.002, component 1)</code></pre>
-<pre><code>## Warning: Model contains random slopes. Cannot compute accurate ICCs by group
-## factors.</code></pre>
-<pre><code>## # ICC by Group
-## 
-## Group       |   ICC
-## -------------------
-## screen_name | 0.193</code></pre>
-<table style="border-collapse:collapse; border:none;">
-<tr>
-<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
- 
-</th>
-<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-senti scale
-</th>
-</tr>
-<tr>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
-Predictors
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-Estimates
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-std. Error
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-p
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-(Intercept)
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.72
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-favorite_count_user
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.093
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-retweet_count_user
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.166
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-type_of_tweet<br>[ngsschat-chat]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-type_of_tweet<br>[ngsschat-non-chat]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-time_on_twitter
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.03
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-isTeacher
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.10
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-year_of_post_centered
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.11
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-hasJoinedChat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.400
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_chatsessions
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.15
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.004</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_ngsschat_nonchat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.06
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.194
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n_posted_non_ngsschat
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.007</strong>
 </td>
 </tr>
 <tr>
@@ -2695,7 +2129,7 @@ N <sub>screen_name</sub>
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-536697
+536698
 </td>
 </tr>
 <tr>
@@ -2707,11 +2141,11 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 </tr>
 </table>
+<pre class="r"><code>extract_eq(m_rs, wrap = TRUE)</code></pre>
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{3}(\operatorname{scale(time\_on\_twitter)})\ + \\
-&amp;\quad \beta_{4j[i]}(\operatorname{year\_of\_post\_centered}) + \beta_{5}(\operatorname{hasJoinedChat}) + \beta_{6}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{7}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)})\ + \\
-&amp;\quad \beta_{8}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \left(
+&amp;\quad \beta_{4j[i]}(\operatorname{year\_of\_post\_centered}) + \beta_{5}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{6}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{7}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \left(
  \begin{array}{c} 
 \begin{aligned}
 &amp;\alpha_{j} \\ &amp;\beta_{4j}
@@ -2720,7 +2154,7 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
  \right) &amp;\sim N \left(\left(
  \begin{array}{c} 
 \begin{aligned}
-&amp;\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{favorite\_count\_user} ) + \gamma^{\alpha}_{2} ( \operatorname{retweet\_count\_user} ) + \gamma^{\alpha}_{3} ( \operatorname{isTeacher} ) \\ &amp;\mu_{\beta_{4j}}
+&amp;\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) \\ &amp;\mu_{\beta_{4j}}
 \end{aligned}
  \end{array}
  \right),\left(
@@ -2728,22 +2162,26 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
     \right) \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
 \end{aligned}
 \]</span></p>
-<pre><code>## refitting model(s) with ML (instead of REML)</code></pre>
-<pre><code>## Data: d
-## Models:
-## m2: senti_scale ~ favorite_count_user + retweet_count_user + type_of_tweet + 
-## m2:     scale(time_on_twitter) + isTeacher + year_of_post_centered + 
-## m2:     hasJoinedChat + scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + 
-## m2:     scale(n_posted_non_ngsschat) + (year_of_post_centered | screen_name)
-## m1: senti_scale ~ favorite_count + retweet_count + reply_count + 
-## m1:     type_of_tweet + scale(time_on_twitter) + isTeacher + year_of_post_centered + 
-## m1:     hasJoinedChat + scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + 
-## m1:     scale(n_posted_non_ngsschat) + (year_of_post_centered | screen_name)
-##    npar     AIC     BIC  logLik deviance Chisq Df Pr(&gt;Chisq)    
-## m2   16 1630528 1630707 -815248  1630496                        
-## m1   17 1630245 1630435 -815105  1630211 284.7  1  &lt; 2.2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>extract_eq(m_rs)</code></pre>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{senti\_scale}  &amp;\sim N \left(\mu,\sigma^2 \right) \\ \mu &amp;=\alpha_{j[i]} + \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-chat}}) + \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}}) + \beta_{3}(\operatorname{scale(time\_on\_twitter)}) + \beta_{4j[i]}(\operatorname{year\_of\_post\_centered}) + \beta_{5}(\operatorname{scale(n\_posted\_chatsessions)}) + \beta_{6}(\operatorname{scale(n\_posted\_ngsschat\_nonchat)}) + \beta_{7}(\operatorname{scale(n\_posted\_non\_ngsschat)}) \\ \left(
+ \begin{array}{c} 
+\begin{aligned}
+&amp;\alpha_{j} \\ &amp;\beta_{4j}
+\end{aligned}
+ \end{array}
+ \right) &amp;\sim N \left(\left(
+ \begin{array}{c} 
+\begin{aligned}
+&amp;\gamma^{\alpha}_{0}  + \gamma^{\alpha}_{1} ( \operatorname{isTeacher} ) \\ &amp;\mu_{\beta_{4j}}
+\end{aligned}
+ \end{array}
+ \right),\left(
+    \begin{array}{cc}\sigma^2_{\alpha_{j}} &amp; \rho \alpha_{j} \beta_{4j}\\\rho \beta_{4j} \alpha_{j} &amp; \sigma^2_{\beta_{4j}}\end{array}
+    \right) \right) , \operatorname{ for  screen\_name } j  = 1, \dots ,  J
+\end{aligned}
+\]</span></p>
 </div>
 </div>
 </div>

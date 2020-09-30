@@ -24,7 +24,7 @@ d <- params$d
 ### results
 
 ```{r}
-m_null <- lmer(senti_scale ~ 
+m_null <- lmer(scale(senti_scale) ~ 
                  
                  (1|state_master) +
                  
@@ -43,7 +43,7 @@ extract_eq(m_null, wrap = TRUE)
 ### results
 
 ```{r}
-m <- lmer(senti_scale ~ 
+m <- lmer(scale(senti_scale) ~ 
             
             type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
             #adopted +
@@ -68,4 +68,20 @@ extract_eq(m, wrap = TRUE)
 
 ```{r, results = "markup"}
 extract_eq(m)
+```
+
+### predicted values
+
+```{r}
+augmented_data <- broom.mixed::augment(m)
+write_rds(augmented_data, "augmented_data.rds")
+```
+
+```{r, eval = FALSE}
+augmented_data %>% 
+  group_by(year_of_post_centered) %>% 
+  summarize(mean_scale = mean(senti_scale)) %>% 
+  ggplot(aes(x = year_of_post_centered, y = mean_scale)) +
+  geom_point() +
+  theme_bw()
 ```

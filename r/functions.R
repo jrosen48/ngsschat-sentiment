@@ -77,7 +77,7 @@ create_new_variables_and_filter_by_language <- function(d) {
            year_fct = factor(as.numeric(as.character(d$year_fct))))
   
   d <- d %>% 
-    mutate(year_of_post_centered = scale(year_of_post, scale = FALSE))
+    mutate(year_of_post_centered = year_of_post - 2015)
   
   d <- d %>% filter(lang == "en")
   
@@ -95,4 +95,32 @@ create_new_variables_and_filter_by_language <- function(d) {
 filter_data_by_year <- function(d) {
   d %>% 
     filter(year_of_post >= 2010)
+}
+
+estimate_null_model <- function(d) {
+  lmer(scale(senti_scale) ~ 
+         (1|state_master) + 
+         (1|screen_name),
+       
+       data = d)
+}
+
+estimate_full_model <- function(d) {
+  lmer(scale(senti_scale) ~ 
+         
+         type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
+         #adopted +
+         
+         scale(time_on_twitter) + # for how long a person has been on Twitter
+         isTeacher + # participant is a teacher or not
+         
+         year_of_post_centered +
+         
+         hasJoinedChat +
+         
+         scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
+         
+         (1|screen_name),
+       
+       data = d)
 }

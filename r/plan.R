@@ -28,10 +28,9 @@ the_plan <-
       output_file = file_out("docs/descriptives-binary.html"),
       params = list(d = data_to_model)),
     
-    final_models = rmarkdown::render(
-      knitr_in("models.Rmd"),
-      output_file = file_out("docs/models.html"),
-      params = list(d = data_to_model)),
+    null_model = estimate_null_model(data_to_model),
+    
+    full_model = estimate_full_model(data_to_model),
   
     # for site
     

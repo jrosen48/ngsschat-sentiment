@@ -299,3 +299,9 @@ p
 
 ggsave("img/ngsschat-posts-per-day.png", width = 8, height = 6)
 ```
+
+## Sentiment over time
+
+```{r}
+data_to_model %>% group_by(year_of_post_centered) %>% summarize(mean_senti = mean(senti_scale)) %>% ggplot(aes(y = mean_senti, x = year_of_post_centered)) + geom_point() + geom_smooth()
+```

@@ -22,23 +22,6 @@ icc(null_model, by_group = TRUE)
 tab_model(full_model, show.icc = TRUE)
 ```
 
-```{r}
-states_sf <- get_urbn_map("states", sf = TRUE)
-
-state_ranefs <- rename(state_ranefs, state_name = level) %>% 
-  mutate(state_name = tools::toTitleCase(state_name))
-
-states_sf <- states_sf %>% 
-  left_join(state_ranefs)
-  
-states_sf %>% 
-  ggplot(aes(fill = estimate)) +
-  geom_sf(color = "#ffffff") +
-  # theme_minimal() +
-  scale_fill_continuous("Random Effect Estimate") +
-  theme(text = element_text(family = "Times"))
-```
-
 ```{r label, options}
 mod_d <- full_model@frame
 
@@ -52,9 +35,11 @@ pred_frame <- data.frame(type_of_tweet = rep(c("non-ngsschat",
                          n_posted_chatsessions = mean(mod_d$`scale(n_posted_chatsessions)`),
                          n_posted_ngsschat_nonchat = mean(mod_d$`scale(n_posted_ngsschat_nonchat)`),
                          n_posted_non_ngsschat = mean(mod_d$`scale(n_posted_non_ngsschat)`),
+                         adopted_fct = "not-adopted",
                          screen_name = -999
-                         )
-pred_frame$prediction <- predict(full_model, newdata = pred_frame, allow.new.levels = TRUE )
+)
+
+pred_frame$prediction <- predict(full_model, newdata = pred_frame, allow.new.levels = TRUE)
 
 theme_set(theme_minimal(15))
 ggplot(pred_frame, aes(year_of_post_centered + 2016, prediction)) +

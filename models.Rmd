@@ -18,14 +18,22 @@ knitr::opts_chunk$set()
 ```{r}
 icc(null_model, by_group = TRUE)
 
-tab_model(full_model, show.std = "std2", show.icc = TRUE)
+tab_model(full_model, show.icc = TRUE)
 ```
 
 ```{r}
-p <- augmented_full_model_data %>% ggplot(aes(x = year_of_post_centered, y = .fitted)) + geom_jitter() + geom_smooth(method = "lm")
-```
+states_sf <- get_urbn_map("states", sf = TRUE)
 
-```{r}
-tidied_full_model <- broom.mixed::tidy(full_model)
-```
+state_ranefs <- rename(state_ranefs, state_name = level) %>% 
+  mutate(state_name = tools::toTitleCase(state_name))
 
+states_sf <- states_sf %>% 
+  left_join(state_ranefs)
+  
+states_sf %>% 
+  ggplot(aes(fill = estimate)) +
+  geom_sf(color = "#ffffff") +
+  # theme_minimal() +
+  scale_fill_continuous("Random Effect Estimate") +
+  theme(text = element_text(family = "Times"))
+```

@@ -14,6 +14,7 @@ library(knitr)
 library(hrbrthemes)
 library(corrr)
 library(broom.mixed)
+library(urbnmapr)
 
 conflict_prefer("load", "base")
 conflict_prefer("filter", "dplyr")

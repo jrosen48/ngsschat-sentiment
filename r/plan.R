@@ -20,7 +20,7 @@ the_plan <-
     
     null_model = lmer(senti_scale ~ isTeacher + (1|state_master) + (1|screen_name), data = readd(data_to_model)),
     
-    state_ranefs = broom.mixed::tidy(null_model, effects = "ran_vals") %>% filter(group == "state_master"),
+    state_ranefs = return_state_ranefs(null_model),
     
     full_model = lmer(scale(senti_scale) ~
                         type_of_tweet +

@@ -27,6 +27,7 @@ the_plan <-
                         scale(time_on_twitter) +
                         isTeacher +
                         year_of_post_centered +
+                        isTeacher:year_of_post_centered +
                         hasJoinedChat +
                         scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) +
                         adopted_fct +

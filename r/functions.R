@@ -85,8 +85,8 @@ create_new_variables_and_filter_by_language <- function(d) {
   
   d <- d %>% 
     mutate(adopted_fct = ifelse(is.na(adopted), "missing", 
-                                ifelse(adopted == 1, "adopted", "not adopted"))) %>% 
-    mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "adopted"))
+                                ifelse(adopted == 1, "adopted", "not-adopted"))) %>% 
+    mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "not-adopted"))
   
   d %>% 
     as_tibble()

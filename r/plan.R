@@ -29,8 +29,7 @@ the_plan <-
                         year_of_post_centered +
                         hasJoinedChat +
                         scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) +
-                        adopted +
-                        (1|state_master) +
+                        adopted_fct +
                         (1|screen_name),
                       data = readd(data_to_model)),
     
@@ -67,9 +66,7 @@ the_plan <-
       trigger = trigger(condition = TRUE)
     ),
     
-    open_site = target(
-      command = browseURL("docs/index.html"),
-      trigger = trigger(condition = TRUE)
-    )
+    # to open site: 
+    #   browseURL("docs/index.html")
     
   )

@@ -22,10 +22,6 @@ Conrad Borchers
 University of Tübingen, Germany
 conrad.borchers@student.uni-tuebingen.de
 
-Benjamin Gibbons
-Emory University
-ben.gibbons@emory.edu
-
 Elizabeth Dyer
 Middle Tennessee State University
 elizabeth.dyer@mtsu.edu

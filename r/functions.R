@@ -83,10 +83,15 @@ create_new_variables_and_filter_by_language <- function(d) {
   
   d <- d %>% mutate(type_of_tweet = forcats::fct_relevel(type_of_tweet, "non-ngsschat"))
   
+  d <- d %>% 
+    mutate(adopted_fct = ifelse(is.na(adopted), "missing", 
+                                ifelse(adopted == 1, "adopted", "not-adopted"))) %>% 
+    mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "not-adopted"))
+  
   d %>% 
     as_tibble()
   
-  # d <- d[-536375, ] # performance::check_outliers(m_rs) revealed this to be an outlier; inspection of it confirms
+  d <- d[-536375, ] # performance::check_outliers(m_rs) revealed this to be an outlier; inspection of it confirms
   
   d
   
@@ -97,30 +102,7 @@ filter_data_by_year <- function(d) {
     filter(year_of_post >= 2010)
 }
 
-estimate_null_model <- function(d) {
-  lmer(scale(senti_scale) ~ 
-         (1|state_master) + 
-         (1|screen_name),
-       
-       data = d)
-}
-
-estimate_full_model <- function(d) {
-  lmer(scale(senti_scale) ~ 
-         
-         type_of_tweet + # NGSSchat - chat, #NGSSChat non-chat, non-#NGSSchat (includes e.g. NGSS)
-         #adopted +
-         
-         scale(time_on_twitter) + # for how long a person has been on Twitter
-         isTeacher + # participant is a teacher or not
-         
-         year_of_post_centered +
-         
-         hasJoinedChat +
-         
-         scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) + # also user-level variables
-         
-         (1|screen_name),
-       
-       data = d)
+return_state_ranefs <- function(m) {
+  broom.mixed::tidy(m, effects = "ran_vals") %>% 
+    filter(group == "state_master")
 }

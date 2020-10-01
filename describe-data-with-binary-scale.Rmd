@@ -72,3 +72,15 @@ d %>%
   mutate(senti_ratio = neg/pos) %>% 
   arrange(desc(senti_ratio))
 ```
+
+```{r}
+d %>% 
+  count(state_master, senti_binary) %>% 
+  spread(senti_binary, n) %>% 
+  set_names(c("state_master", "neg", "pos")) %>% 
+  mutate(senti_ratio = neg/pos) %>% 
+  arrange(desc(senti_ratio)) %>% 
+  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
+  geom_col() +
+  coord_flip()
+```

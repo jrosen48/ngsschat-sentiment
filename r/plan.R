@@ -18,11 +18,11 @@ the_plan <-
     
     # estimating models
     
-    null_model = lmer(senti_scale ~ isTeacher + (1|state_master) + (1|screen_name), data = readd(data_to_model)),
+    null_model = lmer(scale(senti_scale, center = FALSE) ~ isTeacher + (1|state_master) + (1|screen_name), data = readd(data_to_model)),
     
     state_ranefs = return_state_ranefs(null_model),
     
-    full_model = lmer(scale(senti_scale) ~
+    full_model = lmer(scale(senti_scale, center = FALSE) ~
                         type_of_tweet +
                         scale(time_on_twitter) +
                         isTeacher +

@@ -15,6 +15,7 @@ library(hrbrthemes)
 library(corrr)
 library(broom.mixed)
 library(urbnmapr)
+library(extrafont)
 
 conflict_prefer("load", "base")
 conflict_prefer("filter", "dplyr")

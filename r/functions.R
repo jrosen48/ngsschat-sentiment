@@ -84,7 +84,9 @@ create_new_variables_and_filter_by_language <- function(d) {
   d <- d %>% mutate(type_of_tweet = forcats::fct_relevel(type_of_tweet, "non-ngsschat"))
   
   d <- d %>% 
-    mutate(adopted_fct = ifelse(is.na(adopted), "missing", adopted))
+    mutate(adopted_fct = ifelse(is.na(adopted), "missing", 
+                                ifelse(adopted == 1, "adopted", "not adopted"))) %>% 
+    mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "adopted"))
   
   d %>% 
     as_tibble()

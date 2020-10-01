@@ -65,6 +65,11 @@ the_plan <-
     rendered_site = target(
       command = render_site(),
       trigger = trigger(condition = TRUE)
+    ),
+    
+    open_site = target(
+      command = browseURL("docs/index.html"),
+      trigger = trigger(condition = TRUE)
     )
     
   )

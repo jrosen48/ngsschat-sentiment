@@ -53,7 +53,8 @@ the_plan <-
       output_file = file_out("docs/models.html"),
       params = list(null_model = null_model,
                     full_model = full_model,
-                    augmented_full_model_data = augmented_full_model_data)),
+                    augmented_full_model_data = augmented_full_model_data,
+                    state_ranefs = state_ranefs)),
     
     # for site
     

@@ -9,6 +9,7 @@ params:
   null_model: ""
   full_model: ""
   augmented_full_model_data: ""
+  state_ranefs: ""
 ---
 
 ```{r setup, include=FALSE}

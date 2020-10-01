@@ -77,7 +77,7 @@ create_new_variables_and_filter_by_language <- function(d) {
            year_fct = factor(as.numeric(as.character(d$year_fct))))
   
   d <- d %>% 
-    mutate(year_of_post_centered = year_of_post - 2015)
+    mutate(year_of_post_centered = year_of_post - 2016)
   
   d <- d %>% filter(lang == "en")
   

@@ -24,7 +24,7 @@ tab_model(full_model, show.icc = TRUE)
 
 ```{r label, options}
 mod_d <- full_model@frame
-levels(mod_d$adopted_fct)
+
 pred_frame <- data.frame(type_of_tweet = rep(c("non-ngsschat", 
                                                "ngsschat-chat", 
                                                "ngsschat-non-chat"), each = 2*11),
@@ -53,7 +53,7 @@ label_frame <- data.frame(isTeacher = "Teachers",
                                     "Non-Chat"))
 
 
-loadfonts()
+extrafont::loadfonts()
 
 theme_set(theme_minimal(15))
 pred_frame %>% 
@@ -76,5 +76,24 @@ pred_frame %>%
 
  
 ggsave("interactions.png", width = 6.5, height = 8, dpi = 800)
+
+
+samp_d <- mod_d %>% 
+  select(year_of_post_centered, 
+         isTeacher, 
+         type_of_tweet, 
+         senti_scale = `scale(senti_scale, center = FALSE)`) %>% 
+  mutate(isTeacher = ifelse(isTeacher == 0, "Non-Teachers", "Teachers")) %>% 
+  group_by(year_of_post_centered, isTeacher, type_of_tweet) %>% 
+  slice_sample(prop = 0.1) 
+
+pred_frame %>% 
+  mutate(isTeacher = ifelse(isTeacher == 0, "Non-Teachers", "Teachers")) %>% 
+  ggplot(aes(year_of_post_centered + 2016, prediction)) +
+  geom_point(aes(year_of_post_centered + 2016, senti_scale),
+             samp_d,
+             color = "gray80") +
+  geom_line(size = 1.3) +
+  facet_grid(isTeacher ~ type_of_tweet)
 ```
 

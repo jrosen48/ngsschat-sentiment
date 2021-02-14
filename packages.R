@@ -16,7 +16,9 @@ library(corrr)
 library(broom.mixed)
 library(urbnmapr)
 library(extrafont)
-
+library(urbnmapr) # devtools::install_github("UrbanInstitute/urbnmapr")
+library(visNetwork)
+        
 conflict_prefer("load", "base")
 conflict_prefer("filter", "dplyr")
 conflict_prefer("gather", "tidyr")

@@ -14,8 +14,10 @@ the_plan <-
     
     joined_data = create_new_variables_and_filter_by_language(loaded_rda_data_with_state),
     
-    data_to_model = filter_data_by_year(joined_data), # removes 20 cases before 2010
+    data_to_model_filtered = filter_data_by_year(joined_data), # removes 20 cases before 2010
     
+    data_to_model = scale_key_vars(data_to_model_filtered),
+      
     # estimating models
     
     null_model = lmer(scale(senti_scale, center = FALSE) ~ isTeacher + (1|state_master) + (1|screen_name), data = readd(data_to_model)),
@@ -24,13 +26,14 @@ the_plan <-
     
     full_model = lmer(scale(senti_scale, center = FALSE) ~
                         type_of_tweet +
-                        scale(time_on_twitter) +
+                        time_on_twitter_s +
                         isTeacher +
                         year_of_post_centered +
                         isTeacher:year_of_post_centered +
-                        type_of_tweet:year_of_post_centered +
+                        type_of_tweet:year_of_post_centered + 
+                        isTeacher:type_of_tweet:year_of_post_centered +
                         hasJoinedChat +
-                        scale(n_posted_chatsessions) + scale(n_posted_ngsschat_nonchat) + scale(n_posted_non_ngsschat) +
+                        n_posted_chatsessions_s + n_posted_ngsschat_nonchat_s + n_posted_non_ngsschat_s +
                         adopted_fct +
                         (1|screen_name),
                       data = readd(data_to_model)),

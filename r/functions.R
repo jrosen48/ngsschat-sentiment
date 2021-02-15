@@ -106,3 +106,12 @@ return_state_ranefs <- function(m) {
   broom.mixed::tidy(m, effects = "ran_vals") %>% 
     filter(group == "state_master")
 }
+
+scale_key_vars <- function(d) {
+  d %>% 
+    mutate(time_on_twitter_s = as.numeric(scale(time_on_twitter)),
+           n_posted_chatsessions_s = as.numeric(scale(n_posted_chatsessions)),
+           n_posted_ngsschat_nonchat_s = as.numeric(scale(n_posted_ngsschat_nonchat)),
+           n_posted_non_ngsschat_s = as.numeric(scale(n_posted_non_ngsschat)),
+           senti_scale_s = as.numeric(scale(senti_scale, center = FALSE)))
+}

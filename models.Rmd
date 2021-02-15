@@ -22,19 +22,23 @@ icc(null_model, by_group = TRUE)
 tab_model(full_model, show.icc = TRUE)
 ```
 
+```{r}
+equatiomatic::extract_eq(full_model)
+```
+
 ```{r label, options}
 mod_d <- full_model@frame
 
 pred_frame <- data.frame(type_of_tweet = rep(c("non-ngsschat", 
                                                "ngsschat-chat", 
                                                "ngsschat-non-chat"), each = 2*11),
-                         time_on_twitter = mean(mod_d$`scale(time_on_twitter)`),
+                         time_on_twitter = mean(mod_d$time_on_twitter_s),
                          isTeacher = rep(c(0, 1), 3*11),
                          year_of_post_centered = seq(-5, 5, 1),
                          hasJoinedChat = 0,
-                         n_posted_chatsessions = mean(mod_d$`scale(n_posted_chatsessions)`),
-                         n_posted_ngsschat_nonchat = mean(mod_d$`scale(n_posted_ngsschat_nonchat)`),
-                         n_posted_non_ngsschat = mean(mod_d$`scale(n_posted_non_ngsschat)`),
+                         n_posted_chatsessions = mean(mod_d$n_posted_chatsessions_s),
+                         n_posted_ngsschat_nonchat = mean(mod_d$n_posted_ngsschat_nonchat_s),
+                         n_posted_non_ngsschat = mean(mod_d$n_posted_non_ngsschat_s),
                          adopted_fct = factor("not-adopted",
                                               levels = c("not-adopted", "adopted", "missing")),
                          screen_name = -999
@@ -82,7 +86,7 @@ samp_d <- mod_d %>%
   select(year_of_post_centered, 
          isTeacher, 
          type_of_tweet, 
-         senti_scale = `scale(senti_scale, center = FALSE)`) %>% 
+         senti_scale_s) %>% 
   mutate(isTeacher = ifelse(isTeacher == 0, "Non-Teachers", "Teachers")) %>% 
   group_by(year_of_post_centered, isTeacher, type_of_tweet) %>% 
   slice_sample(prop = 0.1) 

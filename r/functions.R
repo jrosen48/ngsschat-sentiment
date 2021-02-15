@@ -108,10 +108,88 @@ return_state_ranefs <- function(m) {
 }
 
 scale_key_vars <- function(d) {
+  
   d %>% 
     mutate(time_on_twitter_s = as.numeric(scale(time_on_twitter)),
            n_posted_chatsessions_s = as.numeric(scale(n_posted_chatsessions)),
            n_posted_ngsschat_nonchat_s = as.numeric(scale(n_posted_ngsschat_nonchat)),
            n_posted_non_ngsschat_s = as.numeric(scale(n_posted_non_ngsschat)),
            senti_scale_s = as.numeric(scale(senti_scale, center = FALSE)))
+}
+
+create_figure_1 <- function(d) {
+  
+  d$dates <- d$created_at %>% lubridate::date()
+  
+  # Recode q
+  
+  d$q <- d$q %>% 
+    recode(
+      next_generation_science_standards = "non-ngsschat",
+      next_generation_science_standard = "non-ngsschat",
+      next_gen_science_standards = "non-ngsschat",
+      next_gen_science_standard = "non-ngsschat",
+      ngss = "non-ngsschat"
+      )
+  
+  d$q[which(d$isChat == 1 & d$q == "#NGSSchat")] <- "ngsschat-inside"
+  d$q[which(d$isChat == 0 & d$q == "#NGSSchat")] <- "ngsschat-outside"
+  
+  # Aggregate tweet count over days
+  
+  d_days <- d %>% 
+    group_by(dates, q) %>% 
+    summarise(n_tweets = n()) %>% 
+    pivot_wider(names_from="q", values_from="n_tweets", values_fill=0)
+  
+  # Fill in missing days and code with 0
+  
+  ts <- seq.POSIXt(as.POSIXlt(min(d$dates)), as.POSIXlt(max(d$dates)), by="day")
+  ts <- ts %>% lubridate::date()
+  df <- data.frame(dates=ts)
+  
+  d_all <- full_join(df, d_days) %>% replace(is.na(.), 0)
+  names(d_all) <- c("day", "Non-#NGSSchat", "Non-chat", "Chat")
+  
+  d_all <- d_all %>% pivot_longer(!day, names_to="Category")
+  
+  # Cut off dates 2008-2012 for better readability
+  
+  d_all <- d_all[year(d_all$day) >= 2012,]
+  
+  # Cap dates at last download for all categories for unbiased representation
+  
+  maxd <- d %>% group_by(q) %>% summarise(last_dl=min(dl_at)) %>% 
+    pull(last_dl) %>% min() %>% lubridate::date()
+  
+  d_all <- d_all[d_all$day <= maxd,]
+  
+  # Plot by week
+  
+  d_all <- d_all %>%
+    mutate(week = lubridate::floor_date(day, "week")) %>%
+    group_by(week, Category) %>% 
+    summarise(value=sum(value))
+  
+  loadfonts(device="win") # edit depending on OS
+  
+  d_all$Category <- factor(d_all$Category, levels=c("Chat", "Non-chat", "Non-#NGSSchat"))
+  
+  filename <- "fig1.png"
+  
+  png(filename, width = 480*4, height = 480*2)
+  d_all %>% 
+    ggplot(aes(x = week, y = value)) + 
+    geom_col(aes(fill = Category), width=2) + 
+    scale_y_continuous(limits=c(0, 4000), oob = scales::squish) +
+    xlab("Week") + 
+    ylab("Number of Tweets") + 
+    theme_bw() + 
+    theme(legend.position="top") + 
+    scale_fill_manual(values = c("#426600", "#00998F", "#990000")) + 
+    theme(text=element_text(family="Times New Roman", size=36)) 
+  dev.off()
+  
+  return(filename) 
+
 }

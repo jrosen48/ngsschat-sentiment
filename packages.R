@@ -18,6 +18,7 @@ library(urbnmapr)
 library(extrafont)
 library(urbnmapr) # devtools::install_github("UrbanInstitute/urbnmapr")
 library(visNetwork)
+library(scales)
         
 conflict_prefer("load", "base")
 conflict_prefer("filter", "dplyr")

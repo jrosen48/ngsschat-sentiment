@@ -24,7 +24,7 @@ the_plan <-
     
     state_ranefs = return_state_ranefs(null_model),
     
-    full_model = lmer(scale(senti_scale, center = FALSE) ~
+    full_model = lmer(senti_scale_s ~
                         type_of_tweet +
                         time_on_twitter_s +
                         isTeacher +

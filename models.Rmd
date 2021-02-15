@@ -28,22 +28,26 @@ equatiomatic::extract_eq(full_model)
 
 ```{r label, options}
 mod_d <- full_model@frame
+```
 
+```{r}
 pred_frame <- data.frame(type_of_tweet = rep(c("non-ngsschat", 
                                                "ngsschat-chat", 
                                                "ngsschat-non-chat"), each = 2*11),
-                         time_on_twitter = mean(mod_d$time_on_twitter_s),
+                         time_on_twitter_s = mean(mod_d$time_on_twitter_s),
                          isTeacher = rep(c(0, 1), 3*11),
                          year_of_post_centered = seq(-5, 5, 1),
                          hasJoinedChat = 0,
-                         n_posted_chatsessions = mean(mod_d$n_posted_chatsessions_s),
-                         n_posted_ngsschat_nonchat = mean(mod_d$n_posted_ngsschat_nonchat_s),
-                         n_posted_non_ngsschat = mean(mod_d$n_posted_non_ngsschat_s),
+                         n_posted_chatsessions_s = mean(mod_d$n_posted_chatsessions_s),
+                         n_posted_ngsschat_nonchat_s = mean(mod_d$n_posted_ngsschat_nonchat_s),
+                         n_posted_non_ngsschat_s = mean(mod_d$n_posted_non_ngsschat_s),
                          adopted_fct = factor("not-adopted",
                                               levels = c("not-adopted", "adopted", "missing")),
                          screen_name = -999
 )
+```
 
+```{r}
 pred_frame$prediction <- predict(full_model, newdata = pred_frame, allow.new.levels = TRUE)
 
 label_frame <- data.frame(isTeacher = "Teachers",
@@ -55,8 +59,9 @@ label_frame <- data.frame(isTeacher = "Teachers",
                           label = c("Non-#NGSSchat",
                                     "Chat",
                                     "Non-Chat"))
+```
 
-
+```{r}
 extrafont::loadfonts()
 
 theme_set(theme_minimal(15))
@@ -81,6 +86,11 @@ pred_frame %>%
  
 ggsave("interactions.png", width = 6.5, height = 8, dpi = 800)
 
+```
+
+```{r}
+
+print(mod_d)
 
 samp_d <- mod_d %>% 
   select(year_of_post_centered, 
@@ -94,7 +104,7 @@ samp_d <- mod_d %>%
 pred_frame %>% 
   mutate(isTeacher = ifelse(isTeacher == 0, "Non-Teachers", "Teachers")) %>% 
   ggplot(aes(year_of_post_centered + 2016, prediction)) +
-  geom_point(aes(year_of_post_centered + 2016, senti_scale),
+  geom_point(aes(year_of_post_centered + 2016, senti_scale_s),
              samp_d,
              color = "gray80") +
   geom_line(size = 1.3) +

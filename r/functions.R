@@ -171,7 +171,7 @@ create_figure_1 <- function(d) {
     group_by(week, Category) %>% 
     summarise(value=sum(value))
   
-  loadfonts(device="win") # edit depending on OS
+  loadfonts(device = "pdf") # edit depending on OS
   
   d_all$Category <- factor(d_all$Category, levels=c("Chat", "Non-chat", "Non-#NGSSchat"))
   

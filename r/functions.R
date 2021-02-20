@@ -11,6 +11,13 @@ render_site <- function() {
 
 join_state <- function(d, state_data) {
   
+  # state_data <- state_data %>% 
+  #   mutate(adoption_status = case_when(
+  #     adopted == 1 & lead == "Yes" ~ "adopted-lead",
+  #     adopted == 1 & lead != "Yes" ~ "adapted",
+  #     adopted == 0 ~ "did-not-adopt",
+  #     TRUE ~ NA))
+  
   ## ---- proc-state-data---------------------------------------------------------------------------------------------------
   state_data$month <- state_data$date_month %>% 
     str_split("\\-") %>% 
@@ -97,6 +104,30 @@ create_new_variables_and_filter_by_language <- function(d) {
   
 }
 
+add_lead_state_status <- function(d, s) {
+  
+  state_data_merge <- s %>% 
+    rename(state = State) %>% 
+    mutate(state = tolower(state)) %>% 
+    select(state_master = state, lead)
+  
+  dd <- left_join(d, state_data_merge, by = "state_master")
+  
+  ddd <- dd %>% 
+    mutate(adopted_chr = as.character(adopted_fct)) %>% 
+    mutate(adopted_chr = 
+             case_when(
+               adopted_chr == "adopted" & lead == "Yes" ~ "adopted-lead",
+               TRUE ~ adopted_chr
+             )
+    ) %>% 
+    mutate(adopted_chr = as.factor(adopted_chr)) %>% 
+    mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "not-adopted"))
+  
+  ddd
+   
+}
+
 filter_data_by_year <- function(d) {
   d %>% 
     filter(year_of_post >= 2010)
@@ -130,7 +161,7 @@ create_figure_1 <- function(d) {
       next_gen_science_standards = "non-ngsschat",
       next_gen_science_standard = "non-ngsschat",
       ngss = "non-ngsschat"
-      )
+    )
   
   d$q[which(d$isChat == 1 & d$q == "#NGSSchat")] <- "ngsschat-inside"
   d$q[which(d$isChat == 0 & d$q == "#NGSSchat")] <- "ngsschat-outside"
@@ -178,6 +209,7 @@ create_figure_1 <- function(d) {
   filename <- "fig1.png"
   
   png(filename, width = 480*4, height = 480*2)
+  
   d_all %>% 
     ggplot(aes(x = week, y = value)) + 
     geom_col(aes(fill = Category), width=2) + 
@@ -191,5 +223,5 @@ create_figure_1 <- function(d) {
   dev.off()
   
   return(filename) 
-
+  
 }

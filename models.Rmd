@@ -10,6 +10,7 @@ params:
   full_model: ""
   augmented_full_model_data: ""
   state_ranefs: ""
+  full_model_with_three_way_interact: ""
 ---
 
 ```{r setup, include=FALSE}
@@ -24,6 +25,10 @@ tab_model(full_model, show.icc = TRUE)
 
 ```{r}
 equatiomatic::extract_eq(full_model)
+```
+
+```{r}
+tab_model(full_model_with_three_way_interact, show.icc = TRUE)
 ```
 
 ```{r label, options}

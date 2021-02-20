@@ -202,8 +202,12 @@ create_figure_1 <- function(d) {
     group_by(week, Category) %>% 
     summarise(value=sum(value))
   
-  loadfonts(device = "pdf") # edit depending on OS
-  
+  switch(Sys.info()[['sysname']],
+  Windows= {loadfonts(device = "win")},
+  Linux  = {loadfonts(device = "pdf")},
+  Darwin = {loadfonts(device = "pdf")}
+  )
+
   d_all$Category <- factor(d_all$Category, levels=c("Chat", "Non-chat", "Non-#NGSSchat"))
   
   filename <- "fig1.png"

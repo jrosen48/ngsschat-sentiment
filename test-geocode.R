@@ -3,11 +3,16 @@
 library(rtweet)
 library(mapsapi)
 library(dplyr)
+library(readr)
 library(sf)
 
-# requires setting up credentials first using rtweet::create_token()
+# # requires setting up credentials first using rtweet::create_token()
+# 
+# tweet_data <- rtweet::search_tweets("#rstats", n = 50) 
+# 
+# write_rds(tweet_data, "example-tweet-data.rds")
 
-tweet_data <- rtweet::search_tweets("#rstats", n = 40) 
+tweet_data <- read_rds("example-tweet-data.rds")
 
 # requires passing a Google Maps Geocoding API key
 

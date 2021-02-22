@@ -122,7 +122,7 @@ add_lead_state_status <- function(d, s) {
              )
     ) %>% 
     mutate(adopted_chr = as.factor(adopted_chr)) %>% 
-    mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "not-adopted"))
+    mutate(adopted_fct = forcats::fct_relevel(adopted_chr, "not-adopted"))
   
   ddd
    

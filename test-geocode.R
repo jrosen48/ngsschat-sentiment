@@ -14,7 +14,8 @@ library(sf)
 
 tweet_data <- read_rds("example-tweet-data.rds")
 
-# requires passing a Google Maps Geocoding API key
+# requires passing a Google Maps Geocoding API key; tweet_data$location can be
+# replaced with the variable/value for the location using the new API
 
 geocoded_locs <- mapsapi::mp_geocode(tweet_data$location,
                                           key = "")

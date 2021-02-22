@@ -1,3 +1,274 @@
+
+rename_vars <- function(d) {
+  d <- map(d, janitor::clean_names)
+  d$main <- d$main %>% rename(status_id=id,user_id=author_id)
+  d$users <- d$users  %>% rename(user_id=id,user_created_at=created_at)
+  d$tweets <- d$tweets %>% rename(ref_id=id, ref_text=text)
+  d <- map(d, function(x) {names(x)<-names(x)%>%str_remove_all("public_metrics_");return(x)})
+  return(d)
+}
+
+drop_duplicates <- function(d) {
+  d$main <- d$main %>% distinct(status_id, .keep_all=T)
+  d$users <- d$users %>% distinct(user_id, .keep_all=T)
+  d$tweets <- d$tweets %>% distinct(ref_id, .keep_all=T) 
+  return(d)
+} 
+
+prepare_join <- function(d) {
+  d$main$is_retweet <- map(d$main$referenced_tweets, function(x) return(isTRUE(x$type=="retweeted"))) %>% unlist()
+  d$main$is_quote <- map(d$main$referenced_tweets, function(x) return(isTRUE(x$type=="quoted"))) %>% unlist()
+  d$main$is_reply <- map(d$main$referenced_tweets, function(x) return(isTRUE(x$type=="replied_to"))) %>% unlist()
+  d$main$ref_id <- map(d$main$referenced_tweets, function(x) if(is.null(x)) return(NA) else return(head(x$id,1))) %>% unlist()
+  d$main <- d$main %>% select(-referenced_tweets)    
+  return(d)
+}
+
+
+join_tables <- function(d) { 
+  return(
+    d$main %>%
+      left_join(d$tweets,by="ref_id") %>%
+      left_join(d$users,by="user_id")
+  )
+}
+
+no_duplicates <- function(d) {
+  return(
+    d %>% 
+      distinct(status_id, .keep_all=T)
+  )
+}
+
+preproc_master <- function(d) {
+  d %>%
+    rename_vars() %>%
+    drop_duplicates() %>%
+    prepare_join() %>%
+    join_tables() %>% 
+    no_duplicates()
+}
+
+remove_langs <- function(d) {
+  return(
+    d %>% 
+      filter(lang %in% c("en", "und"))
+  )
+}
+
+get_full_text <- function(d) {
+  d$text[d$is_retweet==T] <- d$ref_text[d$is_retweet==T] # retweet text abbreviated @ main
+  return(d %>% select(-starts_with("ref")))
+}
+
+clean_timevars <- function(d) {
+  d$created_at <- d$created_at %>% 
+    str_replace("T", " ") %>% 
+    str_remove("\\.000Z$") %>% 
+    as.POSIXct(tz="UTC", format="%Y-%m-%d %H:%M:%OS")
+  d$user_created_at <- d$user_created_at %>% 
+    str_replace("T", " ") %>% 
+    str_remove("\\.000Z$") %>% 
+    as.POSIXct(tz="UTC", format="%Y-%m-%d %H:%M:%OS")
+  return(d)
+}
+
+clean_master <- function(d) {
+  return(
+    d %>% 
+      remove_langs() %>% 
+      get_full_text() %>% 
+      clean_timevars()
+  )
+}
+
+export_for_sentistrength <- function(d) {
+  f <- "data-raw/in-sentistrength.txt"
+  write.table(gsub("[\r\n]", "", d$text), f, row.names = F, col.names = F)
+  return(f)
+}
+
+export_for_userclass <- function(d) {
+  f <- "data-raw/in-userclass.csv"
+  write.table(gsub("[\r\n]", "", d$description), f, row.names = F, col.names = F)
+  return(f)
+}
+
+add_external <- function(d, scales, binary, trinary, userclass) {
+  d$ss_pos <- scales$Positive; d$ss_neg <- scales$Negative
+  d$ss_binary <- binary$Overall; d$ss_trinary <- trinary$Overall
+  d$is_teacher <- userclass$prediction_by_keywords
+  return(d)
+}
+
+add_context <- function(d) {
+  d$has_ngsschat <- grepl("\\#\\bngsschat\\b", d$text, ignore.case=T)
+  d$has_ngss <- grepl("\\bngss\\b", d$text, ignore.case=T)
+  d$context <- NA
+  d$context[d$has_ngsschat==T] <- "#NGSSchat"
+  d$context[d$has_ngsschat==F & d$has_ngss==T] <- "ngss"
+  d$context[d$has_ngsschat==F & d$has_ngss==F] <- "other"
+  return(d %>% select(-has_ngsschat, -has_ngss))
+}
+
+add_is_chat <- function(d) {
+  d2 <- d[d$context == "#NGSSchat",] %>% 
+    select(c("status_id", "created_at", "text"))
+  
+  time <- d2$created_at
+  time <- format(time, format="%Y-%m-%d %H")
+  
+  freq <- table(time) 
+  freq <- sort(freq, decreasing = T)
+  freq <- freq %>% head(1000) 
+  
+  hours <- names(freq) # Select 1,000 most busy hours in data set
+  
+  # Select tweets at the beginning of these 1,000 hours (+- 5 minutes around edge)
+  
+  hours <- hours %>%  # format to hour
+    sapply(paste, ":00:00 UTC", sep="") %>% 
+    as.character() %>% 
+    as.POSIXct(tz = "UTC")
+  
+  # Add minutes around edges of beginning of hours
+  
+  minutes <- hours
+  
+  for (i in seq(60, 5*60, 60)){
+    minutes <- c(minutes, hours-i) # seconds are added and substracted in steps of 60
+    minutes <- c(minutes, hours+i)
+  }
+  
+  # Standardize tweet posting times to minutes in order to obtain tweets around beginning of must busy hours
+  
+  post_minutes <- d2$created_at %>%
+    round_date(unit="1 minute")
+  
+  possible_chat_openings <- d2[which(post_minutes %in% minutes),]
+  
+  # Grab tweets with "Welcome to "NGSSchat" and related terms, openings lines have been manually looked up before
+  
+  ind <- grep("Welcome to #NGSSchat", possible_chat_openings$text)
+  ind <- c(ind, grep("Welcome to the first session of #NGSSchat", possible_chat_openings$text))
+  ind <- c(ind, grep("Our #nhed guest moderator for this evening is", possible_chat_openings$text))
+  ind <- c(ind, grep("Excited to learn and connect with my #NGSSchat community-- Join us-- happening", possible_chat_openings$text))
+  
+  ind <- unique(ind)
+  
+  # Sort out which specific hours are chats based on ind
+  
+  hours_with_opening_lines <- possible_chat_openings$created_at[ind] %>%
+    format(format="%Y-%m-%d %H") %>%
+    sapply(paste, ":00:00 UTC", sep="") %>%
+    as.character() %>%
+    as.POSIXct(tz = "UTC")
+  
+  chat_hours <- hours[which(hours %in% hours_with_opening_lines)]  # declare busiest hours with opening lines as chat hours
+  
+  # Create Variable "isChat", strict definition of chat as a 1 hour timeframe
+  
+  time <- d2$created_at %>%
+    format(format="%Y-%m-%d %H")
+  
+  hours <- time %>% 
+    sapply(paste, ":00:00 UTC", sep="") %>%
+    as.character() %>%
+    as.POSIXct(tz = "UTC")
+  
+  ind <- which(hours %in% chat_hours)
+  
+  isChat <- rep(0, nrow(d2))
+  isChat[ind] <- 1  # 1 if tweets is in chat session
+  
+  d2$isChat <- isChat
+  
+  # Knit back together with full data frame
+  
+  d$is_chat <- rep(NA, nrow(d))
+  d$is_chat[d$status_id %in% d2$status_id] <- d2$isChat
+  d$is_chat <- d$is_chat %>% as.factor()
+  
+  return(d)
+}
+
+add_time_on_twitter <- function(d) {
+  return(
+    d %>% 
+      mutate(time_on_twitter_seconds = created_at - user_created_at)
+  )
+}
+
+add_year_centered <- function(d) {
+  return(
+    d %>% 
+      mutate(year_of_post_centered = year(created_at) - 2016)
+  )
+}
+
+add_type_of_tweet <- function(d) {
+  return(
+    d %>% 
+      mutate(type_of_tweet = ifelse(is_chat==1,"ngsschat-chat",ifelse(is_chat==0,"ngsschat-non-chat",NA))) %>% 
+      mutate(type_of_tweet = ifelse(is.na(type_of_tweet),"non-ngsschat",type_of_tweet))
+  )
+}
+
+add_senti_scale <- function(d) {
+  return(
+    d %>% 
+      mutate(ss_scale = ss_pos + ss_neg)
+  )
+}
+
+add_has_joined_chat <- function(d) {
+  d %>% 
+    arrange(created_at) %>% 
+    group_by(user_id, is_chat) %>% 
+    summarise(joined=first(created_at)) %>% 
+    filter(is_chat==1) %>% 
+    select(-is_chat) -> reference
+  d <- d %>% 
+    left_join(reference, by="user_id") %>% 
+    mutate(has_joined_chat = ifelse(created_at>=joined,1,0)) %>% 
+    mutate(has_joined_chat = ifelse(is.na(has_joined_chat),0,has_joined_chat)) %>% 
+    select(-joined)
+  return(d)
+}
+
+add_n_posted_vars <- function(d) {
+  d %>% 
+    group_by(user_id, context) %>% 
+    summarise(n_tweets=n()) %>% 
+    ungroup() %>% 
+    pivot_wider(names_from=context, values_from=n_tweets) %>% 
+    rename(n_posted_ngss_nonchat=ngss,n_posted_chatsessions=`#NGSSchat`,
+           n_posted_non_ngsschat=other) -> reference
+  return(
+    d %>% 
+      left_join(reference, by="user_id") %>% 
+      mutate(across(starts_with("n_posted"),  ~replace(., is.na(.), 0)))
+  )
+}
+
+aggregate_variables <- function(d){
+  return(
+    d %>% 
+      add_context() %>% 
+      add_is_chat() %>% 
+      add_time_on_twitter() %>% 
+      add_year_centered() %>% 
+      add_type_of_tweet() %>% 
+      add_senti_scale() %>% 
+      add_has_joined_chat() %>% 
+      add_n_posted_vars()
+  )
+}
+
+
+
+###########################
+
 load_rda <- function(f) {
   load(f)
   tweets_dl

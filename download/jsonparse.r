@@ -18,9 +18,12 @@ collect_data <- function(files) {
     i <- 1
     for (file in files) {
         d <- fromJSON(file)     
-        main[[i]] <- flatten_if_not_null(d$data)
-        users[[i]] <- flatten_if_not_null(d$includes$users)
-        tweets[[i]] <- flatten_if_not_null(d$includes$tweets)
+        main[[i]] <- flatten_if_not_null(d$data) %>%
+            select(id,created_at,author_id,text,lang,starts_with("public_metrics"),referenced_tweets)
+        users[[i]] <- flatten_if_not_null(d$includes$users) %>%
+            select(id,created_at,description,location,starts_with("public_metrics"))
+        tweets[[i]] <- flatten_if_not_null(d$includes$tweets) %>%
+            select(id,text)
         cat("\014Read", i, "out of", length(files), "files\n")
         i <- i+1
     }

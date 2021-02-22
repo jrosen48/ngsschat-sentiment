@@ -5,6 +5,7 @@
 *.rda
 *.json
 *.rds
-token.txt
+*.txt
+*.un~
 .drake
 out

@@ -97,7 +97,7 @@ d %>% filter(!is.na(state)) %>% select(user_id, state) -> res_old
 d <- d %>% filter(is.na(state)) %>% select(-location) %>% rename(location=location_orig) 
 
 d$location <- d$location %>% str_remove_all("[[:punct:]]")
-saveRDS(d, "remaining.rds")
+#saveRDS(d, "remaining.rds")
 
 ###
 
@@ -107,35 +107,84 @@ library(stringr)
 library(mapsapi)
 library(sf)
 
-rm(list=ls())
+#rm(list=ls())
 
-d <- readRDS("remaining.rds")
-key <- readLines("geokey.txt")
+#d <- readRDS("remaining.rds")
+#key <- readLines("geokey.txt")
 
 #out <- list()
 #j <- 1
 
+#out <- readRDS("interim-out.rds")
+#j <- readRDS("interim-j.rds")
+
+#for (i in j:nrow(d)) {
+#   res <- mapsapi::mp_geocode(d$location[i], key=key)
+#   res <- try(mapsapi::mp_get_points(res))
+#   if(res$status=="ZERO_RESULTS" | !is.logical(res$status=="ZERO_RESULTS") | is.na(res$status)){
+#      j<-j+1
+#      cat("\014", i, "out of", nrow(d), "geocoded\n")
+#      next
+#   }
+#   address <- res %>% pull(address_google)
+ #  res <- res %>% pull(pnt) %>% as.character() %>% str_remove_all("^c\\(|\\)$") %>% str_split(", ") %>% unlist() %>% as.numeric()
+ ##  res <- maps::map.where(x = res[1], y = res[2], database = "state")
+ #  out[[j]] <- list(d$user_id[i], address, res)
+ #  j<-j+1
+ #  cat("\014", i, "out of", nrow(d), "geocoded\n")
+#}#
+
+#saveRDS(out, "interim-out.rds")
+#saveRDS(j, "interim-j.rds")
+
+### Merge all together
+
 out <- readRDS("interim-out.rds")
-j <- readRDS("interim-j.rds")
+vectors <- map(out, unlist)
+cleaned <- vectors[lapply(vectors, length)==3]
+out <- do.call(rbind, cleaned) %>% tibble()
+out <- out$. %>% as.data.frame() %>% tibble()
 
-for (i in j:nrow(d)) {
-   res <- mapsapi::mp_geocode(d$location[i], key=key)
-   res <- try(mapsapi::mp_get_points(res))
-   if(res$status=="ZERO_RESULTS"){
-      j<-j+1
-      cat("\014", i, "out of", nrow(d), "geocoded\n")
-      next
-   }
-   address <- res %>% pull(address_google)
-   res <- res %>% pull(pnt) %>% as.character() %>% str_remove_all("^c\\(|\\)$") %>% str_split(", ") %>% unlist() %>% as.numeric()
-   res <- maps::map.where(x = res[1], y = res[2], database = "state")
-   out[[j]] <- list(d$user_id[i], address, res)
-   j<-j+1
-   cat("\014", i, "out of", nrow(d), "geocoded\n")
-}
+out <- out %>% 
+    filter(!is.na(V3)) %>% 
+    filter(V2!="United States") %>% # gets matched as "Kansas"
+    filter(V2!="USA") %>%
+    filter(V2!="US") %>%
+    filter(V2!="U.S.") %>%
+    filter(V2!="U.S.A") %>%
+    select(-V2) %>%
+    rename(user_id=V1, state=V3)
 
-saveRDS(out, "interim-out.rds")
-saveRDS(j, "interim-j.rds")
+all <- rbind(
+out,
+res_name,
+res_old,
+res_postal,
+res_postal_last_lower,
+res_short
+)
 
+states <- states %>%
+    select(postal, name) %>%
+    rename(state=postal)
 
+all$state <- all$state %>% 
+    str_remove_all(":.*") %>% # remove specifications (e.g., "michigan:south")
+    str_remove_all("\\.") %>% # remove dots
+    toupper() 
+
+all <- all %>% 
+    left_join(states, by="state")
+
+all$state[!is.na(all$name)] <- all$name[!is.na(all$name)]
+all <- all %>% select(-name) %>% mutate(state=toupper(state)) %>% filter(state!="NO MATCH")
+
+all$state[all$state=="ARK"] <- "ARKANSAS"
+all$state[all$state=="DEL"] <- "DELAWARE"
+all$state[all$state=="FLA"] <- "FLORIDA"
+all$state[all$state=="IND"] <- "INDIANA"
+all$state[all$state=="ORE"] <- "OREGON"
+all$state[all$state=="TENN"] <- "TENNESSEE"
+
+saveRDS(all, "user-state-final-2021-02-25.rds")
 

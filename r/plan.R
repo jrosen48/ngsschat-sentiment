@@ -15,15 +15,16 @@ the_plan <-
     in_senti_binary =  read.table(file_in("data-raw/out-sentistrength-binary.txt"), sep="\t", header = T, quote=""),
     in_senti_trinary =  read.table(file_in("data-raw/out-sentistrength-trinary.txt"), sep="\t", header = T, quote=""),
     in_userclass = read.csv(file_in("data-raw/out-userclass.csv"), header=T),
+    in_geo = readRDS(file_in("data-raw/user-state-final-2021-02-25.rds")),
     
     with_external = add_external(clean,in_senti_scales,in_senti_binary,in_senti_trinary,in_userclass),
-    all_vars = with_external %>% aggregate_variables()
+    with_geo = add_external_geo(with_external, in_geo),
+    all_vars = with_geo %>% aggregate_variables(),
+    additional_geo = all_vars %>% get_more_geo(),
     
+    state_data = read_csv(file_in("data-raw/ngsschat-state-data.csv"))
     # 
-    # loaded_rda_data = load_rda(file_in("data-raw/data_final_2020_09_16.rda")),
-    # state_data = read_csv(file_in("data-raw/ngsschat-state-data.csv")),
-    # 
-    # # figure 1
+    # figure 1
     # 
     # fig1_path = create_figure_1(loaded_rda_data),
     # 

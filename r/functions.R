@@ -101,6 +101,12 @@ add_external <- function(d, scales, binary, trinary, userclass) {
   return(d)
 }
 
+add_external_geo <- function(d, geo) {
+  return(
+    d %>% left_join(geo, by="user_id")
+  )
+}
+
 add_context <- function(d) {
   d$has_ngsschat <- grepl("\\#\\bngsschat\\b", d$text, ignore.case=T)
   d$has_ngss <- grepl("\\bngss\\b", d$text, ignore.case=T)
@@ -265,6 +271,154 @@ aggregate_variables <- function(d){
   )
 }
 
+rgx_build <- function(words){
+  searchfor <- paste(words, sep="", collapse="\\>|\\<")
+  searchfor <- paste(c("\\<", searchfor, "\\>"), sep="", collapse="")
+  return(searchfor)
+}
+
+get_more_geo <- function(d) {
+  acros <- read.table(header=T, sep=";", text=
+  "acronym;state
+  AK;Alaska
+  AL;Alabama
+  AR;Arkansas
+  AZ;Arizona
+  CA;California
+  CO;Colorado
+  CT;Connecticut
+  DC;District of Columbia
+  DE;Delaware
+  FL;Florida
+  GA;Georgia
+  HI;Hawaii
+  IA;Iowa
+  ID;Idaho
+  IL;Illinois
+  IN;Indiana
+  KS;Kansas
+  KY;Kentucky
+  LA;Louisiana
+  MA;Massachusetts
+  MD;Maryland
+  ME;Maine
+  MI;Michigan
+  MN;Minnesota
+  MO;Missouri
+  MS;Mississippi
+  MT;Montana
+  NC;North Carolina
+  ND;North Dakota
+  NE;Nebraska
+  NH;New Hampshire
+  NJ;New Jersey
+  NM;New Mexico
+  NV;Nevada
+  NY;New York
+  OH;Ohio
+  OK;Oklahoma
+  OR;Oregon
+  PA;Pennsylvania
+  PR;Puerto Rico
+  RI;Rhode Island
+  SC;South Carolina
+  SD;South Dakota
+  TN;Tennessee
+  TX;Texas
+  UT;Utah
+  VA;Virginia
+  VT;Vermont
+  WA;Washington
+  WI;Wisconsin
+  WV;West Virginia
+  WY;Wyoming")
+  
+  acros$acronym <- acros$acronym %>% trimws()
+  acros$state <- tolower(acros$state)
+  acros$state <- acros$state %>% str_remove("district of ") %>% trimws()
+  
+  # By introduction
+  
+  ngsschat <- d[d$context == "#NGSSchat",]
+  
+  ind <- which(ngsschat$is_chat == 1)
+  ind <- ind[ngsschat$is_chat[ind-1] != 1]  # starting points of chats
+  
+  for (element in ind){
+    ind <- c(ind, seq(element-50, element+150))
+  }
+  
+  ind <- sort(unique(ind))
+  ind <- ind[ind >= 0]
+  
+  possible_cases <- ngsschat[ind,]
+  
+  possible_cases$text <- possible_cases$text %>%
+    tolower() %>% 
+    str_remove_all("[[:punct:]]")
+  
+  result <- list()
+  
+  for (i in 1:nrow(acros)){
+       raw <- c(
+           possible_cases$user_id[grep(rgx_build(tolower(acros$acronym[i])), possible_cases$text)],
+           possible_cases$user_id[grep(rgx_build(tolower(acros$state[i])), possible_cases$text)]
+           ) %>% unique()
+       result[[acros$state[i]]] <- list(raw)[[1]]
+       cat("\014 Searching for states in chat openings... Iteration", i, "/ 52 done.\n")
+  }
+  
+  reshape2::melt(result) %>% 
+    tibble() %>% 
+    rename(user_id=value, state=L1) %>% 
+    group_by(user_id) %>% 
+    filter(n() == 1) %>% 
+    ungroup() -> for_join
+  
+  already_matched <- d$user_id[!is.na(d$state)]
+  for_join <- for_join[!(for_join$user_id %in% already_matched),]
+  for_join$state <- for_join$state %>% toupper()
+  
+  d <- d %>% left_join(for_join, by="user_id") 
+  d$state <- coalesce(d$state.x, d$state.y)
+  d <- d %>% select(-state.x, -state.y)
+  
+  # By all tweets
+  
+  possible_cases <- d %>% filter(is.na(state))
+  
+  possible_cases$text <- possible_cases$text %>%
+    tolower() %>% 
+    str_remove_all("[[:punct:]]")
+  
+  result <- list()
+  
+  for (i in 1:nrow(acros)){
+    raw <- c(
+      possible_cases$user_id[grep(rgx_build(tolower(acros$acronym[i])), possible_cases$text)],
+      possible_cases$user_id[grep(rgx_build(tolower(acros$state[i])), possible_cases$text)]
+    ) %>% unique()
+    result[[acros$state[i]]] <- list(raw)[[1]]
+    cat("\014 Searching for states in remaining tweets... Iteration", i, "/ 52 done.\n")
+  }
+  
+  reshape2::melt(result) %>% 
+    tibble() %>% 
+    rename(user_id=value, state=L1) %>% 
+    group_by(user_id) %>% 
+    filter(n() == 1) %>% 
+    ungroup() -> for_join
+  
+  already_matched <- d$user_id[!is.na(d$state)]
+  for_join <- for_join[!(for_join$user_id %in% already_matched),]
+  for_join$state <- for_join$state %>% toupper()
+  
+  d <- d %>% left_join(for_join, by="user_id") 
+  d$state <- coalesce(d$state.x, d$state.y)
+  d <- d %>% select(-state.x, -state.y)
+  
+  return(d)
+}
 
 
 ###########################

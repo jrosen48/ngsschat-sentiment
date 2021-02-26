@@ -3,5 +3,9 @@
 .Rproj.user
 *.csv
 *.rda
+*.json
+*.rds
+*.txt
+*.un~
 .drake
 out

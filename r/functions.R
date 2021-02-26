@@ -569,21 +569,22 @@ add_lead_state_status <- function(d, s) {
   state_data_merge <- s %>% 
     rename(state = State) %>% 
     mutate(state = tolower(state)) %>% 
-    select(state, lead)
+    select(state_master = state, lead)
   
-  return(
-    d %>%
-      left_join(state_data_merge, by = "state") %>% 
-      mutate(adopted_chr = as.character(adopted_fct)) %>% 
-      mutate(adopted_chr = 
-               case_when(
-                 adopted_chr == "adopted" & lead == "Yes" ~ "adopted-lead",
-                 TRUE ~ adopted_chr
-               )
-      ) %>% 
-      mutate(adopted_chr = as.factor(adopted_chr)) %>% 
-      mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "not-adopted"))
-  )
+  dd <- left_join(d, state_data_merge, by = "state_master")
+  
+  ddd <- dd %>% 
+    mutate(adopted_chr = as.character(adopted_fct)) %>% 
+    mutate(adopted_chr = 
+             case_when(
+               adopted_chr == "adopted" & lead == "Yes" ~ "adopted-lead",
+               TRUE ~ adopted_chr
+             )
+    ) %>% 
+    mutate(adopted_chr = as.factor(adopted_chr)) %>% 
+    mutate(adopted_fct = forcats::fct_relevel(adopted_chr, "not-adopted"))
+  
+  ddd
    
 }
 

@@ -20,6 +20,7 @@ library(urbnmapr) # devtools::install_github("UrbanInstitute/urbnmapr")
 library(visNetwork)
 library(scales)
 library(reshape2)
+library(hash)
         
 conflict_prefer("load", "base")
 conflict_prefer("filter", "dplyr")

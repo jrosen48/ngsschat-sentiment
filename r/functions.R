@@ -480,16 +480,51 @@ join_state <- function(d, state_data) {
   
   state_data_final <- state_data_final %>% 
     mutate(adopted = ifelse(year <= year_adopted, 0, 1)) %>% 
-    select(state_master = state, year_of_post = year, adopted)
+    select(state, year_of_post = year, adopted) %>% 
+    mutate(state=toupper(state))
+  
+  d$year_of_post <- lubridate::year(d$created_at)
   
   d <- d %>% 
-    left_join(state_data_final, by = c("state_master", "year_of_post"))
+    left_join(state_data_final, by = c("state", "year_of_post"))
   
   d
   
 }
 
 create_new_variables_and_filter_by_language <- function(d) {
+  
+  # Get hashmap of all chats that holds all status IDs
+  # for each chat (key) as value (status IDs)
+  
+  ngsschat <- d[d$context == "#NGSSchat",]
+  
+  ind <- which(ngsschat$is_chat == 1)
+  ind_start <- ind[ngsschat$is_chat[ind-1] != 1]  # starting points of chats
+  ind_end <- ind[ngsschat$is_chat[ind+1] != 1]  # end points of chats
+  
+  # Mark all indexes in between to corresponding chats, values become status IDs
+  # and not $row because $row was calculated over all $q queries
+  
+  h_chats <- hash()   # h_chats[["1"]] gives statues of first chat session 
+  
+  for (i in 1:length(ind_start)){
+    chat_indexes <- (ind_start[i]):(ind_end[i])
+    h_chats[[as.character(i)]] <- ngsschat[chat_indexes,]$status_id
+  }
+  
+  # Create variables:
+  
+  d$chat_id <- rep(NA, nrow(d))
+  
+  i <- 1
+  for (key in keys(h_chats)){
+    d$chat_id[which(d$status_id %in% h_chats[[key]])] <- key
+    cat("\014 Hash chat index iteration", i, "out of", length(keys(h_chats)), "complete\n")
+    i <- i+1
+  }
+  
+  d$chat_id <- d$chat_id %>% as.numeric()
   
   # creating factor for chat_id
   d <- d %>% 
@@ -499,13 +534,13 @@ create_new_variables_and_filter_by_language <- function(d) {
   d$year_fct <- factor(d$year_of_post) %>% forcats::fct_relevel('2016')
   
   d <- d %>% 
-    mutate(type_of_tweet = ifelse(isChat == 0, "ngsschat-non-chat",
-                                  ifelse(isChat == 1, "ngsschat-chat", NA))) %>% 
+    mutate(type_of_tweet = ifelse(is_chat == 0, "ngsschat-non-chat",
+                                  ifelse(is_chat == 1, "ngsschat-chat", NA))) %>% 
     mutate(type_of_tweet = ifelse(is.na(type_of_tweet), "non-ngsschat", type_of_tweet))
   
   d <- d %>% 
     mutate(year_centered = scale(year_of_post, scale = FALSE),
-           time_on_twitter = (d$created_at - d$account_created_at) / (60 * 60 * 24) / 365,
+           time_on_twitter = (d$created_at - d$user_created_at) / (60 * 60 * 24) / 365,
            year_fct = factor(as.numeric(as.character(d$year_fct))))
   
   d <- d %>% 
@@ -520,10 +555,10 @@ create_new_variables_and_filter_by_language <- function(d) {
                                 ifelse(adopted == 1, "adopted", "not-adopted"))) %>% 
     mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "not-adopted"))
   
-  d %>% 
-    as_tibble()
+  #d %>% 
+  #  as_tibble()
   
-  d <- d[-536375, ] # performance::check_outliers(m_rs) revealed this to be an outlier; inspection of it confirms
+  #d <- d[-536375, ] # performance::check_outliers(m_rs) revealed this to be an outlier; inspection of it confirms
   
   d
   
@@ -534,22 +569,21 @@ add_lead_state_status <- function(d, s) {
   state_data_merge <- s %>% 
     rename(state = State) %>% 
     mutate(state = tolower(state)) %>% 
-    select(state_master = state, lead)
+    select(state, lead)
   
-  dd <- left_join(d, state_data_merge, by = "state_master")
-  
-  ddd <- dd %>% 
-    mutate(adopted_chr = as.character(adopted_fct)) %>% 
-    mutate(adopted_chr = 
-             case_when(
-               adopted_chr == "adopted" & lead == "Yes" ~ "adopted-lead",
-               TRUE ~ adopted_chr
-             )
-    ) %>% 
-    mutate(adopted_chr = as.factor(adopted_chr)) %>% 
-    mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "not-adopted"))
-  
-  ddd
+  return(
+    d %>%
+      left_join(state_data_merge, by = "state") %>% 
+      mutate(adopted_chr = as.character(adopted_fct)) %>% 
+      mutate(adopted_chr = 
+               case_when(
+                 adopted_chr == "adopted" & lead == "Yes" ~ "adopted-lead",
+                 TRUE ~ adopted_chr
+               )
+      ) %>% 
+      mutate(adopted_chr = as.factor(adopted_chr)) %>% 
+      mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "not-adopted"))
+  )
    
 }
 
@@ -566,17 +600,19 @@ return_state_ranefs <- function(m) {
 scale_key_vars <- function(d) {
   
   d %>% 
-    mutate(time_on_twitter_s = as.numeric(scale(time_on_twitter)),
+    rename(n_posted_ngsschat_nonchat = n_posted_ngss_nonchat) %>% 
+    mutate(time_on_twitter_s = as.numeric(scale(time_on_twitter_seconds)),
            n_posted_chatsessions_s = as.numeric(scale(n_posted_chatsessions)),
            n_posted_ngsschat_nonchat_s = as.numeric(scale(n_posted_ngsschat_nonchat)),
            n_posted_non_ngsschat_s = as.numeric(scale(n_posted_non_ngsschat)),
-           senti_scale_s = as.numeric(scale(senti_scale, center = FALSE)))
+           senti_scale_s = as.numeric(scale(ss_scale, center = FALSE)))
 }
 
 create_figure_1 <- function(d) {
   
   d$dates <- d$created_at %>% lubridate::date()
   
+  d <- d %>% rename(q=context,isChat=is_chat) # old code names
   # Recode q
   
   d$q <- d$q %>% 
@@ -585,7 +621,8 @@ create_figure_1 <- function(d) {
       next_generation_science_standard = "non-ngsschat",
       next_gen_science_standards = "non-ngsschat",
       next_gen_science_standard = "non-ngsschat",
-      ngss = "non-ngsschat"
+      ngss = "non-ngsschat",
+      other = "non-ngsschat"
     )
   
   d$q[which(d$isChat == 1 & d$q == "#NGSSchat")] <- "ngsschat-inside"
@@ -611,14 +648,7 @@ create_figure_1 <- function(d) {
   
   # Cut off dates 2008-2012 for better readability
   
-  d_all <- d_all[year(d_all$day) >= 2012,]
-  
-  # Cap dates at last download for all categories for unbiased representation
-  
-  maxd <- d %>% group_by(q) %>% summarise(last_dl=min(dl_at)) %>% 
-    pull(last_dl) %>% min() %>% lubridate::date()
-  
-  d_all <- d_all[d_all$day <= maxd,]
+  d_all <- d_all[lubridate::year(d_all$day) >= 2012,]
   
   # Plot by week
   

@@ -22,27 +22,27 @@ the_plan <-
     all_vars = with_geo %>% aggregate_variables(),
     additional_geo = all_vars %>% get_more_geo(),
     
-    state_data = read_csv(file_in("data-raw/ngsschat-state-data.csv"))
-    # 
+    state_data = read_csv(file_in("data-raw/ngsschat-state-data.csv")),
+
     # figure 1
-    # 
-    # fig1_path = create_figure_1(loaded_rda_data),
-    # 
-    # # joining data
-    # 
-    # loaded_rda_data_with_state = join_state(loaded_rda_data, state_data),
-    # 
-    # # preparing for modeling
-    # 
-    # joined_data = create_new_variables_and_filter_by_language(loaded_rda_data_with_state),
-    # 
-    # data_to_model_filtered = filter_data_by_year(joined_data), # removes 20 cases before 2010
-    # 
-    # data_to_model_lead_states = add_lead_state_status(data_to_model_filtered, state_data),
-    # 
-    # data_to_model = scale_key_vars(data_to_model_lead_states),
-    # 
-    # # estimating models
+
+    fig1_path = create_figure_1(additional_geo),
+
+    # joining data
+
+    loaded_rda_data_with_state = join_state(additional_geo, state_data),
+
+    # preparing for modeling
+
+    joined_data = create_new_variables_and_filter_by_language(loaded_rda_data_with_state),
+
+    data_to_model_filtered = filter_data_by_year(joined_data), # removes 20 cases before 2010
+
+    data_to_model_lead_states = add_lead_state_status(data_to_model_filtered, state_data),
+
+    data_to_model = scale_key_vars(data_to_model_lead_states)
+
+    # estimating models
     # 
     # null_model = lmer(senti_scale_s ~ 1 + (1|state_master) + (1|screen_name), data = data_to_model),
     # 
@@ -51,14 +51,14 @@ the_plan <-
     # full_model = lmer(senti_scale_s ~
     #                     type_of_tweet +
     #                     time_on_twitter_s +
-    #                     isTeacher +
+    #                     is_teacher +
     #                     year_of_post_centered +
-    #                     isTeacher:year_of_post_centered +
+    #                     is_teacher:year_of_post_centered +
     #                     type_of_tweet:year_of_post_centered +
-    #                     hasJoinedChat +
+    #                     has_joined_chat +
     #                     n_posted_chatsessions_s + n_posted_ngsschat_nonchat_s + n_posted_non_ngsschat_s +
     #                     adopted_fct +
-    #                     (1|screen_name),
+    #                     (1|user_id),
     #                   data = data_to_model),
     # 
     # augmented_full_model_data = augment(full_model),
@@ -66,15 +66,15 @@ the_plan <-
     # full_model_with_three_way_interact = lmer(senti_scale_s ~
     #                                             type_of_tweet +
     #                                             time_on_twitter_s +
-    #                                             isTeacher +
+    #                                             is_teacher +
     #                                             year_of_post_centered +
-    #                                             isTeacher:year_of_post_centered +
+    #                                             is_teacher:year_of_post_centered +
     #                                             type_of_tweet:year_of_post_centered +
-    #                                             isTeacher:type_of_tweet:year_of_post_centered +
-    #                                             hasJoinedChat +
+    #                                             is_teacher:type_of_tweet:year_of_post_centered +
+    #                                             has_joined_chat +
     #                                             n_posted_chatsessions_s + n_posted_ngsschat_nonchat_s + n_posted_non_ngsschat_s +
     #                                             adopted_fct +
-    #                                             (1|screen_name),
+    #                                             (1|user_id),
     #                                           data = data_to_model),
     # 
     # # for RMD output

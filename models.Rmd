@@ -35,27 +35,27 @@ tab_model(full_model_with_three_way_interact, show.icc = TRUE)
 mod_d <- full_model@frame
 ```
 
-```{r}
+```{r, eval = FALSE}
 pred_frame <- data.frame(type_of_tweet = rep(c("non-ngsschat", 
                                                "ngsschat-chat", 
                                                "ngsschat-non-chat"), each = 2*11),
                          time_on_twitter_s = mean(mod_d$time_on_twitter_s),
-                         isTeacher = rep(c(0, 1), 3*11),
+                         is_teacher = rep(c(0, 1), 3*11),
                          year_of_post_centered = seq(-5, 5, 1),
-                         hasJoinedChat = 0,
-                         n_posted_chatsessions_s = mean(mod_d$n_posted_chatsessions_s),
-                         n_posted_ngsschat_nonchat_s = mean(mod_d$n_posted_ngsschat_nonchat_s),
-                         n_posted_non_ngsschat_s = mean(mod_d$n_posted_non_ngsschat_s),
+                         has_joined_chat = 0,
+                         mean(mod_d$n_posted_chatsessions, na.rm = T),
+                         mean(mod_d$n_posted_ngsschat_nonchat_s, na.rm = T),
+                         mean(mod_d$n_posted_non_ngsschat_s, na.rm = T),
                          adopted_fct = factor("not-adopted",
                                               levels = c("not-adopted", "adopted", "missing")),
                          screen_name = -999
 )
 ```
 
-```{r}
+```{r, eval = FALSE}
 pred_frame$prediction <- predict(full_model, newdata = pred_frame, allow.new.levels = TRUE)
 
-label_frame <- data.frame(isTeacher = "Teachers",
+label_frame <- data.frame(is_teacher = "Teachers",
                           year_of_post_centered = c(-2.95, 4.3, -1.6),
                           prediction = c(0.906, 1.022, 0.994),
                           type_of_tweet = c("non-ngsschat", 
@@ -66,24 +66,22 @@ label_frame <- data.frame(isTeacher = "Teachers",
                                     "Non-Chat"))
 ```
 
-```{r}
+```{r, eval = FALSE}
 extrafont::loadfonts()
 
 theme_set(theme_minimal(15))
 pred_frame %>% 
-  mutate(isTeacher = ifelse(isTeacher == 0, "Non-Teachers", "Teachers")) %>% 
+  mutate(is_teacher = ifelse(is_teacher == 0, "Non-Teachers", "Teachers")) %>% 
   ggplot(aes(year_of_post_centered + 2016, prediction)) +
   geom_line(aes(color = type_of_tweet), 
             size = 1.3) +
   geom_text(aes(label = label, color = type_of_tweet),
            family = "Times New Roman",
            data = label_frame) +
-  facet_wrap(~isTeacher, ncol = 1) +
+  facet_wrap(~is_teacher, ncol = 1) +
   scale_color_manual(values = c("#01959F", "#5D495A", "#E96058")) +
   guides(color = "none") +
   scale_x_continuous("Year", breaks = seq(2010, 2020, 2)) +
-  #scale_y_continuous("Standardized Model-Predicted Sentiment Score", 
-   #                  breaks = seq(-0.5, 0.5, 0.2)) +
   labs(x = "Year", 
        y = "Standardized Model-Predicted Sentiment Score") +
   theme(text = element_text(family = "Times New Roman"))
@@ -93,26 +91,22 @@ ggsave("interactions.png", width = 6.5, height = 8, dpi = 800)
 
 ```
 
-```{r}
-
-print(mod_d)
-
+```{r, eval= FALSE}
 samp_d <- mod_d %>% 
   select(year_of_post_centered, 
-         isTeacher, 
+         is_teacher, 
          type_of_tweet, 
          senti_scale_s) %>% 
-  mutate(isTeacher = ifelse(isTeacher == 0, "Non-Teachers", "Teachers")) %>% 
-  group_by(year_of_post_centered, isTeacher, type_of_tweet) %>% 
+  mutate(is_teacher = ifelse(is_teacher == 0, "Non-Teachers", "Teachers")) %>% 
+  group_by(year_of_post_centered, is_teacher, type_of_tweet) %>% 
   slice_sample(prop = 0.1) 
 
 pred_frame %>% 
-  mutate(isTeacher = ifelse(isTeacher == 0, "Non-Teachers", "Teachers")) %>% 
+  mutate(is_teacher = ifelse(is_teacher == 0, "Non-Teachers", "Teachers")) %>% 
   ggplot(aes(year_of_post_centered + 2016, prediction)) +
   geom_point(aes(year_of_post_centered + 2016, senti_scale_s),
              samp_d,
              color = "gray80") +
   geom_line(size = 1.3) +
-  facet_grid(isTeacher ~ type_of_tweet)
+  facet_grid(is_teacher ~ type_of_tweet)
 ```
-

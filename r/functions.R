@@ -279,7 +279,7 @@ rgx_build <- function(words){
 
 get_more_geo <- function(d) {
   acros <- read.table(header=T, sep=";", text=
-  "acronym;state
+                        "acronym;state
   AK;Alaska
   AL;Alabama
   AR;Arkansas
@@ -360,12 +360,12 @@ get_more_geo <- function(d) {
   result <- list()
   
   for (i in 1:nrow(acros)){
-       raw <- c(
-           possible_cases$user_id[grep(rgx_build(tolower(acros$acronym[i])), possible_cases$text)],
-           possible_cases$user_id[grep(rgx_build(tolower(acros$state[i])), possible_cases$text)]
-           ) %>% unique()
-       result[[acros$state[i]]] <- list(raw)[[1]]
-       cat("\014 Searching for states in chat openings... Iteration", i, "/ 52 done.\n")
+    raw <- c(
+      possible_cases$user_id[grep(rgx_build(tolower(acros$acronym[i])), possible_cases$text)],
+      possible_cases$user_id[grep(rgx_build(tolower(acros$state[i])), possible_cases$text)]
+    ) %>% unique()
+    result[[acros$state[i]]] <- list(raw)[[1]]
+    cat("\014 Searching for states in chat openings... Iteration", i, "/ 52 done.\n")
   }
   
   reshape2::melt(result) %>% 
@@ -569,11 +569,10 @@ add_lead_state_status <- function(d, s) {
   state_data_merge <- s %>% 
     rename(state = State) %>% 
     mutate(state = tolower(state)) %>% 
-    select(state_master = state, lead)
+    select(state, lead)
   
-  dd <- left_join(d, state_data_merge, by = "state_master")
-  
-  ddd <- dd %>% 
+  d %>%
+    left_join(state_data_merge, by = "state") %>% 
     mutate(adopted_chr = as.character(adopted_fct)) %>% 
     mutate(adopted_chr = 
              case_when(
@@ -582,10 +581,11 @@ add_lead_state_status <- function(d, s) {
              )
     ) %>% 
     mutate(adopted_chr = as.factor(adopted_chr)) %>% 
-    mutate(adopted_fct = forcats::fct_relevel(adopted_chr, "not-adopted"))
+    mutate(adopted_fct = forcats::fct_relevel(adopted_fct, "not-adopted")) %>% 
+    mutate(state = tolower(state),
+           state = tools::toTitleCase(state)) %>% 
+    rename(state_master = state)
   
-  ddd
-   
 }
 
 filter_data_by_year <- function(d) {
@@ -659,11 +659,11 @@ create_figure_1 <- function(d) {
     summarise(value=sum(value))
   
   switch(Sys.info()[['sysname']],
-  Windows= {loadfonts(device = "win")},
-  Linux  = {loadfonts(device = "pdf")},
-  Darwin = {loadfonts(device = "pdf")}
+         Windows= {loadfonts(device = "win")},
+         Linux  = {loadfonts(device = "pdf")},
+         Darwin = {loadfonts(device = "pdf")}
   )
-
+  
   d_all$Category <- factor(d_all$Category, levels=c("Chat", "Non-chat", "Non-#NGSSchat"))
   
   filename <- "fig1.png"

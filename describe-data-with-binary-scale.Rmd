@@ -20,67 +20,8 @@ d <- params$d
 ## overall
 
 ```{r}
-d %>% count(senti_binary) %>% 
-  spread(senti_binary, n) %>% 
+d %>% count(ss_binary) %>% 
+  spread(ss_binary, n) %>% 
   set_names(c("neg", "pos")) %>% 
   mutate(senti_ratio = neg/pos)
-```
-
-## by year 
-
-```{r}
-d %>% count(year_of_post, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("year_of_post", "neg", "pos")) %>%
-  mutate(senti_ratio = neg/pos) %>% 
-  ggplot(aes(x = year_of_post, y = senti_ratio)) +
-  geom_point() +
-  geom_line() +
-  geom_smooth()
-```
-
-## by tweet type
-
-```{r}
-d %>% 
-  count(type_of_tweet, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("type_of_tweet", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos)
-```
-
-## by teacher
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(isTeacher, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("teacher", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio))
-```
-
-## by whether someone posted to NGSSchat
-
-```{r}
-d %>% 
-  filter(year_of_post >= 2012) %>% 
-  count(postedNGSSchat, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("postedNGSSchat", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio))
-```
-
-```{r}
-d %>% 
-  count(state_master, senti_binary) %>% 
-  spread(senti_binary, n) %>% 
-  set_names(c("state_master", "neg", "pos")) %>% 
-  mutate(senti_ratio = neg/pos) %>% 
-  arrange(desc(senti_ratio)) %>% 
-  ggplot(aes(x = reorder(state_master, senti_ratio), y = senti_ratio)) +
-  geom_col() +
-  coord_flip()
 ```

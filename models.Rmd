@@ -36,16 +36,17 @@ mod_d <- full_model@frame
 ```
 
 ```{r, eval = FALSE}
+
 pred_frame <- data.frame(type_of_tweet = rep(c("non-ngsschat", 
                                                "ngsschat-chat", 
                                                "ngsschat-non-chat"), each = 2*11),
-                         time_on_twitter_s = mean(mod_d$time_on_twitter_s),
-                         is_teacher = rep(c(0, 1), 3*11),
+                         time_on_twitter = mean(mod_d$`scale(time_on_twitter)`),
+                         isTeacher = rep(c(0, 1), 3*11),
                          year_of_post_centered = seq(-5, 5, 1),
-                         has_joined_chat = 0,
-                         mean(mod_d$n_posted_chatsessions, na.rm = T),
-                         mean(mod_d$n_posted_ngsschat_nonchat_s, na.rm = T),
-                         mean(mod_d$n_posted_non_ngsschat_s, na.rm = T),
+                         hasJoinedChat = 0,
+                         n_posted_chatsessions = mean(mod_d$`scale(n_posted_chatsessions)`, na.rm = T),
+                         n_posted_ngsschat_nonchat = mean(mod_d$`scale(n_posted_ngsschat_nonchat)`, na.rm = T),
+                         n_posted_non_ngsschat = mean(mod_d$`scale(n_posted_non_ngsschat)`, na.rm = T),
                          adopted_fct = factor("not-adopted",
                                               levels = c("not-adopted", "adopted", "missing")),
                          screen_name = -999
@@ -55,40 +56,63 @@ pred_frame <- data.frame(type_of_tweet = rep(c("non-ngsschat",
 ```{r, eval = FALSE}
 pred_frame$prediction <- predict(full_model, newdata = pred_frame, allow.new.levels = TRUE)
 
-label_frame <- data.frame(is_teacher = "Teachers",
-                          year_of_post_centered = c(-2.95, 4.3, -1.6),
-                          prediction = c(0.906, 1.022, 0.994),
+label_frame <- data.frame(isTeacher = "Teachers",
+                          year_of_post_centered = c(-2.95, 4.5, -3.5),
+                          prediction = c(0.906, 1.003, 1.003),
                           type_of_tweet = c("non-ngsschat", 
                                             "ngsschat-chat", 
                                             "ngsschat-non-chat"),
                           label = c("Non-#NGSSchat",
-                                    "Chat",
-                                    "Non-Chat"))
+                                    "#NGSSChat",
+                                    "#NGSSChat non-chat"))
 ```
 
 ```{r, eval = FALSE}
 extrafont::loadfonts()
 
+curve_frame <- data.frame(
+  x = c(2014.1, 2019.7, 2013.83),
+  y = c(0.905, 1, 1),
+  xend = c(2014.5, 2019, 2015.7),
+  yend = c(0.955, 1.015, 0.998),
+  isTeacher = "Teachers",
+  type_of_tweet = c("non-ngsschat", "ngsschat-chat", "ngsschat-non-chat")
+)
+
 theme_set(theme_minimal(15))
 pred_frame %>% 
-  mutate(is_teacher = ifelse(is_teacher == 0, "Non-Teachers", "Teachers")) %>% 
+  mutate(isTeacher = ifelse(isTeacher == 0, "Non-Teachers", "Teachers")) %>% 
   ggplot(aes(year_of_post_centered + 2016, prediction)) +
   geom_line(aes(color = type_of_tweet), 
             size = 1.3) +
-  geom_text(aes(label = label, color = type_of_tweet),
-           family = "Times New Roman",
-           data = label_frame) +
-  facet_wrap(~is_teacher, ncol = 1) +
-  scale_color_manual(values = c("#01959F", "#5D495A", "#E96058")) +
+  geom_text(aes(label = label),
+            color = "#373B41",
+            family = "Times New Roman",
+            data = label_frame) +
+  geom_curve(aes(x, y, xend = xend, yend = yend, color = type_of_tweet),
+             data = curve_frame[1, ],
+             size = 0.7,
+             curvature = 0.5,
+             arrow = arrow(length = unit(2, "mm"))) +
+  geom_curve(aes(x, y, xend = xend, yend = yend, color = type_of_tweet),
+           data = curve_frame[2, ],
+           size = 0.7,
+           curvature = -0.5,
+           arrow = arrow(length = unit(2, "mm"))) +
+  geom_curve(aes(x, y, xend = xend, yend = yend, color = type_of_tweet),
+           data = curve_frame[3, ],
+           size = 0.7,
+           curvature = -0.5,
+           arrow = arrow(length = unit(2, "mm"))) +
+  facet_wrap(~isTeacher, ncol = 1) +
+  scale_color_manual(values = c("#373B41", "#67E0CF", "#ABCFED")) +
   guides(color = "none") +
   scale_x_continuous("Year", breaks = seq(2010, 2020, 2)) +
   labs(x = "Year", 
        y = "Standardized Model-Predicted Sentiment Score") +
   theme(text = element_text(family = "Times New Roman"))
 
- 
 ggsave("interactions.png", width = 6.5, height = 8, dpi = 800)
-
 ```
 
 ```{r, eval= FALSE}

@@ -429,8 +429,8 @@ load_rda <- function(f) {
 }
 
 render_site <- function() {
-  file.rename(from = "graph.html", to = "docs/graph.html")
-  fs::dir_delete("graph_files")
+  file.rename(from = "./graph.html", to = "docs/graph.html")
+  #fs::dir_delete("graph_files")
   rmarkdown::render_site("docs")
 }
 
@@ -602,11 +602,11 @@ scale_key_vars <- function(d) {
   
   d %>% 
     rename(n_posted_ngsschat_nonchat = n_posted_ngss_nonchat) %>% 
-    mutate(time_on_twitter_s = as.numeric(scale(time_on_twitter_seconds)),
+    mutate(time_on_twitter_s = as.numeric(scale(as.numeric(time_on_twitter_seconds))),
            n_posted_chatsessions_s = as.numeric(scale(n_posted_chatsessions)),
            n_posted_ngsschat_nonchat_s = as.numeric(scale(n_posted_ngsschat_nonchat)),
            n_posted_non_ngsschat_s = as.numeric(scale(n_posted_non_ngsschat)),
-           senti_scale_s = as.numeric(scale(ss_scale, center = FALSE)))
+           senti_scale_s = ss_scale)
 }
 
 create_figure_1 <- function(d) {

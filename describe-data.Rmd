@@ -17,116 +17,39 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, cache = FALSE)
 d <- params$d
 ```
 
-## Variables used in the analysis
+```{r}
+d %>% janitor::tabyl(has_joined_chat)
+```
 
-q: search term used when downloading the data point, e.g. "#NGSSchat"
-note: if a tweet was returned in multiple queries, the tweets are marked first
-with "#NGSSchat", then "ngss" and then according to additional search
-terms, such as "next generation science standards"
+```{r}
+d %>% janitor::tabyl(type_of_tweet)
+```
 
-isChat: 1 if tweet was inside a #NGSSchat session, 0 if not, NA if #NGSSchat is not in 
-the tweet
+```{r}
+d %>% janitor::tabyl(is_teacher)
+```
 
-scale_pos, scale_neg: sentistrength sentiment rating from 1 to 5 and -5 to -1
-
-scale_binary, scale_trinary: sentistrength categorial classification
-
-senti_scale: scalepost + scale_neg + 5 -> sentiment scale from 1 to 9, 5 being neutral
-
-time_on_twitter_seconds: time between post and account creation in seconds
-
-time_on_twitter_period: more readable format in days-hours-minutes-seconds
-
-lon, lat: geo coordinates Josh employed in the Google locations API, taken from
-locations mentioned in user's bio
-
-state_geocoding: coding of states by mentioned location in user's bio
-
-state_introduction: coding of states by mentions of state names or acronyms by
-users around 50 tweets before and 150 tweets after each start
-of an #NGSSchat session
-note: 1) the average #NGSSchat session is around 400 tweets long, thus the 
-choice of tweet range as potential coding information
-2) only unambiguous mentions of state names or acronyms were coded, thus
-users mentioning both Texas and California were not included but
-user mentioning Texas twice were
-
-state_all_tweets: coding of states by mentions of state names or acronyms by users
-at _any_ point of the data set and all search terms
-note: 1) only unambiguous mentions of state names or acronyms were coded, thus
-users mentioning both Texas and California were not included but
-user mentioning Texas twice were
-
-state_master: coding of states that combines the information of all three aforementioned
-variables
-note: geocoded states were prioritized, then NAs were first filled with states
-coded from introductions and then remaining NAs were filled with states
-mentioned in the whole data set
-
-favourite_count_user, retweet_count_user: total sum of likes and retweet of the
-author of each tweet (user-level variable)
-
-isTeacher: prediction of classification algorithm whether post comes from a teacher (1)
-or not (0), empty user bios were predicted as 0
-
-postedNGSSchat: 1 if user ever posted a tweet with #NGSSchat, 0 if not
-
-postedChatSession: 1 if user ever posted inside a #NGSSchat chat session, 0 if not
-
-hasJoinedChat: 0 until user has posted inside a #NGSSchat chat session,
-1 from the point of user's first tweet inside a #NGSSchat chat session on
-
-total_n_chats: number of #NGSSchat chat sessions each user has participated in in total
-
-dl_at: Exact timestamp of download of tweet
-
-dl_at_day: Day in which tweet was downloaded
-
-nrc_pos: Sentiment positivity rating based on nrc dictionary, non-matches coded as 0 (neutral), 
-normalized by number of words in tweets
-
-nrc_neg: Sentiment negativity rating based on nrc dictionary, non-matches coded as 0 (neutral), 
-normalized by number of words in tweets
-
-nrc_scale: nrc_pos + nrc_neg
-
-tidytext_pos: Sentiment positivity rating based on the dictionaries "nrc", "bing", "afinn" and "loughran"
-from the package "tidytext", non-matches coded as 0 (neutral), normalized by number of words in tweets,
-multiple matches in dictionaries aggregated by mean
-
-tidytext_neg: Sentiment negativity rating based on the dictionaries "nrc", "bing", "afinn" and "loughran"
-from the package "tidytext", non-matches coded as 0 (neutral), normalized by number of words in tweets,
-multiple matches in dictionaries aggregated by mean
-
-tidytext_scale: tidytext_pos + tidytext_neg
-
-chat_id: Chronological number of #NGSSchat chat session, nonchats coded as NA
-
-n_posted_chatsessions: Number of tweets this user has posted in #NGSSchat chat sessions in total (user-level variable)
-
-n_posted_ngsschat_nonchat: Number of tweets this user has posted in #NGSSchat outside of chat sessions in total (user-level variable)
-
-n_posted_non_ngsschat: Number of tweets this user has posted outside of #NGSSchat (user-level variable)
-
-liwc_pos: Sentiment positivity rating based on LIWC
-
-liwc_neg: Sentiment negativity rating based on LIWC
-
-liwc_scale: liwc_pos + liwc_neg
-
-Analytic, social, cogproc, insight, affect, anx, anger, sad: LIWC-specific Sentiment variables
+```{r}
+d$time_on_twitter_year <- as.numeric(d$time_on_twitter_seconds/60/60/24/365)
+d$time_on_twitter_year %>% mean(); d$time_on_twitter_year %>% sd()
+```
 
 ```{r, desciptive-stats}
 d %>% 
-  select(type_of_tweet, 
-         chat_id,
-         senti_scale_s,
-         n_posted_chatsessions, n_posted_ngsschat_nonchat ,n_posted_non_ngsschat,
-         state_master, user_id,
+  select(senti_scale_s, 
+         type_of_tweet, 
+         state_master, 
+         user_id,
          year_of_post, 
-         adopted,
-         time_on_twitter, is_teacher, 
-         n_posted_chatsessions, n_posted_ngsschat_nonchat, n_posted_non_ngsschat) %>% 
+         adopted_fct,
+         time_on_twitter,
+         time_on_twitter_s, 
+         is_teacher, 
+         year_of_post_centered,
+         has_joined_chat,
+         n_posted_chatsessions, n_posted_ngsschat_nonchat, n_posted_non_ngsschat,
+         n_posted_chatsessions_s, n_posted_ngsschat_nonchat_s, n_posted_non_ngsschat_s,
+         time_on_twitter) %>%
   skimr::skim()
 ```
 
@@ -134,152 +57,22 @@ d %>%
 
 ```{r, correlations}
 d %>% 
-  select(type_of_tweet, 
-         chat_id,
-         senti_scale_s,
-         n_posted_chatsessions, n_posted_ngsschat_nonchat ,n_posted_non_ngsschat,
-         state_master, user_id,
+  select(senti_scale_s, 
+         type_of_tweet, 
+         state_master, 
+         user_id,
          year_of_post, 
-         adopted,
-         time_on_twitter, is_teacher, 
-         n_posted_chatsessions, n_posted_ngsschat_nonchat, n_posted_non_ngsschat) %>% 
+         adopted_fct,
+         time_on_twitter,
+         time_on_twitter_s, 
+         is_teacher, 
+         year_of_post_centered,
+         has_joined_chat,
+         n_posted_chatsessions, n_posted_ngsschat_nonchat, n_posted_non_ngsschat,
+         n_posted_chatsessions_s, n_posted_ngsschat_nonchat_s, n_posted_non_ngsschat_s,
+         time_on_twitter) %>% 
   select_if(is.numeric) %>% 
   corrr::correlate() %>% 
   corrr::fashion() %>%
   knitr::kable()
-```
-
-## Year of post
-
-```{r}
-d %>% count(year_of_post)
-```
-
-## Histograms of the DVs
-
-### sentistrength 
-
-```{r}
-d %>% 
-  ggplot(aes(x = senti_scale)) +
-  geom_histogram()
-```
-
-```{r}
-d %>% 
-  ggplot(aes(x = scale_pos)) +
-  geom_histogram()
-```
-
-```{r}
-d %>% 
-  ggplot(aes(x = scale_neg)) +
-  geom_histogram()
-```
-
-### nrc
-
-```{r}
-d %>% 
-  ggplot(aes(x = nrc_scale)) +
-  geom_histogram()
-```
-
-with a log transformation
-
-```{r}
-d %>% 
-  ggplot(aes(x = log(nrc_scale + 1))) +
-  geom_histogram()
-```
-
-```{r}
-d %>% 
-  ggplot(aes(x = nrc_pos)) +
-  geom_histogram()
-```
-
-```{r}
-d %>% 
-  ggplot(aes(x = nrc_neg)) +
-  geom_histogram()
-```
-
-### tidytext
-
-```{r}
-d %>% 
-  ggplot(aes(x = tidytext_scale)) +
-  geom_histogram(bins = 100)
-```
-
-```{r}
-d %>% 
-  ggplot(aes(x = log(tidytext_scale + 1))) +
-  geom_histogram(bins = 100)
-```
-
-```{r}
-d %>% 
-  ggplot(aes(x = tidytext_pos)) +
-  geom_histogram()
-```
-
-```{r}
-d %>% 
-  ggplot(aes(x = tidytext_neg)) +
-  geom_histogram()
-```
-
-### liwc
-
-```{r}
-d %>% 
-  ggplot(aes(x = liwc_scale)) +
-  geom_histogram()
-```
-
-with a log transformation
-
-```{r}
-d %>% 
-  ggplot(aes(x = log(liwc_scale + 1))) +
-  geom_histogram()
-```
-
-```{r}
-d %>% 
-  ggplot(aes(x = liwc_pos)) +
-  geom_histogram()
-```
-
-```{r}
-d %>% 
-  ggplot(aes(x = liwc_neg)) +
-  geom_histogram()
-```
-
-## Time series
-
-```{r, ts-plot}
-p <- d %>% 
-  mutate(date_r = lubridate::round_date(created_at, "day")) %>% 
-  count(date_r) %>% 
-  ggplot(aes(y = n, x = date_r)) +
-  geom_line(color = 'lightgray') +
-  geom_point(color = 'black') +
-  hrbrthemes::theme_ipsum() +
-  xlab(NULL) +
-  ylab("Posts") +
-  ggtitle("Posts to the #NGSSchat Hashtag on Twitter Per Day")
-
-p
-
-ggsave("img/ngsschat-posts-per-day.png", width = 8, height = 6)
-```
-
-## Sentiment over time
-
-```{r}
-data_to_model %>% group_by(year_of_post_centered) %>% summarize(mean_senti = mean(senti_scale)) %>% ggplot(aes(y = mean_senti, x = year_of_post_centered)) + geom_point() + geom_smooth()
 ```

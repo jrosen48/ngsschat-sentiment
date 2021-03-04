@@ -79,10 +79,10 @@ the_plan <-
 
     # for RMD output
 
-    # descriptives = rmarkdown::render(
-    #   knitr_in("describe-data.Rmd"),
-    #   output_file = file_out("docs/descriptives.html"),
-    #   params = list(d = data_to_model)),
+    descriptives = rmarkdown::render(
+      knitr_in("describe-data.Rmd"),
+      output_file = file_out("docs/descriptives.html"),
+      params = list(d = data_to_model)),
 
     binary_descriptives_to_compare_directly_to_commoncore = rmarkdown::render(
       knitr_in("describe-data-with-binary-scale.Rmd"),

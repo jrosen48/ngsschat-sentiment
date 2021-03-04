@@ -606,7 +606,7 @@ scale_key_vars <- function(d) {
            n_posted_chatsessions_s = as.numeric(scale(n_posted_chatsessions)),
            n_posted_ngsschat_nonchat_s = as.numeric(scale(n_posted_ngsschat_nonchat)),
            n_posted_non_ngsschat_s = as.numeric(scale(n_posted_non_ngsschat)),
-           senti_scale_s = ss_scale)
+           senti_scale_s = ss_scale / sd(ss_scale))
 }
 
 create_figure_1 <- function(d) {

@@ -1,0 +1,143 @@
+---
+title: "Basic Descriptives"
+output:
+  html_document:
+    toc: true
+    fig_caption: true
+---
+
+```{r, include=FALSE}
+library(dplyr)
+```
+
+```{r}
+print("*** Language Omission Rate ***")
+x <- drake::readd(raw)$main %>% select(id, lang) %>% distinct(id, .keep_all=T) %>% pull(lang)
+print("Lang omission rate in %:");print(round(1-(sum(x=="en")/length(x)),4)*100)
+```
+
+```{r}
+d <- drake::readd(data_to_model) %>% 
+  select(matches("id|count|ss_|is_|state|n_|time|chat|created|type|desc|context"))
+```
+
+```{r}
+print("*** Current Results are for English-Language Tweets Only ***")
+print("N Tweets:");print(nrow(d))
+print("N Users:");print(d %>% pull(user_id) %>% unique() %>% length())
+print("Sentiment Ratio Pos to Neg:");print(sum(d$ss_binary==1)/sum(d$ss_binary==-1))
+print("Sentiment Ratio Neg to Pos:");print(sum(d$ss_binary==-1)/sum(d$ss_binary==1))
+```
+
+```{r}
+print("Teacher frequency:")
+d %>% 
+  select(user_id, is_teacher) %>% 
+  distinct(user_id, .keep_all=T) %>% 
+  group_by(is_teacher) %>% 
+  summarise(n=n()) %>% 
+  mutate(percent=round(n/sum(n),4)*100) %>% 
+  knitr::kable()
+
+print("Empty biographies (assigned non-teacher), absolute and percent:")
+d %>% 
+  select(user_id, description) %>% 
+  distinct(user_id, .keep_all=T) %>% 
+  pull(description) %>% 
+  (function(x) return(list(sum(x==""),round(sum(x=="")/length(x),4)*100)))
+
+print("Assigned states by user and contributed tweets by users with states assigned:")
+d %>% 
+  select(status_id, user_id, state) %>% 
+  (function(d) {
+    x <- d %>% distinct(user_id, .keep_all=T)
+    print("Users with no State Assigned, absolute and percent:")
+    print(sum(is.na(x$state)));print(round(sum(is.na(x$state))/length(x$state),4)*100) 
+    return(d)}) %>% 
+  mutate(has_state=ifelse(is.na(state),0,1)) %>% 
+  group_by(has_state) %>% 
+  summarise(n_tweets=n()) %>% 
+  mutate(percent=round(n_tweets/sum(n_tweets),4)*100) %>% 
+  knitr::kable()
+  
+print("Number of Tweets and Users by Download Context:")
+d %>% 
+  group_by(context) %>% 
+  summarise(n_tweets=n(), n_users=length(unique(user_id))) %>% 
+  mutate(n_tweets_percent=round(n_tweets/sum(n_tweets),4)*100) %>% 
+  mutate(n_users_percent=round(n_users/sum(n_users),4)*100) %>% 
+  select(context, starts_with("n_tweets"), starts_with("n_users")) %>% 
+  knitr::kable()
+
+print("Number of Tweets and Users by Chat Non-Chat inside #NGSSchat:")
+d %>% 
+  group_by(is_chat) %>% 
+  filter(!is.na(is_chat)) %>% 
+  summarise(n_tweets=n(), n_users=length(unique(user_id))) %>% 
+  mutate(n_tweets_percent=round(n_tweets/sum(n_tweets),4)*100) %>% 
+  mutate(n_users_percent=round(n_users/sum(n_users),4)*100) %>% 
+  select(is_chat, starts_with("n_tweets"), starts_with("n_users")) %>% 
+  knitr::kable()
+
+print("Number of Tweets and Users by New Context Variable:")
+d %>% 
+  group_by(type_of_tweet) %>% 
+  summarise(n_tweets=n(), n_users=length(unique(user_id))) %>% 
+  mutate(n_tweets_percent=round(n_tweets/sum(n_tweets),4)*100) %>% 
+  mutate(n_users_percent=round(n_users/sum(n_users),4)*100) %>% 
+  select(type_of_tweet, starts_with("n_tweets"), starts_with("n_users")) %>% 
+  knitr::kable()
+
+```
+
+```{r}
+print("Contributed Tweets by Teacher, Non-Teacher:")
+d %>% 
+  group_by(is_teacher) %>% 
+  summarise(n_tweets=n(), n_users=length(unique(user_id))) %>% 
+  mutate(n_tweets_percent=round(n_tweets/sum(n_tweets),4)*100) %>% 
+  mutate(n_users_percent=round(n_users/sum(n_users),4)*100) %>% 
+  select(is_teacher, starts_with("n_tweets"), starts_with("n_users")) %>% 
+  knitr::kable()
+
+print("Users with less or equal than 2 tweets contributed by Teacher, Non-Teacher:")
+d %>% 
+  group_by(user_id) %>% 
+  summarise(n_tweets=n()) %>% 
+  filter(n_tweets<=2) %>% 
+  pull(user_id) -> small_users
+d %>% 
+  mutate(is_small_user = ifelse(.$user_id %in% small_users, 1, 0)) %>% 
+  distinct(user_id, .keep_all=T) %>% 
+  select(is_teacher, is_small_user, user_id) %>% 
+  group_by(is_teacher, is_small_user) %>% 
+  summarise(n_small_users=length(unique(user_id))) %>% 
+  ungroup() %>% 
+  (function (x) {
+    reference_teachers <- x %>% filter(is_teacher==1) %>% pull(n_small_users) %>% sum() 
+    reference_non_teachers <- x %>% filter(is_teacher==0) %>% pull(n_small_users) %>% sum() 
+    x$percent_small_users <- x$n_small_users
+    x$percent_small_users[x$is_teacher==1] <- round(x$percent_small_users[x$is_teacher==1]/reference_teachers,4)*100
+    x$percent_small_users[x$is_teacher==0] <- round(x$percent_small_users[x$is_teacher==0]/reference_non_teachers,4)*100
+    return(x)
+  }) %>% 
+  knitr::kable()
+
+print("Social Stats by Teachers and Non-Teachers (M, SD), Tweet-Level:")
+d %>% 
+  group_by(is_teacher) %>% 
+  summarise(across(matches("like_|retweet_|reply_|quote_"), list(mean=mean,sd=sd,median=median,IQR=IQR))) %>% 
+  ungroup() %>% 
+  mutate_if(is.numeric, round, 2) %>% 
+  knitr::kable() 
+  
+  
+print("Social Stats by Teachers and Non-Teachers (M, SD), User-Level:")
+d %>% 
+  distinct(user_id, .keep_all=T) %>% 
+  group_by(is_teacher) %>% 
+  summarise(across(matches("followers_|following_|listed_|^tweet_count"), list(mean=mean,sd=sd,median=median,IQR=IQR))) %>% 
+  ungroup() %>% 
+  mutate_if(is.numeric, round, 2) %>% 
+  knitr::kable() 
+```

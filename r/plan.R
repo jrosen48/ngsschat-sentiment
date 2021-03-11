@@ -23,31 +23,31 @@ the_plan <-
     additional_geo = all_vars %>% get_more_geo(),
     
     state_data = read_csv(file_in("data-raw/ngsschat-state-data.csv")),
-
+    
     # figure 1
-
+    
     fig1_path = create_figure_1(additional_geo),
-
+    
     # joining data
-
+    
     loaded_rda_data_with_state = join_state(additional_geo, state_data),
-
+    
     # preparing for modeling
-
+    
     joined_data = create_new_variables_and_filter_by_language(loaded_rda_data_with_state),
-
+    
     data_to_model_filtered = filter_data_by_year(joined_data), # removes 20 cases before 2010
-
+    
     data_to_model_lead_states = add_lead_state_status(data_to_model_filtered, state_data),
-
+    
     data_to_model = scale_key_vars(data_to_model_lead_states),
-
+    
     # estimating models
-
+    
     null_model = lmer(senti_scale_s ~ 1 + (1|state_master) + (1|user_id), data = data_to_model),
-
+    
     state_ranefs = return_state_ranefs(null_model),
-
+    
     full_model = lmer(senti_scale_s ~
                         type_of_tweet +
                         time_on_twitter_s +
@@ -60,9 +60,9 @@ the_plan <-
                         adopted_fct +
                         (1|user_id),
                       data = data_to_model),
-
+    
     augmented_full_model_data = augment(full_model),
-
+    
     full_model_with_three_way_interact = lmer(senti_scale_s ~
                                                 type_of_tweet +
                                                 time_on_twitter_s +
@@ -76,20 +76,24 @@ the_plan <-
                                                 adopted_fct +
                                                 (1|user_id),
                                               data = data_to_model),
-
+    
     # for RMD output
-
-    descriptives = rmarkdown::render(
+    
+    descriptives = target(command = rmarkdown::render(
       knitr_in("describe-data.Rmd"),
       output_file = file_out("docs/descriptives.html"),
       params = list(d = data_to_model)),
-
-    binary_descriptives_to_compare_directly_to_commoncore = rmarkdown::render(
+      trigger = trigger(condition = TRUE)
+    ),
+    
+    binary_descriptives_to_compare_directly_to_commoncore = target(command = rmarkdown::render(
       knitr_in("describe-data-with-binary-scale.Rmd"),
       output_file = file_out("docs/descriptives-binary.html"),
       params = list(d = data_to_model)),
-
-    models = rmarkdown::render(
+      trigger = trigger(condition = TRUE)
+    ),
+    
+    models = target(command = rmarkdown::render(
       knitr_in("models.Rmd"),
       output_file = file_out("docs/models.html"),
       params = list(null_model = null_model,
@@ -97,19 +101,21 @@ the_plan <-
                     full_model_with_three_way_interact = full_model_with_three_way_interact,
                     augmented_full_model_data = augmented_full_model_data,
                     state_ranefs = state_ranefs)),
-
+      trigger = trigger(condition = TRUE)
+    ),
+    
     # for site
-
+    
     dependencies = rmarkdown::render(
       knitr_in("dependencies.Rmd"),
       output_file = file_out("docs/dependencies.html"))
-
+    
     # rendered_site = target(
     #   command = render_site(),
     #   trigger = trigger(condition = TRUE)
     # ),
-
+    
     #to open site:
-      # browseURL("docs/index.html")
+    # browseURL("docs/index.html")
     
   )

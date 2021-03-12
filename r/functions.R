@@ -668,83 +668,61 @@ create_figure_1 <- function(d) {
   
   filename <- "fig1.png"
   
-  labels <- data.frame(
-    xaxis = lubridate::mdy(c("05/01/15", "05/01/18", "07/01/21")),
-    n = c(13000, 2500, 500),
-    label = c("#Non-NGSSchat", "#NGSSchat non-chat", "#NGSSchat"),
-    Category = factor(c("Non-#NGSSchat", "Non-chat", "Chat"),
-                      levels = c("Non-#NGSSchat", "Non-chat", "Chat"),
-                      labels = c("Non-#NGSSchat", "#NGSSchat non-chat", "#NGSSchat"))
-  )
-  
-  png(filename, width = 480*4, height = 480*2)
-  
-  d_all %>% 
+  month_data <- d_all %>% 
     ungroup() %>% 
     mutate(month = lubridate::month(week),
            year = lubridate::year(week),
-           xaxis = lubridate::make_date(month = month, year = year),
+           xaxis_labs = lubridate::make_date(month = month, year = year),
+           xaxis = as.numeric(xaxis_labs),
            Category = factor(Category, 
                              levels = c("Non-#NGSSchat", "Non-chat", "Chat"),
                              labels = c("Non-#NGSSchat", "#NGSSchat non-chat", "#NGSSchat"))) %>% 
-    count(Category, xaxis, wt = value) %>% 
-    ggplot(aes(x = xaxis, y = n)) + 
-    geom_line(aes(color = Category), size = 2.4) +
-    geom_text(aes(label = label), 
-              color = "#373B41",
-              data = labels,
-              hjust = 0,
-              size = 10,
-              family = "Times New Roman") +
-    annotate(geom = "curve", 
-             x = lubridate::mdy("12/01/15"),
-             y = 12750,
-             xend = lubridate::mdy("04/01/15"),
-             yend = 11000,
-             size = 1,
-             curvature = -0.5,
-             color = "#373B41",
-             arrow = arrow(length = unit(5, "mm"))) +
-    annotate(geom = "curve", 
-             x = lubridate::mdy("06/01/18"),
-             y = 2800,
-             xend = lubridate::mdy("10/01/17"),
-             yend = 2800,
-             size = 1,
-             curvature = 0.5,
-             color = "#67E0CF",
-             arrow = arrow(length = unit(5, "mm"))) +
-    annotate(geom = "curve", 
-             x = lubridate::mdy("07/01/21"),
-             y = 700,
-             xend = lubridate::mdy("12/15/20"),
-             yend = 350,
-             size = 1,
-             curvature = 0.5,
-             color = "#ABCFED",
-             arrow = arrow(length = unit(5, "mm"))) +
+    count(Category, xaxis_labs, xaxis, wt = value) 
+    
+  half_years <- unique(round_date(as_date(month_data$xaxis), "halfyear"))
+  half_year_breaks <- as.numeric(half_years)
+  half_year_labels <- format(half_years, "%m-%y")
+  
+  label_locs <- month_data %>% 
+    group_by(Category) %>% 
+    filter(xaxis_labs == max(xaxis_labs)) %>% 
+    ungroup()
+  
+  theme_set(theme_minimal(17))
+  
+  ggplot(month_data, aes(x = xaxis, y = n)) + 
+    geom_line(aes(color = Category), size = 1.2) +
     geom_hline(yintercept = 0, size = 1.5) +
-    scale_y_continuous(limits = c(0, 17000), 
-                       expand = c(0, 0)) +
-    scale_x_date(breaks = "6 months",
-                 date_labels = "%m-%d-%Y",
-                 expand = expansion(mult = c(0, .1),
-                                    add = c(0, 1))) +
-    scale_color_manual(values = c("#373B41", "#67E0CF", "#ABCFED")) +
-    labs(x = "Month (aggregated)",
-         y = "Total number of Tweets") +
-    guides(color = "none",
-           text = "none") +
-    theme_minimal(35) +
-    theme(legend.position = "bottom",
+    annotate("rect",
+             xmin = 18700,
+             xmax = Inf,
+             ymin = -Inf,
+             ymax = Inf,
+             color = "#ffffff",
+             fill = "#ffffff") +
+    scale_y_continuous(
+      name = "Total number of tweets",
+      limits = c(0, 17000), 
+      expand = c(0, 0)
+    ) +
+    scale_x_continuous(
+      name = "Month (aggregated)",
+      breaks = half_year_breaks,
+      labels = half_year_labels,
+      expand = expansion(mult = c(0, .22))
+    ) +
+    scale_color_manual("", values = c("#373B41", "#67E0CF", "#ABCFED")) +
+    theme(legend.position = c(0.91, 0.07),
           text = element_text(family = "Times New Roman"),
-          axis.text.x = element_text(size = 15),
+          axis.text.x = element_text(size = 10),
+          axis.title.x = element_text(hjust = 0.41),
           panel.grid.major.x = element_line(color = "gray95", size = 0.5),
           panel.grid.major.y = element_line(color = "gray95", size = 0.5),
           panel.grid.minor.x = element_blank(),
-          panel.grid.minor.y = element_blank()) 
-  dev.off()
+          panel.grid.minor.y = element_blank())
+  
+  ggsave(filename, width = 11, height = 8.5, dpi = 800)
   
   return(filename) 
-  
+
 }

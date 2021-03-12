@@ -679,22 +679,22 @@ create_figure_1 <- function(d) {
                              labels = c("Non-#NGSSchat", "#NGSSchat non-chat", "#NGSSchat"))) %>% 
     count(Category, xaxis_labs, xaxis, wt = value) 
     
-  quarters <- unique(round_date(as_date(month_data$xaxis), "halfyear"))
-  quarter_breaks <- as.numeric(quarters)
-  quarter_labels <- format(quarters, "%m-%y")
+  half_years <- unique(round_date(as_date(month_data$xaxis), "halfyear"))
+  half_year_breaks <- as.numeric(half_years)
+  half_year_labels <- format(half_years, "%m-%y")
   
   label_locs <- month_data %>% 
     group_by(Category) %>% 
     filter(xaxis_labs == max(xaxis_labs)) %>% 
     ungroup()
   
-  theme_set(theme_minimal(15))
+  theme_set(theme_minimal(17))
   
   ggplot(month_data, aes(x = xaxis, y = n)) + 
     geom_line(aes(color = Category), size = 1.2) +
     geom_hline(yintercept = 0, size = 1.5) +
     annotate("rect",
-             xmin = 18600,
+             xmin = 18700,
              xmax = Inf,
              ymin = -Inf,
              ymax = Inf,
@@ -707,20 +707,21 @@ create_figure_1 <- function(d) {
     ) +
     scale_x_continuous(
       name = "Month (aggregated)",
-      breaks = quarter_breaks,
-      labels = quarter_labels,
-      expand = expansion(mult = c(0, .3))
+      breaks = half_year_breaks,
+      labels = half_year_labels,
+      expand = expansion(mult = c(0, .22))
     ) +
     scale_color_manual("", values = c("#373B41", "#67E0CF", "#ABCFED")) +
-    theme(legend.position = c(0.89, 0.12),
+    theme(legend.position = c(0.91, 0.07),
           text = element_text(family = "Times New Roman"),
-          axis.text.x = element_text(size = 9),
+          axis.text.x = element_text(size = 10),
+          axis.title.x = element_text(hjust = 0.41),
           panel.grid.major.x = element_line(color = "gray95", size = 0.5),
           panel.grid.major.y = element_line(color = "gray95", size = 0.5),
           panel.grid.minor.x = element_blank(),
           panel.grid.minor.y = element_blank())
   
-  ggsave(filename, width = 9.5, height = 4, dpi = 800)
+  ggsave(filename, width = 11, height = 8.5, dpi = 800)
   
   return(filename) 
 

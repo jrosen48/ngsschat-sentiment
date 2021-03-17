@@ -10,21 +10,25 @@ output: html_document
 
 $$
 \begin{aligned}
-  \operatorname{senti\_scale\_s}_{i}  &\sim N \left(\mu, \sigma^2 \right) \\
+  \operatorname{SentiStrength Scale}_{i}  &\sim N \left(\mu, \sigma^2 \right) \\
     \mu &=\alpha_{j[i]}\ + 
- \beta_{1}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-chat}})\ + \\
-&\quad \beta_{2}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}})\ + 
- \beta_{3}(\operatorname{time\_on\_twitter\_s})\ + \\
-&\quad \beta_{4}(\operatorname{year\_of\_post\_centered})\ + 
- \beta_{5}(\operatorname{has\_joined\_chat})\ + \\
-&\quad \beta_{6}(\operatorname{adopted\_fct}_{\operatorname{adopted}})\ + 
- \beta_{7}(\operatorname{adopted\_fct}_{\operatorname{missing}})\ + \\
-&\quad \beta_{8}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-chat}} \times \operatorname{year\_of\_post\_centered})\ + \\
- &\quad\beta_{9}(\operatorname{type\_of\_tweet}_{\operatorname{ngsschat-non-chat}} \times \operatorname{year\_of\_post\_centered}) \\\\
+ \beta_{1}(\operatorname{Type of Tweet}_{\operatorname{NGSSchat no chat}})\ + \\
+&\quad \beta_{2}(\operatorname{Type of Tweet}_{\operatorname{NGSSchat chat}})\ + 
+ \beta_{3}(\operatorname{Time on Twitter})\ + \\
+&\quad \beta_{4}(\operatorname{Year of Post})\ + 
+ \beta_{5}(\operatorname{Has Joined Chat})\ + \\
+&\quad \beta_{6}(\operatorname{Adoption Status}_{\operatorname{Adopted the NGSS}})\ + 
+ \beta_{7}(\operatorname{Adoption Status}_{\operatorname{Missing}})\ + \\
+&\quad \beta_{8}(\operatorname{Type of Tweet}_{\operatorname{NGSSchat chat}} \times \operatorname{Year of Post})\ + \\
+ &\quad\beta_{9}(\operatorname{Type of Tweet}_{\operatorname{NGSSchat non-chat}} \times \operatorname{Year of Post}) \\\\
     
     \alpha_{j}  &\sim N \left( \eta, \sigma^2_{\alpha_{j}} \right) \text{, for user_id j = 1,} \dots \text{,J} \\
     \eta &= \gamma_{0}^{\alpha}\ + 
-     \gamma_{1}^{\alpha}(\operatorname{is\_teacher})\ + \\ &\quad \gamma_{2}^{\alpha}(\operatorname{n\_posted\_chatsessions\_s})\ +  \gamma_{3}^{\alpha}(\operatorname{n\_posted\_ngsschat\_nonchat\_s})\ + \\ &\quad \gamma_{4}^{\alpha}(\operatorname{n\_posted\_non\_ngsschat\_s}) +  \gamma_{5}^{\alpha}(\operatorname{is\_teacher} \times \operatorname{year\_of\_post\_centered})  
+     \gamma_{1}^{\alpha}(\operatorname{Teacher})\ + \\ 
+&\quad \gamma_{2}^{\alpha}(\operatorname{n posted ngsschat chat})\ + \\ 
+&\quad \gamma_{3}^{\alpha}(\operatorname{n posted ngsschat non chat})\ + \\ 
+&\quad \gamma_{4}^{\alpha}(\operatorname{n posted nonngsschat})\ + \\ 
+&\quad\gamma_{5}^{\alpha}(\operatorname{Teacher} \times \operatorname{Year of Post})  
     
 \end{aligned}
 $$

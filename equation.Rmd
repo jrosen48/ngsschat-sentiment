@@ -25,9 +25,9 @@ $$
     \alpha_{j}  &\sim N \left( \eta, \sigma^2_{\alpha_{j}} \right) \text{, for user_id j = 1,} \dots \text{,J} \\
     \eta &= \gamma_{0}^{\alpha}\ + 
      \gamma_{1}^{\alpha}(\operatorname{Teacher})\ + \\ 
-&\quad \gamma_{2}^{\alpha}(\operatorname{n posted ngsschat chat})\ + \\ 
-&\quad \gamma_{3}^{\alpha}(\operatorname{n posted ngsschat non chat})\ + \\ 
-&\quad \gamma_{4}^{\alpha}(\operatorname{n posted nonngsschat})\ + \\ 
+&\quad \gamma_{2}^{\alpha}(\operatorname{Number of NGSSchat chat tweets})\ + \\ 
+&\quad \gamma_{3}^{\alpha}(\operatorname{Number of NGSSchat non chat tweets})\ + \\ 
+&\quad \gamma_{4}^{\alpha}(\operatorname{Number of non NGSSchat tweets})\ + \\ 
 &\quad\gamma_{5}^{\alpha}(\operatorname{Teacher} \times \operatorname{Year of Post})  
     
 \end{aligned}

@@ -23,7 +23,7 @@ icc(null_model, by_group = TRUE)
 tab_model(full_model, show.icc = TRUE)
 ```
 
-```{r}
+```{r eval = FALSE}
 equatiomatic::extract_eq(full_model)
 ```
 
@@ -31,12 +31,11 @@ equatiomatic::extract_eq(full_model)
 tab_model(full_model_with_three_way_interact, show.icc = TRUE)
 ```
 
-```{r label, options}
+```{r}
 mod_d <- full_model@frame
 ```
 
-```{r, eval = FALSE}
-
+```{r}
 pred_frame_chat <- data.frame(type_of_tweet = rep(c("non-ngsschat", 
                                                "ngsschat-chat", 
                                                "ngsschat-non-chat"), each = 2*11),
@@ -65,7 +64,7 @@ pred_frame_tch <- data.frame(type_of_tweet = "non-ngsschat",
 )
 ```
 
-```{r, eval = FALSE}
+```{r}
 pred_frame_chat$prediction <- predict(full_model, 
                                       newdata = pred_frame_chat, 
                                       allow.new.levels = TRUE)
@@ -109,12 +108,12 @@ tch_label_frame <- data.frame(year_of_post_centered = 5,
                                         "Teachers"))
 ```
 
-```{r, eval = FALSE}
+```{r}
 extrafont::loadfonts()
 
 theme_set(theme_minimal(15))
 
-p1 <- pred_frame %>% 
+p1 <- pred_frame_tch %>% 
   filter(type_of_tweet == "non-ngsschat") %>% 
   mutate(is_teacher = ifelse(is_teacher == 0, "Non-Teachers", "Teachers")) %>% 
   ggplot(aes(year_of_post_centered + 2016, prediction)) +
@@ -181,7 +180,7 @@ annotate_figure(
 ggsave("interactions.png", width = 6.5, height = 8, dpi = 800)
 ```
 
-```{r, eval= FALSE}
+```{r}
 samp_d <- mod_d %>% 
   select(year_of_post_centered, 
          is_teacher, 
@@ -191,12 +190,12 @@ samp_d <- mod_d %>%
   group_by(year_of_post_centered, is_teacher, type_of_tweet) %>% 
   slice_sample(prop = 0.1) 
 
-pred_frame %>% 
-  mutate(is_teacher = ifelse(is_teacher == 0, "Non-Teachers", "Teachers")) %>% 
-  ggplot(aes(year_of_post_centered + 2016, prediction)) +
-  geom_point(aes(year_of_post_centered + 2016, senti_scale_s),
-             samp_d,
-             color = "gray80") +
-  geom_line(size = 1.3) +
-  facet_grid(is_teacher ~ type_of_tweet)
+# pred_frame %>% 
+#   mutate(is_teacher = ifelse(is_teacher == 0, "Non-Teachers", "Teachers")) %>% 
+#   ggplot(aes(year_of_post_centered + 2016, prediction)) +
+#   geom_point(aes(year_of_post_centered + 2016, senti_scale_s),
+#              samp_d,
+#              color = "gray80") +
+#   geom_line(size = 1.3) +
+#   facet_grid(is_teacher ~ type_of_tweet)
 ```

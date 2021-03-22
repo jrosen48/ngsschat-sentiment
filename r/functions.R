@@ -278,64 +278,64 @@ rgx_build <- function(words){
 }
 
 get_more_geo <- function(d) {
-  acros <- read.table(header=T, sep=";", text=
-                        "acronym;state
-  AK;Alaska
-  AL;Alabama
-  AR;Arkansas
-  AZ;Arizona
-  CA;California
-  CO;Colorado
-  CT;Connecticut
-  DC;District of Columbia
-  DE;Delaware
-  FL;Florida
-  GA;Georgia
-  HI;Hawaii
-  IA;Iowa
-  ID;Idaho
-  IL;Illinois
-  IN;Indiana
-  KS;Kansas
-  KY;Kentucky
-  LA;Louisiana
-  MA;Massachusetts
-  MD;Maryland
-  ME;Maine
-  MI;Michigan
-  MN;Minnesota
-  MO;Missouri
-  MS;Mississippi
-  MT;Montana
-  NC;North Carolina
-  ND;North Dakota
-  NE;Nebraska
-  NH;New Hampshire
-  NJ;New Jersey
-  NM;New Mexico
-  NV;Nevada
-  NY;New York
-  OH;Ohio
-  OK;Oklahoma
-  OR;Oregon
-  PA;Pennsylvania
-  PR;Puerto Rico
-  RI;Rhode Island
-  SC;South Carolina
-  SD;South Dakota
-  TN;Tennessee
-  TX;Texas
-  UT;Utah
-  VA;Virginia
-  VT;Vermont
-  WA;Washington
-  WI;Wisconsin
-  WV;West Virginia
-  WY;Wyoming")
+  acros <- read.table(header=T, sep=",", text=
+                        "name,short,postal
+Alabama,Ala\\.,AL
+Alaska,Alaska,AK
+Arizona,Ariz\\.,AZ
+Arkansas,Ark\\.,AR
+California,Calif\\.,CA
+Colorado,Colo\\.,CO
+Connecticut,Conn\\.,CT
+Delaware,Del\\.,DE
+District of Columbia,D\\.C\\.,DC
+Florida,Fla\\.,FL
+Georgia,Ga\\.,GA
+Hawaii,Hawaii,HI
+Idaho,Idaho,ID
+Illinois,Ill\\.,IL
+Indiana,Ind\\.,IN
+Iowa,Iowa,IA
+Kansas,Kans\\.,KS
+Kentucky,Ky\\.,KY
+Louisiana,La\\.,LA
+Maine,Maine,ME
+Maryland,Md\\.,MD
+Massachusetts,Mass\\.,MA
+Michigan,Mich\\.,MI
+Minnesota,Minn\\.,MN
+Mississippi,Miss\\.,MS
+Missouri,Mo\\.,MO
+Montana,Mont\\.,MT
+Nebraska,Nebr\\.,NE
+Nevada,Nev\\.,NV
+New Hampshire,N\\.H\\.,NH
+New Jersey,N\\.J\\.,NJ
+New Mexico,N\\.M\\.,NM
+New York,N\\.Y\\.,NY
+North Carolina,N\\.C\\.,NC
+North Dakota,N\\.D\\.,ND
+Ohio,Ohio,OH
+Oklahoma,Okla\\.,OK
+Oregon,Ore\\.,OR
+Pennsylvania,Pa\\.,PA
+Rhode Island,R\\.I\\.,RI
+South Carolina,S\\.C\\.,SC
+South Dakota,S\\.D\\.,SD
+Tennessee,Tenn\\.,TN
+Texas,Tex\\.,TX
+Utah,Utah,UT
+Vermont,Vt\\.,VT
+Virginia,Va\\.,VA
+Washington,Wash\\.,WA
+West Virginia,W\\.Va\\.,WV
+Wisconsin,Wis\\.,WI
+Wyoming,Wyo\\.,WY")
   
-  acros$acronym <- acros$acronym %>% trimws()
-  acros$state <- tolower(acros$state)
-  acros$state <- acros$state %>% str_remove("district of ") %>% trimws()
+  acros$name <- tolower(acros$name)
+  acros$name <- acros$name %>% str_remove("district of ") %>% trimws()
+  acros$short <- tolower(acros$short)
+  acros$postal <- tolower(acros$postal)
   
   # By introduction
   
@@ -354,17 +354,17 @@ get_more_geo <- function(d) {
   possible_cases <- ngsschat[ind,]
   
   possible_cases$text <- possible_cases$text %>%
-    tolower() %>% 
-    str_remove_all("[[:punct:]]")
+    tolower()
   
   result <- list()
   
   for (i in 1:nrow(acros)){
     raw <- c(
-      possible_cases$user_id[grep(rgx_build(tolower(acros$acronym[i])), possible_cases$text)],
-      possible_cases$user_id[grep(rgx_build(tolower(acros$state[i])), possible_cases$text)]
+      possible_cases$user_id[grep(rgx_build(tolower(acros$name[i])), possible_cases$text)],
+      possible_cases$user_id[grep(rgx_build(tolower(acros$short[i])), possible_cases$text)],
+      possible_cases$user_id[grep(rgx_build(tolower(acros$postal[i])), possible_cases$text)]
     ) %>% unique()
-    result[[acros$state[i]]] <- list(raw)[[1]]
+    result[[acros$name[i]]] <- list(raw)[[1]]
     cat("\014 Searching for states in chat openings... Iteration", i, "/ 52 done.\n")
   }
   
@@ -372,7 +372,7 @@ get_more_geo <- function(d) {
     tibble() %>% 
     rename(user_id=value, state=L1) %>% 
     group_by(user_id) %>% 
-    filter(n() == 1) %>% 
+    filter(n() == 1) %>%    # unambiguous instances of state mentions
     ungroup() -> for_join
   
   already_matched <- d$user_id[!is.na(d$state)]
@@ -388,17 +388,17 @@ get_more_geo <- function(d) {
   possible_cases <- d %>% filter(is.na(state))
   
   possible_cases$text <- possible_cases$text %>%
-    tolower() %>% 
-    str_remove_all("[[:punct:]]")
+    tolower()
   
   result <- list()
   
   for (i in 1:nrow(acros)){
     raw <- c(
-      possible_cases$user_id[grep(rgx_build(tolower(acros$acronym[i])), possible_cases$text)],
-      possible_cases$user_id[grep(rgx_build(tolower(acros$state[i])), possible_cases$text)]
+      possible_cases$user_id[grep(rgx_build(tolower(acros$name[i])), possible_cases$text)],
+      possible_cases$user_id[grep(rgx_build(tolower(acros$short[i])), possible_cases$text)],
+      possible_cases$user_id[grep(rgx_build(tolower(acros$postal[i])), possible_cases$text)]
     ) %>% unique()
-    result[[acros$state[i]]] <- list(raw)[[1]]
+    result[[acros$name[i]]] <- list(raw)[[1]]
     cat("\014 Searching for states in remaining tweets... Iteration", i, "/ 52 done.\n")
   }
   
